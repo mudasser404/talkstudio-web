@@ -1,0 +1,90 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Redirecting to Google..." %}{% endblock %}
+
+{% block header_title %}{% trans "Connecting to Google" %}{% endblock %}
+{% block header_subtitle %}{% trans "Please wait while we redirect you..." %}{% endblock %}
+
+{% block content %}
+<div class="redirect-container" style="text-align: center; padding: 60px 20px;">
+    <div style="width: 120px; height: 120px; margin: 0 auto 32px; position: relative;">
+        <div class="spinner-border" role="status" style="width: 120px; height: 120px; color: #3b82f6;">
+            <span class="visually-hidden">{% trans "Loading..." %}</span>
+        </div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <svg width="48" height="48" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+                <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+                <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+                <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+            </svg>
+        </div>
+    </div>
+
+    <h3 style="color: #1f2937; margin-bottom: 16px;">{% trans "Connecting to Google" %}</h3>
+
+    <p style="color: #6b7280; font-size: 16px; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto;">
+        {% trans "Please wait while we securely connect to your Google account. You'll be redirected to Google in a moment..." %}
+    </p>
+
+    <div class="loading-steps" style="max-width: 400px; margin: 0 auto;">
+        <div class="step-item mb-3" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9fafb; border-radius: 8px;">
+            <div class="spinner-border spinner-border-sm text-primary" role="status" style="width: 20px; height: 20px;">
+                <span class="visually-hidden">{% trans "Loading..." %}</span>
+            </div>
+            <span style="color: #6b7280;">{% trans "Establishing secure connection..." %}</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 16px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 8px; max-width: 480px; margin-left: auto; margin-right: auto;">
+        <p style="margin: 0; color: #1e40af; font-size: 14px;">
+            <i class="fas fa-shield-alt me-2"></i>
+            {% trans "Your data is encrypted and secure. We never store your Google password." %}
+        </p>
+    </div>
+</div>
+
+<form id="continue-form" method="POST" style="display: none;">
+    {% csrf_token %}
+</form>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    .step-item {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .spinner-border {
+        animation: spinner-border 0.75s linear infinite;
+    }
+
+    @keyframes spinner-border {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-submit the form after a short delay to ensure smooth transition
+    setTimeout(function() {
+        const form = document.getElementById('continue-form');
+        if (form) {
+            form.submit();
+        }
+    }, 1000);
+</script>
+{% endblock %}

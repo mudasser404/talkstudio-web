@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Privacy Policy - TalkStudio.ai{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+        --border-color: #e5e7eb;
+        --link-color: #3b82f6;
+        --link-hover: #2563eb;
+        --accent: #1f2937;
+        --pill-hover: #f1f5f9;
+        --pill-active: #000000;
+        --pill-active-text: #ffffff;
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0a;
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --text-muted: #6b7280;
+        --border-color: #1f2937;
+        --link-color: #60a5fa;
+        --link-hover: #93c5fd;
+        --accent: #e5e7eb;
+        --pill-hover: #1a1a1a;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background 0.3s ease, color 0.3s ease;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .privacy-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem;
+        line-height: 1.75;
+    }
+
+    /* Back Button */
+    .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.925rem;
+        font-weight: 500;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+    .back:hover { color: var(--link-color); }
+    .back i { font-size: 1rem; }
+
+    /* Header */
+    .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .header .icon {
+        font-size: 3rem;
+        color: var(--link-color);
+        margin-bottom: 1rem;
+    }
+    .header h1 {
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin: 0 0 0.75rem;
+        background: linear-gradient(135deg, var(--accent), #374151);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    [data-theme="dark"] .header h1 {
+        background: linear-gradient(135deg, #f3f4f6, #9ca3af);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .meta-date {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        background: var(--bg-secondary);
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+    }
+
+    /* Intro */
+    .intro {
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto 3rem;
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+    }
+
+    /* Sections */
+    .section {
+        margin-bottom: 3rem;
+        scroll-margin-top: 120px;
+    }
+    .section h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0 0 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-primary);
+    }
+    .section h2 i {
+        font-size: 1.35rem;
+        color: var(--link-color);
+    }
+
+    .section p,
+    .section li {
+        color: var(--text-secondary);
+        margin-bottom: 0.9rem;
+        font-size: 1rem;
+    }
+
+    .section ul {
+        padding-left: 1.4rem;
+        margin: 1rem 0;
+    }
+    .section ul li {
+        margin-bottom: 0.75rem;
+    }
+    .section ul li::marker {
+        color: var(--link-color);
+    }
+
+    /* Contact Box */
+    .contact-box {
+        text-align: center;
+        background: linear-gradient(135deg, #111827, #1f2937);
+        color: #f3f4f6;
+        padding: 3rem 2rem;
+        border-radius: 16px;
+        margin: 4rem 0 2rem;
+    }
+    [data-theme="dark"] .contact-box {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    }
+    .contact-box h3 {
+        font-size: 1.5rem;
+        margin: 0 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .contact-box p {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+    .contact-box a {
+        color: #93c5fd;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+    .contact-box a:hover {
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .privacy-page { padding: 2rem 1rem; }
+        .header h1 { font-size: 2.1rem; }
+        .header .icon { font-size: 2.5rem; }
+        .section h2 { 
+            font-size: 1.5rem; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 0.5rem; 
+        }
+        .contact-box { padding: 2.5rem 1.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="privacy-page">
+
+
+    <!-- Header -->
+    <header class="header">
+        <div class="icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h1>Privacy Policy</h1>
+        <p class="meta-date">Last Updated: November 4, 2025</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="intro">
+        <p>At <strong>TalkStudio.ai</strong>, your privacy is our priority. We are committed to protecting the personal information of our users and ensuring transparency in how we handle data.</p>
+    </section>
+
+    <!-- Information We Collect -->
+    <section class="section" id="information">
+        <h2><i class="fas fa-database"></i> Information We Collect</h2>
+        <ul>
+            <li><strong>Personal details</strong> such as name, email address, and contact number when creating an account or making a purchase.</li>
+            <li><strong>Payment details</strong> are processed securely through third-party payment gateways <em>(we do not store credit/debit card information)</em>.</li>
+            <li><strong>Usage data</strong>, including IP address and browser type, to improve user experience and platform performance.</li>
+        </ul>
+    </section>
+
+    <!-- How We Use Your Information -->
+    <section class="section" id="usage">
+        <h2><i class="fas fa-cogs"></i> How We Use Your Information</h2>
+        <ul>
+            <li>To process payments and manage subscriptions.</li>
+            <li>To provide, maintain, and improve our text-to-speech and AI-based services.</li>
+            <li>To communicate updates, promotions, and important account information.</li>
+        </ul>
+    </section>
+
+    <!-- Data Security -->
+    <section class="section" id="security">
+        <h2><i class="fas fa-lock"></i> Data Security</h2>
+        <p>We use <strong>SSL encryption</strong> and other security measures to protect your data. Only authorized personnel can access user information when necessary for support or maintenance.</p>
+    </section>
+
+    <!-- Third-Party Services -->
+    <section class="section" id="third-party">
+        <h2><i class="fas fa-handshake"></i> Third-Party Services</h2>
+        <p>We may use trusted third-party services (such as payment processors and analytics providers). Each third party follows strict data protection standards.</p>
+    </section>
+
+    <!-- Your Rights -->
+    <section class="section" id="rights">
+        <h2><i class="fas fa-user-shield"></i> Your Rights</h2>
+        <p>You have the right to access, modify, or delete your personal information by contacting us at <a href="mailto:support@talkstudio.ai">support@talkstudio.ai</a>.</p>
+    </section>
+
+</div>
+
+<script>
+    // Theme sync with root data-theme
+    const syncTheme = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.body.style.background = isDark ? '#000' : '#fff';
+    };
+    syncTheme();
+    new MutationObserver(syncTheme).observe(document.documentElement, { 
+        attributes: true, 
+        attributeFilter: ['data-theme'] 
+    });
+</script>
+{% endblock %}

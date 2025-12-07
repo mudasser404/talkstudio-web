@@ -1,0 +1,2575 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Text To Speech - TalkStudio{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gradio-row {
+        background: white;
+    }
+    :root {
+        --gradio-bg: #f7f7f7;
+        --gradio-card: #ffffff;
+        --gradio-border: #e5e5e5;
+        --gradio-primary: #ff7c00;
+        --gradio-primary-hover: #ff6600;
+        --gradio-text: #374151;
+        --gradio-text-secondary: #6b7280;
+    }
+
+    body {
+        background: var(--gradio-bg);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .gradio-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .gradio-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .gradio-header h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--gradio-text);
+        margin-bottom: 8px;
+    }
+
+    .gradio-header p {
+        color: var(--gradio-text-secondary);
+        font-size: 14px;
+    }
+
+    .gradio-tabs {
+        background: var(--gradio-card);
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .tab-header {
+        border-bottom: 1px solid var(--gradio-border);
+        padding: 16px 24px;
+        background: #fafafa;
+    }
+
+    .tab-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--gradio-text);
+    }
+
+    .gradio-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        padding: 24px;
+    }
+
+    .gradio-column {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .gradio-group {
+        background: var(--gradio-card);
+        border: 1px solid var(--gradio-border);
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .gradio-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--gradio-text);
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .gradio-info {
+        font-size: 12px;
+        color: var(--gradio-text-secondary);
+        margin-top: 4px;
+    }
+
+    .gradio-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 12px;
+        border: 1px solid var(--gradio-border);
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        resize: vertical;
+        transition: border-color 0.2s;
+    }
+
+    .gradio-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .gradio-audio-upload {
+        border: 2px dashed var(--gradio-border);
+        border-radius: 8px;
+        padding: 32px 16px;
+        text-align: center;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .gradio-audio-upload:hover {
+        border-color: var(--primary);
+        background: #fff8f0;
+    }
+
+    .gradio-audio-upload i {
+        font-size: 32px;
+        color: var(--gradio-text-secondary);
+        margin-bottom: 12px;
+    }
+
+    .gradio-button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+    }
+
+    .gradio-button:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .gradio-button:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+        transform: none;
+    }
+    .microphone-btn {
+        float: right;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .gradio-button.secondary {
+        background: #6b7280;
+        
+    }
+
+    .gradio-button.secondary:hover {
+        background: #4b5563;
+    }
+
+    .gradio-accordion {
+        margin-top: 20px;
+    }
+
+    .accordion-header {
+        background: #fafafa;
+        border: 1px solid var(--gradio-border);
+        border-radius: 6px;
+        padding: 12px 16px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+        color: var(--gradio-text);
+    }
+
+    .accordion-content {
+        border: 1px solid var(--gradio-border);
+        border-top: none;
+        border-radius: 0 0 6px 6px;
+        padding: 16px;
+        display: none;
+    }
+
+    .accordion-content.open {
+        display: block;
+    }
+
+    .emotion-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    input[type="range"] {
+        accent-color: var(--primary); /* Example: blue color */
+    }
+    .emotion-slider {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .emotion-slider label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--gradio-text);
+        margin-bottom: 8px;
+    }
+
+    .emotion-slider input[type="range"] {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #e5e7eb;
+        outline: none;
+        -webkit-appearance: none;
+    }
+
+    .emotion-slider input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+    }
+
+    .emotion-slider input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        border: none;
+    }
+
+    .slider-value {
+        text-align: center;
+        font-size: 12px;
+        color: var(--gradio-text-secondary);
+        margin-top: 4px;
+    }
+
+    .counter-display {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .counter-display .count {
+        font-weight: 700;
+        color: var(--gradio-text);
+    }
+
+    .counter-display .credits {
+        color: var(--gradio-text-secondary);
+        margin-top: 4px;
+        font-size: 12px;
+    }
+
+    audio {
+        width: 100%;
+        margin-top: 16px;
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 12px 0;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .checkbox-group label {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    .alert.success {
+        background: #d1fae5;
+        border: 1px solid #6ee7b7;
+        color: #065f46;
+    }
+
+    .alert.error {
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        color: #991b1b;
+    }
+
+    .alert.warning {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        color: #92400e;
+    }
+
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .gradio-row {
+            grid-template-columns: 1fr;
+        }
+
+        .emotion-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="gradio-container">
+    {% comment %} <div class="gradio-header">
+        <h1>TalkStudio Text To Speech</h1>
+        <p>Advanced AI-powered TalkStudio with emotion control</p>
+    </div> {% endcomment %}
+
+    <div id="alert-container"></div>
+
+    <div class="gradio-tabs">
+        <div class="tab-header">
+            <div class="tab-title">Text To Speech</div>
+        </div>
+
+       
+            <div class="px-3" style="display: flex; flex-direction: column;">
+                <!-- Voice Cloning Column (Hidden - now in text input section) -->
+            <div class="gradio-column" style="margin-top: 20px; order: 2; display: none;">
+                <!-- Voice Reference Upload -->
+                <div class="gradio-group">
+                    <div class="gradio-row px-0">
+                        <div class="gradio-column " style="display: none;">
+                            <!-- Reference Text (Optional) -->
+                            <div style="margin-top: 15px;">
+                                <label class="gradio-label">
+                                    <i class="fas fa-file-alt"></i> Reference Text (Optional)
+                                </label>
+                                <textarea
+                                    id="reference-text"
+                                    class="gradio-textarea"
+                                    style="min-height: 60px;"
+                                    placeholder="Enter the text spoken in reference audio (improves quality)&#10;Leave empty for auto-transcription (requires internet & disk space)"
+                                ></textarea>
+                                <div class="gradio-info">
+                                    <i class="fas fa-info-circle"></i> Optional: Type what is said in the audio for better quality. If empty, will auto-transcribe (may fail if disk space low).
+                                </div>
+                            </div>
+                        </div>
+                         
+                        <div class="gradio-column">
+                            <!-- Saved Voices Dropdown -->
+                            <div id="saved-voices-section" style="margin-top: 15px;">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--gradio-text);">
+                                    <i class="fas fa-folder-open"></i> Saved Cloned
+                                </label>
+                                <select id="saved-voices-dropdown" style="width: 100%; padding: 10px; border: 1px solid var(--gradio-border-color); border-radius: 8px; background: white; cursor: pointer;">
+                                    <option value="">-- Select a Saved Cloned --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="gradio-column" >
+                            <div id="audio-preview-container"></div>
+                            <!-- Save Voice Button -->
+                            
+                        </div>
+                    </div>
+                    <div id="save-voice-section" style="display: none;margin-bottom: 12px;">
+                        <button type="button" id="save-voice-btn" class="gradio-button secondary" style="width: 100%; background: var(--primary); color: white; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
+                            <i class="fas fa-save"></i> Save This Voice for Later
+                        </button>
+                    </div>
+                     
+
+                    <!-- Hidden Voice Cloning Section -->
+                    <div style="display: none;">
+                    <button type="button" id="record-btn" class="gradio-button secondary microphone-btn"  >
+                        <i class="fas fa-microphone record-btn-icon"></i>
+                        <span id="record-btn-text"></span>
+                    </button>
+                    <label class="gradio-label" style="margin-bottom: 12px;">
+                        <i class="fas fa-microphone"></i> Voice Cloning
+                    </label>
+
+                    <!-- Saved Voices Dropdown -->
+                    <div class="gradio-group" style="margin-bottom: 16px;">
+                        <label class="gradio-label">
+                            <i class="fas fa-book"></i> Use Saved Voice
+                        </label>
+                        <select id="saved-voices-dropdown" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                            <option value="">-- Select a saved voice --</option>
+                        </select>
+                        <small class="text-muted" style="display: block; margin-top: 4px;">
+                            <i class="fas fa-info-circle"></i> Or upload/record a new voice below
+                        </small>
+                    </div>
+
+                    <input type="file" id="reference-audio" accept="audio/*" style="display: none;">
+                    <div class="gradio-audio-upload" onclick="document.getElementById('reference-audio').click();">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Upload Your Clone</div>
+                        <div style="font-size: 12px; color: var(--gradio-text-secondary);">Upload speaker voice or record using microphone</div>
+                    </div>
+                    
+                    <div id="recording-status" style="display:none; margin-top:10px; padding:10px; background:#fff3cd; border-radius:8px; text-align:center;">
+                        <i class="fas fa-circle" style="color:#dc3545; animation:pulse 1s infinite;"></i>
+                        <span style="margin-left:8px;">Recording... <span id="recording-timer">0:00</span></span>
+                    </div>
+                    </div>
+                    
+
+                    
+
+                   
+                </div>
+
+                
+            </div>
+            <div class="gradio-group " style="margin-top: 20px;display: none;"> 
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="show-experimental" />
+                            <label for="show-experimental">Show experimental features</label>
+                        </div>
+                    </div>
+            <!-- Text Input Column (Now First) -->
+
+            <div class="gradio-column" style="margin: 20px 0px; order: 1;" >
+            <!-- Text Input -->
+                    <div class="gradio-group">
+                        <label class="gradio-label">
+                            Text To Speech
+                            <span class="gradio-info">Current TalkStudio Turbo 2.0 | Max: 50,000 characters</span>
+                        </label>
+                        <textarea
+                            id="input-text"
+                            class="gradio-textarea"
+                            placeholder="Please input the text to generate voice"
+                            maxlength="50000"
+                        ></textarea>
+                        <div class="counter-display">
+                            <div class="count" id="char-counter">0 characters</div>
+                            <div class="credits" id="credits-counter">0 credits needed | Available: <span id="credits-available">0</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Voice Selection & Upload Section (After Text Box) -->
+                    <div class="gradio-group" style="margin-top: 20px;">
+                        <!-- Voice Selection Dropdowns - 2 Columns -->
+                        <div class="row mb-3">
+                            <!-- Saved Cloned Voices Dropdown (6 columns) -->
+                            <div class="col-md-6">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--gradio-text);">
+                                    <i class="fas fa-folder-open"></i> Saved Cloned
+                                </label>
+                                <select id="saved-voices-dropdown-text-input" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                                    <option value="">-- Select a Saved Voice --</option>
+                                </select>
+                                <div id="audio-preview-container-text-input" style="margin-top: 10px;"></div>
+                            </div>
+
+                            <!-- Default Voices Dropdown (6 columns) -->
+                            <div class="col-md-6">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--gradio-text);">
+                                    <i class="fas fa-music"></i> Default Voices
+                                </label>
+                                <select id="default-voices-dropdown-text-input" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                                    <option value="">-- Select a Default Voice --</option>
+                                </select>
+                                <div id="default-audio-preview-container" style="margin-top: 10px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Voice Cloning Upload - Hidden -->
+                        <div style="display: none;">
+                            <label class="gradio-label" style="margin-bottom: 12px;">
+                                <i class="fas fa-microphone"></i> Voice Cloning
+                            </label>
+
+                            <!-- Microphone Record Button -->
+                            <button type="button" id="record-btn-text-input" class="gradio-button secondary" style="margin-bottom: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px;">
+                                <i class="fas fa-microphone" id="record-btn-icon-text-input"></i>
+                                <span id="record-btn-text-input-label">Record Voice</span>
+                            </button>
+
+                            <!-- Recording Status -->
+                            <div id="recording-status-text-input" style="display:none; margin-bottom:12px; padding:10px; background:#fff3cd; border-radius:8px; text-align:center;">
+                                <i class="fas fa-circle" style="color:#dc3545; animation:pulse 1s infinite;"></i>
+                                <span style="margin-left:8px;">Recording... <span id="recording-timer-text-input">0:00</span></span>
+                            </div>
+
+                            <!-- File Upload -->
+                            <input type="file" id="reference-audio-text-input" accept="audio/*" style="display: none;">
+                            <div class="gradio-audio-upload" onclick="document.getElementById('reference-audio-text-input').click();">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div style="font-weight: 600; margin-bottom: 4px;">Upload Your Clone</div>
+                                <div style="font-size: 12px; color: var(--gradio-text-secondary);">Upload speaker voice or record using microphone</div>
+                            </div>
+
+                            <!-- Audio Preview for uploaded file -->
+                            <div id="audio-upload-preview-text-input" style="margin-top: 10px;"></div>
+
+                            <!-- Save Voice Button -->
+                            <div id="save-voice-section-text-input" style="display: none; margin-top: 12px;">
+                                <button type="button" id="save-voice-btn-text-input" class="gradio-button secondary" style="width: 100%; background: var(--primary); color: white; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
+                                    <i class="fas fa-save"></i> Save This Voice for Later
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div class="gradio-group" style="margin-top: 20px;">
+                        <div class="gradio-accordion">
+                        <div class="accordion-header" onclick="toggleAccordion('settings-accordion')">
+                            <span><i class="fas fa-cog"></i> Settings</span>
+                            <i class="fas fa-chevron-down" id="settings-chevron"></i>
+                        </div>
+                        <div class="accordion-content " id="settings-accordion">
+
+                            <!-- Language Selection -->
+                            <div style="margin-bottom: 20px;">
+                                <label class="gradio-label">
+                                    <i class="fas fa-globe"></i> Language / زبان / भाषा / 語言
+                                </label>
+                                <select id="language-select" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                                    <option value="multilingual" selected>🌐 Auto-Detect (Recommended)</option>
+                                    {% for lang in supported_languages %}
+                                    <option value="{{ lang.language_code }}">{{ lang.flag_emoji }} {{ lang.language_name }} ({{ lang.native_name }})</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="gradio-info">
+                                    <i class="fas fa-info-circle"></i> Select the language of your input text for better results
+                                </div>
+                            </div>
+
+                            <!-- F5-TTS Usage Type -->
+                            <div style="margin-bottom: 20px;">
+                                <label class="gradio-label">
+                                    <i class="fas fa-gauge-high"></i> Generation Quality
+                                </label>
+                                <select id="usage-type" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                                    <option value="short" selected>Standard Quality (32 steps)</option>
+                                    <option value="long">Premium Quality (64 steps - slower)</option>
+                                </select>
+                                <div class="gradio-info">
+                                    <i class="fas fa-info-circle"></i> Higher steps produce smoother, more natural voice but take longer
+                                </div>
+                            </div>
+
+                            <!-- Voice Control Settings -->
+                            <div style="margin-bottom: 20px; padding: 16px; background: #fafafa; border-radius: 8px; border: 1px solid var(--gradio-border);">
+                                <div style="font-weight: 600; margin-bottom: 16px; color: var(--gradio-text);">
+                                    <i class="fas fa-sliders-h"></i> Voice Modifier
+                                </div>
+
+                                <div style="margin-bottom: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label class="gradio-label" style="margin: 0; font-size: 13px;">Speed</label>
+                                        <span style="font-size: 12px; color: var(--primary); font-weight: 600;" id="speed-value">1.0x</span>
+                                    </div>
+                                    <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.1" value="1.0" style="width: 100%;">
+                                </div>
+
+                                <div style="margin-bottom: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label class="gradio-label" style="margin: 0; font-size: 13px;">Pitch</label>
+                                        <span style="font-size: 12px; color: var(--primary); font-weight: 600;" id="pitch-value">1.0x</span>
+                                    </div>
+                                    <input type="range" id="pitch-slider" min="0.5" max="2.0" step="0.1" value="1.0" style="width: 100%;">
+                                </div>
+
+                                <div style="margin-bottom: 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label class="gradio-label" style="margin: 0; font-size: 13px;">Volume</label>
+                                        <span style="font-size: 12px; color: var(--primary); font-weight: 600;" id="volume-value">100%</span>
+                                    </div>
+                                    <input type="range" id="volume-slider" min="0" max="200" step="10" value="100" style="width: 100%;">
+                                </div>
+                            </div>
+                            <!-- Emotion Control Method -->
+                            <div style="margin-bottom: 20px;">
+                                <label class="gradio-label">Emotion Control Method</label>
+                                <select id="emotion-method" class="gradio-textarea" style="min-height: auto; height: 42px;">
+                                    <option value="0">Emotion from speaker</option>
+                                    <option value="1">Emotion from reference audio</option>
+                                    <option value="2">Custom emotion vectors</option>
+                                    <option value="3">Emotion from text description</option>
+                                </select>
+                            </div>
+
+                            <!-- Emotion Reference Audio -->
+                            <div id="emotion-ref-container" style="display:none; margin-bottom: 20px;">
+                                <label class="gradio-label">Upload emotion reference audio</label>
+                                <input type="file" id="emotion-ref-audio" accept="audio/*" style="display: none;">
+                                <div class="gradio-audio-upload" onclick="document.getElementById('emotion-ref-audio').click();" style="padding: 16px;">
+                                    <i class="fas fa-upload" style="font-size: 20px;"></i>
+                                    <div style="font-size: 13px; margin-top: 8px;">Click to upload</div>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label class="gradio-label" style="font-size: 12px;">Emotion Weight</label>
+                                    <input type="range" id="emotion-weight" min="0" max="1" step="0.05" value="0.5" style="width: 100%;">
+                                    <div class="slider-value"><span id="emotion-weight-value">0.5</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Emotion Vectors -->
+                            <div id="emotion-vectors-container" style="display:none;">
+                                <div class="emotion-grid">
+                                    <div class="emotion-slider">
+                                        <label>Happy</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="happy">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Angry</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="angry">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Sad</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="sad">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Afraid</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="afraid">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Disgusted</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="disgusted">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Melancholic</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="melancholic">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Surprised</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="surprised">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                    <div class="emotion-slider">
+                                        <label>Calm</label>
+                                        <input type="range" min="0" max="1" step="0.05" value="0" data-emotion="calm">
+                                        <div class="slider-value"><span>0.0</span></div>
+                                    </div>
+                                </div>
+                                <div class="checkbox-group" style="margin-top: 16px;">
+                                    <input type="checkbox" id="randomize-emotion" />
+                                    <label for="randomize-emotion">Randomize emotion sampling</label>
+                                </div>
+                            </div>
+
+                            <!-- Emotion Text Description -->
+                            <div id="emotion-text-container" style="display:none; margin-top: 20px;">
+                                <label class="gradio-label">Emotion Text Description</label>
+                                <textarea id="emotion-text" class="gradio-textarea" style="min-height: 80px;" placeholder="Describe the emotion you want..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button at End -->
+                    <button class="gradio-button" id="generate-btn" style="margin-top: 20px;">
+                        <i class="fas fa-play"></i>
+                        <span id="generate-btn-text">Generate Voice</span>
+                    </button>
+
+                    <!-- Progress Container -->
+                    <div id="progress-container" style="display:none; margin-top: 20px;">
+                        <div style="background: #f3f4f6; border-radius: 8px; padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: var(--gradio-text);">Generating Voice...</span>
+                                <span id="progress-percentage" style="color: var(--primary); font-weight: 600;">0%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); transition: width 0.3s;"></div>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 12px; color: var(--gradio-text-secondary); text-align: center;">
+                                <span id="progress-status">Initializing...</span>
+                                {% comment %} <span id="estimated-time" style="margin-left: 16px;"></span> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generated Audio Output at End -->
+                    <div class="gradio-group" id="output-container" style="display:none; margin-top: 20px;">
+                        <label class="gradio-label">
+                            <i class="fas fa-headphones"></i> Audio Generated Successfully
+                        </label>
+                        <audio id="output-audio" controls style="width: 100%; margin-bottom: 16px;"></audio>
+                        <button id="download-audio-btn" onclick="downloadGeneratedAudio()" class="gradio-button primary" style="margin-top: 12px;">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    </div>
+            </div>
+                
+           
+        </div>
+    
+    </div>
+</div>
+
+
+<!-- Save Voice Modal -->
+<div id="save-voice-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; width: 400px; max-width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <h3 style="margin-top: 0; color: #333;">Save Voice</h3>
+        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Voice Name:</label>
+        <input type="text" id="voice-title-input" placeholder="Enter a name for this voice..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+        <div style="display: flex; gap: 10px;">
+            <button onclick="saveVoiceWithTitle()" class="gradio-button primary" style="flex: 1; padding: 12px;">
+                <i class="fas fa-check"></i> Save
+            </button>
+            <button onclick="closeSaveModal()" class="gradio-button secondary" style="flex: 1; padding: 12px;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Low Credits Modal -->
+<div id="low-credits-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10001; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 40px; border-radius: 16px; width: 480px; max-width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center;">
+        <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-exclamation-triangle" style="color: white; font-size: 36px;"></i>
+        </div>
+        <h3 style="margin: 0 0 12px 0; color: #333; font-size: 24px; font-weight: 700;">Low Credits Warning</h3>
+        <p id="low-credits-message" style="color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+            You have low credits. Please purchase more credits to continue using TalkStudio without interruption.
+        </p>
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+            <p style="margin: 0; color: #888; font-size: 13px;">Current Balance</p>
+            <p id="current-credits-display" style="margin: 8px 0 0 0; font-size: 28px; font-weight: 700; color: #ff6b6b;">{{ user.credits|default:0 }} Credits</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button onclick="closeLowCreditsModal()" class="gradio-button secondary" style="flex: 1; padding: 14px; font-size: 15px;">
+                <i class="fas fa-times"></i> Close
+            </button>
+            <button onclick="goToPricing()" class="gradio-button primary" style="flex: 1; padding: 14px; font-size: 15px; background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); border: none;">
+                <i class="fas fa-shopping-cart"></i> Buy Credits
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== GLOBAL VARIABLES AND FUNCTIONS =====
+// (Must be in global scope for onclick handlers and accessibility)
+
+let currentAudioFile = null;
+
+// Helper function to get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Helper function to convert AudioBuffer to WAV format
+function audioBufferToWav(buffer) {
+    const numberOfChannels = buffer.numberOfChannels;
+    const sampleRate = buffer.sampleRate;
+    const format = 1; // PCM
+    const bitDepth = 16;
+
+    const bytesPerSample = bitDepth / 8;
+    const blockAlign = numberOfChannels * bytesPerSample;
+
+    const data = [];
+    for (let i = 0; i < buffer.length; i++) {
+        for (let channel = 0; channel < numberOfChannels; channel++) {
+            const sample = buffer.getChannelData(channel)[i];
+            const s = Math.max(-1, Math.min(1, sample));
+            data.push(s < 0 ? s * 0x8000 : s * 0x7FFF);
+        }
+    }
+
+    const dataLength = data.length * bytesPerSample;
+    const buffer_new = new ArrayBuffer(44 + dataLength);
+    const view = new DataView(buffer_new);
+
+    const writeString = (offset, string) => {
+        for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+        }
+    };
+
+    // RIFF identifier
+    writeString(0, 'RIFF');
+    // file length
+    view.setUint32(4, 36 + dataLength, true);
+    // RIFF type
+    writeString(8, 'WAVE');
+    // format chunk identifier
+    writeString(12, 'fmt ');
+    // format chunk length
+    view.setUint32(16, 16, true);
+    // sample format (raw)
+    view.setUint16(20, format, true);
+    // channel count
+    view.setUint16(22, numberOfChannels, true);
+    // sample rate
+    view.setUint32(24, sampleRate, true);
+    // byte rate (sample rate * block align)
+    view.setUint32(28, sampleRate * blockAlign, true);
+    // block align (channel count * bytes per sample)
+    view.setUint16(32, blockAlign, true);
+    // bits per sample
+    view.setUint16(34, bitDepth, true);
+    // data chunk identifier
+    writeString(36, 'data');
+    // data chunk length
+    view.setUint32(40, dataLength, true);
+
+    // write the PCM samples
+    let offset = 44;
+    for (let i = 0; i < data.length; i++) {
+        view.setInt16(offset, data[i], true);
+        offset += 2;
+    }
+
+    return buffer_new;
+}
+
+// Global alert function (needed by save function and other parts)
+function showAlert(message, type = 'info') {
+    const container = document.getElementById('alert-container');
+    if (!container) {
+        // Fallback if container doesn't exist
+        alert(message);
+        return;
+    }
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${type}`;
+    alertDiv.textContent = message;
+    container.appendChild(alertDiv);
+    alertDiv.style.display = 'block';
+
+    setTimeout(() => {
+        alertDiv.style.display = 'none';
+        alertDiv.remove();
+    }, 5000);
+}
+
+// Close save voice modal
+function closeSaveModal() {
+    const saveVoiceBtn = document.getElementById('save-voice-btn');
+    const modalSaveBtn = document.querySelector('#save-voice-modal button[onclick="saveVoiceWithTitle()"]');
+
+    // Re-enable buttons when closing modal
+    if (saveVoiceBtn) {
+        saveVoiceBtn.disabled = false;
+        saveVoiceBtn.innerHTML = '<i class="fas fa-save"></i> Save This Voice for Later';
+    }
+    if (modalSaveBtn) {
+        modalSaveBtn.disabled = false;
+        modalSaveBtn.innerHTML = '<i class="fas fa-check"></i> Save';
+    }
+
+    document.getElementById('save-voice-modal').style.display = 'none';
+    document.getElementById('voice-title-input').value = '';
+}
+
+// Show low credits modal
+function showLowCreditsModal(requiredCredits = null) {
+    const userCredits = {{ user.credits|default:0 }};
+    const messageEl = document.getElementById('low-credits-message');
+
+    // Update message based on credit amount and required credits
+    if (requiredCredits && requiredCredits > userCredits) {
+        const shortage = requiredCredits - userCredits;
+        messageEl.textContent = `You need ${requiredCredits} credits for this generation, but only have ${userCredits} credits. You need ${shortage} more credits.`;
+    } else if (userCredits === 0) {
+        messageEl.textContent = "You have no credits remaining. Please purchase credits to continue using TalkStudio.";
+    } else if (userCredits <= 100) {
+        messageEl.textContent = `You only have ${userCredits} credits left. Please purchase more credits to avoid service interruption.`;
+    } else {
+        messageEl.textContent = "You have low credits. Please purchase more credits to continue using TalkStudio without interruption.";
+    }
+
+    document.getElementById('low-credits-modal').style.display = 'flex';
+}
+
+// Close low credits modal
+function closeLowCreditsModal() {
+    document.getElementById('low-credits-modal').style.display = 'none';
+}
+
+// Navigate to pricing page
+function goToPricing() {
+    window.location.href = '/pricing/';
+}
+
+// Save voice with title (called from modal button onclick)
+async function saveVoiceWithTitle() {
+    const title = document.getElementById('voice-title-input').value.trim();
+    const saveVoiceBtn = document.getElementById('save-voice-btn');
+    const modalSaveBtn = document.querySelector('#save-voice-modal button[onclick="saveVoiceWithTitle()"]');
+
+    if (!title) {
+        showAlert('Please enter a voice name', 'error');
+        return;
+    }
+
+    if (!currentAudioFile) {
+        showAlert('No audio file to save', 'error');
+        return;
+    }
+
+    try {
+        // Disable both buttons during save operation
+        if (saveVoiceBtn) {
+            saveVoiceBtn.disabled = true;
+            saveVoiceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+        if (modalSaveBtn) {
+            modalSaveBtn.disabled = true;
+            modalSaveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('audio', currentAudioFile);
+
+        // Get CSRF token for Django
+        const csrftoken = getCookie('csrftoken');
+
+        const response = await fetch('/api/voices/save-voice/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert(`Voice "${title}" saved successfully!`, 'success');
+            closeSaveModal();
+
+            // Refresh saved voices dropdown if function exists
+            if (typeof loadSavedVoices === 'function') {
+                loadSavedVoices();
+            }
+
+            // Re-enable and reset the save button
+            if (saveVoiceBtn) {
+                saveVoiceBtn.disabled = false;
+                saveVoiceBtn.innerHTML = '<i class="fas fa-save"></i> Save This Voice for Later';
+            }
+        } else {
+            showAlert('Error: ' + (data.error || 'Unknown error'), 'error');
+
+            // Re-enable buttons on error
+            if (saveVoiceBtn) {
+                saveVoiceBtn.disabled = false;
+                saveVoiceBtn.innerHTML = '<i class="fas fa-save"></i> Save This Voice for Later';
+            }
+            if (modalSaveBtn) {
+                modalSaveBtn.disabled = false;
+                modalSaveBtn.innerHTML = '<i class="fas fa-check"></i> Save';
+            }
+        }
+    } catch (error) {
+        showAlert('Error saving voice: ' + error.message, 'error');
+
+        // Re-enable buttons on error
+        if (saveVoiceBtn) {
+            saveVoiceBtn.disabled = false;
+            saveVoiceBtn.innerHTML = '<i class="fas fa-save"></i> Save This Voice for Later';
+        }
+        if (modalSaveBtn) {
+            modalSaveBtn.disabled = false;
+            modalSaveBtn.innerHTML = '<i class="fas fa-check"></i> Save';
+        }
+    }
+}
+
+// Helper function to ensure HTTPS URLs (fix mixed content errors)
+function ensureHttps(url) {
+    if (!url) return url;
+
+    // If URL is relative, make it absolute with current origin
+    if (url.startsWith('/')) {
+        return window.location.origin + url;
+    }
+
+    // FIXED: Don't force HTTPS - use URL as-is from API
+    // The backend auto-detects HTTP/HTTPS and returns correct protocol
+    return url;
+}
+
+// Download generated audio function
+async function downloadGeneratedAudio() {
+    const audioElement = document.getElementById('output-audio');
+    const downloadBtn = document.getElementById('download-audio-btn');
+
+    if (!audioElement || !audioElement.src) {
+        showAlert('No audio file available to download', 'error');
+        return;
+    }
+
+    try {
+        // Disable button and show spinner
+        downloadBtn.disabled = true;
+        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+
+        // Fix mixed content: force HTTPS
+        let audioUrl = ensureHttps(audioElement.src);
+
+        // Fetch the audio file as blob to ensure download works
+        const response = await fetch(audioUrl);
+        const blob = await response.blob();
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `talkstudio_voice_${Date.now()}.wav`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        setTimeout(() => {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }, 100);
+
+        showAlert('Download started!', 'success');
+    } catch (error) {
+        console.error('Download error:', error);
+        showAlert('Download failed. Please try again.', 'error');
+    } finally {
+        // Re-enable button
+        setTimeout(() => {
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+        }, 1000);
+    }
+}
+
+// ===== END GLOBAL SECTION =====
+function toggleAccordion(id) {
+        const content = document.getElementById(id);
+        const chevron = document.getElementById(id.replace('accordion', 'chevron'));
+
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            chevron.style.transform = 'rotate(-90deg)';
+        } else {
+            content.classList.add('open');
+            chevron.style.transform = 'rotate(0deg)';
+        }
+    }
+document.addEventListener('DOMContentLoaded', function() {
+    // Note: getCookie and showAlert are now global functions (defined above)
+
+    
+
+    // Character counter
+    const inputText = document.getElementById('input-text');
+    const charCounter = document.getElementById('char-counter');
+    const creditsCounter = document.getElementById('credits-counter');
+
+    if (inputText && charCounter) {
+        inputText.addEventListener('input', function() {
+            const count = this.value.length;
+            const words = this.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+            charCounter.textContent = `${count.toLocaleString()} characters`;
+
+            // Update credits counter if it exists
+            if (creditsCounter) {
+                const creditsAvailable = document.getElementById('credits-available');
+                if (creditsAvailable) {
+                    creditsCounter.textContent = `${count.toLocaleString()} credits needed | Available: ${creditsAvailable.textContent}`;
+                }
+            }
+
+            // Color coding
+            if (count > 50000) {
+                charCounter.style.color = '#dc3545';
+                charCounter.style.fontWeight = 'bold';
+            } else if (count > 150000) {
+                charCounter.style.color = '#dc3545';
+            } else if (count > 100000) {
+                charCounter.style.color = '#ffc107';
+            } else {
+                charCounter.style.color = 'var(--gradio-text)';
+                charCounter.style.fontWeight = 'normal';
+            }
+        });
+    }
+
+    // Emotion sliders value display
+    document.querySelectorAll('.emotion-slider input[type="range"]').forEach(slider => {
+        slider.addEventListener('input', function() {
+            const valueDisplay = this.parentElement.querySelector('.slider-value span');
+            valueDisplay.textContent = parseFloat(this.value).toFixed(2);
+        });
+    });
+
+    // Emotion weight slider
+    document.getElementById('emotion-weight').addEventListener('input', function() {
+        document.getElementById('emotion-weight-value').textContent = parseFloat(this.value).toFixed(2);
+    });
+
+
+    // Voice control sliders value display
+    document.getElementById('speed-slider').addEventListener('input', function() {
+        document.getElementById('speed-value').textContent = parseFloat(this.value).toFixed(1) + 'x';
+    });
+
+    document.getElementById('pitch-slider').addEventListener('input', function() {
+        document.getElementById('pitch-value').textContent = parseFloat(this.value).toFixed(1) + 'x';
+    });
+
+    document.getElementById('volume-slider').addEventListener('input', function() {
+        document.getElementById('volume-value').textContent = this.value + '%';
+    });
+
+    // Progress tracking functions
+    function showProgress() {
+        document.getElementById('progress-container').style.display = 'block';
+        document.getElementById('output-container').style.display = 'none';
+    }
+
+    function hideProgress() {
+        document.getElementById('progress-container').style.display = 'none';
+    }
+
+    function showOutput() {
+        document.getElementById('output-container').style.display = 'block';
+    }
+
+    function updateProgress(percent, status, estimatedTime) {
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const progressStatus = document.getElementById('progress-status');
+        const estimatedTimeEl = document.getElementById('estimated-time');
+
+        if (progressBar) progressBar.style.width = percent + '%';
+        if (progressPercentage) progressPercentage.textContent = Math.round(percent) + '%';
+        if (progressStatus) progressStatus.textContent = status;
+        if (estimatedTime && estimatedTimeEl) {
+            estimatedTimeEl.textContent = 'Est. time: ' + estimatedTime;
+        }
+    }
+
+    function estimateTime(charCount) {
+        const seconds = Math.ceil(charCount / 100);
+        if (seconds < 60) {
+            return seconds + 's';
+        } else {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return mins + 'm ' + (secs > 0 ? secs + 's' : '');
+        }
+    }
+
+    // Load saved voices into dropdown
+    async function loadSavedVoices() {
+        try {
+            const response = await fetch('/api/voices/cloned/', {
+                credentials: 'include'
+            });
+            const responseData = await response.json();
+            const voices = responseData.results || responseData;
+
+            const dropdown = document.getElementById('saved-voices-dropdown');
+            dropdown.innerHTML = '<option value="">-- Select a saved voice --</option>';
+
+            if (voices && voices.length > 0) {
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.id;
+                    option.textContent = voice.name;
+                    option.dataset.audioUrl = ensureHttps(voice.audio_file);
+                    dropdown.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading saved voices:', error);
+        }
+    }
+
+    // Handle saved voice selection
+    document.getElementById('saved-voices-dropdown').addEventListener('change', async function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (!selectedOption.value) {
+            return;
+        }
+
+        let audioUrl = selectedOption.dataset.audioUrl;
+        console.log('Selected saved voice:', selectedOption.textContent, audioUrl);
+
+        try {
+            // Fetch the audio file
+            const response = await fetch(audioUrl);
+            const blob = await response.blob();
+            const file = new File([blob], `${selectedOption.textContent}.wav`, { type: 'audio/wav' });
+
+            // Set to file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            const refAudioInput = document.getElementById('reference-audio');
+            refAudioInput.files = dataTransfer.files;
+
+            // Mark as from dropdown
+            refAudioInput.dataset.fromDropdown = 'true';
+
+            // Trigger change event to show preview
+            refAudioInput.dispatchEvent(new Event('change'));
+
+            console.log('Saved voice loaded successfully');
+        } catch (error) {
+            console.error('Error loading saved voice audio:', error);
+            alert('Failed to load saved voice. Please try again.');
+        }
+    });
+
+    // Load saved voices on page load
+    loadSavedVoices();
+
+    // Emotion method change
+    document.getElementById('emotion-method').addEventListener('change', function() {
+        const method = parseInt(this.value);
+
+        document.getElementById('emotion-ref-container').style.display = method === 1 ? 'block' : 'none';
+        document.getElementById('emotion-vectors-container').style.display = method === 2 ? 'block' : 'none';
+        document.getElementById('emotion-text-container').style.display = method === 3 ? 'block' : 'none';
+    });
+
+    // Voice recording
+    const recordBtn = document.getElementById('record-btn');
+    const recordBtnText = document.getElementById('record-btn-text');
+    const recordBtnIcon = document.getElementById('record-btn-icon');
+    const recordingStatus = document.getElementById('recording-status');
+    const recordingTimer = document.getElementById('recording-timer');
+    const referenceAudioInput = document.getElementById('reference-audio');
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let recordingInterval = null;
+
+    recordBtn.addEventListener('click', async function() {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const file = new File([blob], 'recorded.wav', { type: 'audio/wav' });
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    referenceAudioInput.files = dt.files;
+                    referenceAudioInput.dispatchEvent(new Event('change'));
+                    stream.getTracks().forEach(t => t.stop());
+                    showAlert('Voice recorded successfully!', 'success');
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordBtn.classList.remove('secondary');
+                recordBtn.style.background = '#dc3545';
+                //recordBtnText.textContent = 'Stop Recording';
+                recordBtnIcon.classList.remove('fa-microphone');
+                recordBtnIcon.classList.add('fa-microphone-slash');
+                recordingStatus.style.display = 'block';
+
+                let startTime = Date.now();
+                recordingInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    recordingTimer.textContent = Math.floor(elapsed / 60) + ':' + (elapsed % 60).toString().padStart(2, '0');
+                }, 1000);
+
+            } catch (err) {
+                showAlert('Microphone access denied', 'error');
+            }
+        } else {
+            if (mediaRecorder) mediaRecorder.stop();
+            isRecording = false;
+            recordBtn.classList.add('secondary');
+            recordBtn.style.background = '';
+            //recordBtnText.textContent = 'Record Your Voice';
+            recordBtnIcon.classList.add('fa-microphone');
+            recordBtnIcon.classList.remove('fa-microphone-slash');
+            recordingStatus.style.display = 'none';
+            if (recordingInterval) clearInterval(recordingInterval);
+            recordingTimer.textContent = '0:00';
+        }
+    });
+
+    // File preview - REMOVED: Replaced by comprehensive handler below (line 1029)
+    // The new handler includes preview + save button functionality
+
+    // Generate button
+    const generateBtn = document.getElementById('generate-btn');
+    const generateBtnText = document.getElementById('generate-btn-text');
+    const outputContainer = document.getElementById('output-container');
+    const outputAudio = document.getElementById('output-audio');
+
+    // Global polling interval
+    let progressPollingInterval = null;
+    let progressSimulationInterval = null;
+
+    // Progressive progress bar based on character count
+    function startProgressiveProgress(characterCount) {
+        // Clear any existing intervals
+        if (progressSimulationInterval) {
+            clearInterval(progressSimulationInterval);
+        }
+
+        // Calculate estimated time: 17 characters = 1 second
+        const estimatedSeconds = Math.ceil(characterCount / 17);
+        console.log(`📊 Characters: ${characterCount}, Estimated time: ${estimatedSeconds} seconds`);
+
+        // Update progress every second by 10%
+        let currentProgress = 0;
+        const progressIncrement = 10;
+        const intervalTime = 1000; // 1 second
+
+        updateProgress(0, 'Starting generation...', `~${estimatedSeconds}s`);
+
+        progressSimulationInterval = setInterval(() => {
+            currentProgress += progressIncrement;
+
+            // Cap at 90% - we'll jump to 100% when actual result arrives
+            if (currentProgress >= 90) {
+                currentProgress = 90;
+                clearInterval(progressSimulationInterval);
+                updateProgress(90, 'Finalizing...', 'Almost done');
+            } else {
+                const remainingSeconds = Math.ceil(((90 - currentProgress) / 10));
+                updateProgress(currentProgress, 'Generating voice...', `~${remainingSeconds}s`);
+            }
+        }, intervalTime);
+    }
+
+    // Stop progress simulation
+    function stopProgressiveProgress() {
+        if (progressSimulationInterval) {
+            clearInterval(progressSimulationInterval);
+            progressSimulationInterval = null;
+        }
+    }
+
+    // OLD FUNCTION - NOT USED ANYMORE
+    // Function to poll progress
+    async function pollProgress_OLD(taskId) {
+        try {
+            console.log('Polling progress for task:', taskId);
+            const url = `/api/tts/api/generation-progress/${taskId}/`;
+            console.log('Fetching from URL:', url);
+
+            const response = await fetch(url);
+            console.log('Response status:', response.status, response.statusText);
+
+            if (!response.ok) {
+                console.error('HTTP error:', response.status);
+                const text = await response.text();
+                console.error('Response text:', text);
+                return;
+            }
+
+            const data = await response.json();
+            console.log('Poll response:', data);
+
+            if (data.success) {
+                const status = data.status;
+                const progress = data.progress || 0;
+                const remainingTime = data.remaining_time;
+                console.log('✓ Status:', status, 'Progress:', progress, '%', 'Audio URL:', data.audio_url);
+
+                // Update UI based on status
+                let statusText = '';
+                if (status === 'pending') {
+                    statusText = 'Waiting to start...';
+                } else if (status === 'processing') {
+                    statusText = 'Generating audio...';
+                } else if (status === 'completed') {
+                    statusText = 'Complete!';
+                } else if (status === 'failed') {
+                    statusText = 'Failed';
+                }
+
+                // Format remaining time
+                let timeText = '';
+                if (remainingTime !== null && remainingTime !== undefined && status === 'processing') {
+                    const mins = Math.floor(remainingTime / 60);
+                    const secs = remainingTime % 60;
+                    timeText = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                }
+
+                console.log('Updating UI - Progress:', progress, 'Status:', statusText, 'Time:', timeText);
+                updateProgress(progress, statusText, timeText);
+
+                // Check if complete
+                if (status === 'completed') {
+                    if (progressPollingInterval) {
+                        clearInterval(progressPollingInterval);
+                        progressPollingInterval = null;
+                    }
+
+                    // Show audio
+                    if (data.audio_url) {
+                        console.log('Audio generation completed, URL:', data.audio_url);
+                        hideProgress();
+
+                        // Set audio source and show output (ensure HTTPS)
+                        outputAudio.src = ensureHttps(data.audio_url);
+                        showOutput();
+                        console.log('Output container shown');
+
+                        // Store audio file for download
+                        currentAudioFile = ensureHttps(data.audio_url);
+
+                        showAlert('Voice generated successfully!', 'success');
+
+                        // Re-enable generate button
+                        generateBtn.disabled = false;
+                        generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                    }
+                } else if (status === 'failed') {
+                    if (progressPollingInterval) {
+                        clearInterval(progressPollingInterval);
+                        progressPollingInterval = null;
+                    }
+                    hideProgress();
+                    showAlert('Voice generation failed', 'error');
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                }
+            } else {
+                console.error('Poll response unsuccessful:', data);
+            }
+        } catch (error) {
+            console.error('Error polling progress:', error);
+            // Don't stop polling on network errors, keep trying
+        }
+    }
+
+    generateBtn.addEventListener('click', async function() {
+        const text = inputText.value.trim();
+
+        // Check text first to calculate required credits
+        if (!text) {
+            showAlert('Please enter text to generate', 'error');
+            return;
+        }
+
+        // Calculate required credits based on text length
+        const userCredits = {{ user.credits|default:0 }};
+        const creditsPerCharacter = 1; // Adjust this based on platform settings
+        const textLength = text.length;
+        const requiredCredits = textLength * creditsPerCharacter;
+
+        // Check if user has enough credits for this generation
+        if (userCredits < requiredCredits) {
+            showLowCreditsModal(requiredCredits);
+            return;
+        }
+
+        // Warn if credits are getting low (less than 100 characters worth)
+        const lowCreditsThreshold = 100 * creditsPerCharacter;
+        if (userCredits < lowCreditsThreshold && userCredits >= requiredCredits) {
+            // User can generate this text, but warn about low balance
+            console.warn(`Low credits: ${userCredits} remaining`);
+        }
+
+        // FIXED: Check both file inputs (recording section and text input section)
+        const refAudioRecording = referenceAudioInput.files[0]; // reference-audio
+        const refAudioTextInput = document.getElementById('reference-audio-text-input').files[0]; // reference-audio-text-input
+        const referenceAudio = refAudioRecording || refAudioTextInput;
+
+        console.log('Generate button clicked');
+        console.log('Text length:', text.length);
+        console.log('Required credits:', requiredCredits);
+        console.log('Available credits:', userCredits);
+        console.log('Reference audio (recording):', refAudioRecording);
+        console.log('Reference audio (text input):', refAudioTextInput);
+        console.log('Reference audio (final):', referenceAudio);
+
+        if (!referenceAudio) {
+            console.error('No reference audio file found in either input!');
+            showAlert('Please upload or record a reference voice, or select a voice from the dropdowns', 'error');
+            return;
+        }
+
+        if (text.length > 50000) {
+            showAlert('Text exceeds 50,000 character limit', 'error');
+            return;
+        }
+
+        // Prepare emotion data
+        const emotionMethod = parseInt(document.getElementById('emotion-method').value);
+        const emotionWeight = parseFloat(document.getElementById('emotion-weight').value);
+        const emotionText = document.getElementById('emotion-text').value;
+        const randomizeEmotion = document.getElementById('randomize-emotion').checked;
+
+        const emotionVectors = [];
+        if (emotionMethod === 2) {
+            document.querySelectorAll('.emotion-slider input[type="range"]').forEach(slider => {
+                emotionVectors.push(parseFloat(slider.value));
+            });
+        }
+
+        // Get voice control values
+        const speed = parseFloat(document.getElementById('speed-slider').value);
+        const pitch = parseFloat(document.getElementById('pitch-slider').value);
+        const volume = parseInt(document.getElementById('volume-slider').value);
+        const usageType = document.getElementById('usage-type').value;
+        const referenceText = document.getElementById('reference-text').value.trim();
+        const language = document.getElementById('language-select').value;
+
+        const formData = new FormData();
+        formData.append('text', text);
+        formData.append('reference_audio', referenceAudio);
+        formData.append('reference_text', referenceText); // Manual or empty for auto-transcribe
+        formData.append('language', language);
+        formData.append('emotion_method', emotionMethod);
+        formData.append('emotion_weight', emotionWeight);
+        formData.append('emotion_text', emotionText);
+        formData.append('randomize_emotion', randomizeEmotion);
+        formData.append('emotion_vectors', JSON.stringify(emotionVectors));
+        formData.append('speed', speed);
+        formData.append('pitch', pitch);
+        formData.append('volume', volume);
+        formData.append('usage_type', usageType);
+
+        if (emotionMethod === 1 && document.getElementById('emotion-ref-audio').files[0]) {
+            formData.append('emotion_ref_audio', document.getElementById('emotion-ref-audio').files[0]);
+        }
+
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<div class="spinner"></div> Generating...';
+
+        showProgress();
+
+        // Start progressive progress based on character count
+        const characterCount = text.length;
+        startProgressiveProgress(characterCount);
+
+        try {
+            // Submit generation request
+            console.log('Sending generation request...');
+            const response = await fetch('/api/tts/generate/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData
+            });
+
+            console.log('Response received, status:', response.status, response.statusText);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('HTTP error:', response.status, errorText);
+                throw new Error(`Server error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Generation response:', data);
+
+            if (data.success && data.task_id) {
+                const taskId = data.task_id;
+                console.log('✅ Task created:', taskId);
+
+                // IMMEDIATE CHECK (since sync execution completes immediately)
+                setTimeout(async () => {
+                    console.log('⚡ IMMEDIATE CHECK - Fetching latest audio...');
+                    try {
+                        const resp = await fetch('/api/voices/generated/', { credentials: 'include' });
+                        const mvData = await resp.json();
+                        const audios = mvData.results || mvData;
+                        console.log('📊 My Voices response:', audios);
+
+                        if (audios && audios.length > 0) {
+                            const latest = audios[0];
+                            console.log('Latest audio:', latest);
+
+                            if (latest.audio_file) {
+                                const url = latest.audio_file.startsWith('/') || latest.audio_file.startsWith('http') ?
+                                    latest.audio_file : '/media/' + latest.audio_file;
+
+                                console.log('🎉 SHOWING AUDIO:', url);
+
+                                // Stop progressive progress and show completion
+                                stopProgressiveProgress();
+                                updateProgress(100, 'Complete!', '');
+
+                                // Small delay for smooth 100% display, then hide
+                                setTimeout(() => {
+                                    hideProgress();
+                                }, 1000);
+
+                                outputAudio.src = ensureHttps(url);
+                                showOutput();
+                                currentAudioFile = ensureHttps(url);
+                                showAlert('Voice generated successfully!', 'success');
+                                generateBtn.disabled = false;
+                                generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Immediate check error:', err);
+                    }
+                }, 1000);
+
+                // Show estimated time
+                if (data.estimated_time) {
+                    const mins = Math.floor(data.estimated_time / 60);
+                    const secs = data.estimated_time % 60;
+                    const timeText = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                    updateProgress(0, 'Pending...', timeText);
+                }
+
+                // Start polling - simplified and guaranteed to execute
+                let pollAttempts = 0;
+                const maxPolls = 150; // 5 minutes max (150 * 2 seconds)
+
+                const doPoll = async () => {
+                    pollAttempts++;
+                    console.log(`📡 Poll attempt #${pollAttempts}`);
+
+                    try {
+                        const pollUrl = `/api/tts/api/generation-progress/${taskId}/`;
+                        const pollResp = await fetch(pollUrl);
+
+                        if (!pollResp.ok) {
+                            console.error('Poll failed:', pollResp.status);
+
+                            // If poll endpoint fails, check My Voices API directly
+                            console.log('⚠️ Poll failed, checking My Voices API as backup...');
+                            const myVoicesResp = await fetch('/api/voices/generated/', { credentials: 'include' });
+                            if (myVoicesResp.ok) {
+                                const mvData = await myVoicesResp.json();
+                                const data = mvData.results || mvData;
+                                const targetAudio = data.find(a => a.id === taskId) || data[0];
+
+                                if (targetAudio && targetAudio.status === 'completed' && targetAudio.audio_file) {
+                                    console.log('✅ Found completed audio in My Voices!');
+                                    clearInterval(progressPollingInterval);
+                                    stopProgressiveProgress();
+
+                                    const audioUrl = targetAudio.audio_file.startsWith('/') || targetAudio.audio_file.startsWith('http') ?
+                                        targetAudio.audio_file : '/media/' + targetAudio.audio_file;
+
+                                    // Show 100%, then hide after 1 second
+                                    updateProgress(100, 'Complete!', '');
+                                    setTimeout(() => hideProgress(), 1000);
+
+                                    outputAudio.src = ensureHttps(audioUrl);
+                                    showOutput();
+                                    currentAudioFile = ensureHttps(audioUrl);
+                                    showAlert('Voice generated successfully!', 'success');
+                                    generateBtn.disabled = false;
+                                    generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                                }
+                            }
+                            return;
+                        }
+
+                        const pollData = await pollResp.json();
+                        console.log('📊 Poll data:', pollData);
+
+                        if (!pollData.success) {
+                            console.error('Poll unsuccessful');
+                            return;
+                        }
+
+                        const { status, progress, audio_url, queue_position, estimated_wait } = pollData;
+                        console.log(`Status: ${status}, Progress: ${progress}%, Queue: ${queue_position}`);
+
+                        // Update progress bar with queue info
+                        let statusText = '';
+                        let subText = '';
+
+                        if (status === 'pending' && queue_position > 0) {
+                            statusText = `Queue Position: #${queue_position}`;
+                            const waitMinutes = Math.ceil(estimated_wait / 60);
+                            subText = `Estimated wait: ${waitMinutes} ${waitMinutes === 1 ? 'minute' : 'minutes'}`;
+                        } else if (status === 'processing') {
+                            statusText = 'Generating your voice...';
+                            if (progress > 0) {
+                                subText = `${progress}% complete`;
+                            }
+                        } else {
+                            statusText = 'Pending...';
+                        }
+
+                        updateProgress(progress || 0, statusText, subText);
+
+                        // Check if completed
+                        if (status === 'completed') {
+                            console.log('✅ COMPLETED! Audio URL from poll:', audio_url);
+
+                            // Stop polling
+                            if (progressPollingInterval) {
+                                clearInterval(progressPollingInterval);
+                                progressPollingInterval = null;
+                            }
+
+                            // Fetch latest audio from My Voices API (always, to get fresh data)
+                            console.log('🔍 Fetching latest audio from My Voices API...');
+                            fetch('/api/voices/generated/', { credentials: 'include' })
+                                .then(res => res.json())
+                                .then(resp => {
+                                    const data = resp.results || resp;
+                                    console.log('📊 My Voices API response:', data);
+
+                                    if (data && data.length > 0) {
+                                        // Find audio matching current task or get latest
+                                        let targetAudio = data.find(a => a.id === taskId) || data[0];
+
+                                        const audioUrl = targetAudio.audio_file ?
+                                            (targetAudio.audio_file.startsWith('/') || targetAudio.audio_file.startsWith('http') ?
+                                                targetAudio.audio_file : '/media/' + targetAudio.audio_file) : null;
+
+                                        console.log('✅ Using audio URL:', audioUrl);
+
+                                        if (audioUrl) {
+                                            // Stop progressive progress and complete
+                                            stopProgressiveProgress();
+                                            updateProgress(100, 'Complete!', '');
+                                            setTimeout(() => hideProgress(), 1000);
+
+                                            outputAudio.src = ensureHttps(audioUrl);
+                                            showOutput();
+                                            currentAudioFile = ensureHttps(audioUrl);
+                                            showAlert('Voice generated successfully!', 'success');
+
+                                            // Re-enable button
+                                            generateBtn.disabled = false;
+                                            generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                                        } else {
+                                            updateProgress(100, 'Processing...', '');
+                                            showAlert('Audio generated but file not available yet', 'warning');
+                                            generateBtn.disabled = false;
+                                            generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                                        }
+                                    } else {
+                                        console.error('No audio found in My Voices');
+                                        updateProgress(100, 'Complete!', '');
+                                        showAlert('Audio generated but not found in library', 'error');
+                                        generateBtn.disabled = false;
+                                        generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('Error fetching from My Voices API:', err);
+
+                                    // Fallback to poll audio_url if API fails
+                                    stopProgressiveProgress();
+                                    if (audio_url) {
+                                        updateProgress(100, 'Complete!', '');
+                                        setTimeout(() => hideProgress(), 1000);
+                                        outputAudio.src = ensureHttps(audio_url);
+                                        showOutput();
+                                        currentAudioFile = ensureHttps(audio_url);
+                                        showAlert('Voice generated successfully!', 'success');
+                                    } else {
+                                        updateProgress(100, 'Error', '');
+                                        hideProgress();
+                                        showAlert('Audio generated but could not load', 'error');
+                                    }
+
+                                    generateBtn.disabled = false;
+                                    generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                                });
+                        } else if (status === 'failed') {
+                            console.error('❌ Generation failed');
+                            clearInterval(progressPollingInterval);
+                            stopProgressiveProgress();
+                            updateProgress(0, 'Failed', '');
+                            hideProgress();
+                            showAlert('Generation failed', 'error');
+                            generateBtn.disabled = false;
+                            generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                        } else if (pollAttempts >= maxPolls) {
+                            console.error('⏱️ Timeout - stopping polls');
+                            clearInterval(progressPollingInterval);
+                            stopProgressiveProgress();
+                            updateProgress(0, 'Timeout', '');
+                            hideProgress();
+                            showAlert('Generation timeout', 'error');
+                            generateBtn.disabled = false;
+                            generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+                        }
+                    } catch (err) {
+                        console.error('Poll error:', err);
+                    }
+                };
+
+                // Start immediate poll
+                console.log('🔄 About to call doPoll() for the first time...');
+                setTimeout(() => {
+                    console.log('⏰ Delayed poll starting...');
+                    doPoll();
+                }, 100);
+
+                // Start interval polling
+                console.log('⏱️ Setting up interval polling...');
+                progressPollingInterval = setInterval(() => {
+                    console.log('⏰ Interval tick');
+                    doPoll();
+                }, 2000);
+                console.log('✅ Polling started - interval ID:', progressPollingInterval);
+
+            } else {
+                stopProgressiveProgress();
+                hideProgress();
+                showAlert(data.error || 'Failed to start voice generation', 'error');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+            }
+        } catch (error) {
+            stopProgressiveProgress();
+            hideProgress();
+            showAlert('Network error: ' + error.message, 'error');
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="fas fa-play"></i> <span>Generate Voice</span>';
+        }
+    });
+
+    // Load user credits on page load
+    async function loadCredits() {
+        try {
+            const response = await fetch('/api/voices/credit-info/');
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('credits-available').textContent = data.credits_available || 0;
+            }
+        } catch (error) {
+            console.error('Failed to load credits:', error);
+        }
+    }
+
+
+    // ===== SAVE VOICE FEATURE =====
+    // Note: currentAudioFile is now a global variable (defined at top of script)
+
+    // Load saved voices on page load
+    async function loadSavedVoices() {
+        try {
+            const response = await fetch('/api/voices/saved-voices/');
+            const data = await response.json();
+
+            if (data.success) {
+                // Original dropdown in Voice Cloning section
+                const dropdown = document.getElementById('saved-voices-dropdown');
+                if (dropdown) {
+                    dropdown.innerHTML = '<option value="">-- Select a Saved Voice --</option>';
+                    data.voices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.id;
+                        const duration = formatDuration(voice.duration);
+                        option.textContent = `${voice.title} (${duration})`;
+                        option.dataset.url = ensureHttps(voice.url);
+                        dropdown.appendChild(option);
+                    });
+                }
+
+                // New dropdown in Text Input section (before Generate button)
+                const dropdownTextInput = document.getElementById('saved-voices-dropdown-text-input');
+                if (dropdownTextInput) {
+                    dropdownTextInput.innerHTML = '<option value="">-- Select a Saved Voice --</option>';
+                    data.voices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.id;
+                        const duration = formatDuration(voice.duration);
+                        option.textContent = `${voice.title} (${duration})`;
+                        option.dataset.url = ensureHttps(voice.url);
+                        dropdownTextInput.appendChild(option);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading saved voices:', error);
+        }
+    }
+
+    // Format duration helper
+    function formatDuration(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    }
+
+    // Load default voices into dropdown
+    async function loadDefaultVoices() {
+        console.log('🎤 Loading default voices...');
+        try {
+            const response = await fetch('/api/voices/library/');
+            console.log('API Response:', response.status);
+            const responseData = await response.json();
+            console.log('Response Data:', responseData);
+            const voices = responseData.results || responseData;
+            console.log('Voices found:', voices.length);
+
+            const dropdown = document.getElementById('default-voices-dropdown-text-input');
+            console.log('Dropdown element:', dropdown);
+
+            if (dropdown) {
+                dropdown.innerHTML = '<option value="">-- Select a Default Voice --</option>';
+
+                if (voices && voices.length > 0) {
+                    voices.forEach(voice => {
+                        // FIXED: Safe property access with fallbacks
+                        const voiceFile = voice.voice_file || voice.audio_file || voice.file;
+                        if (!voiceFile) {
+                            console.warn('⚠️ Voice has no audio file:', voice.name);
+                            return; // Skip this voice
+                        }
+
+                        const option = document.createElement('option');
+                        option.value = voice.id;
+                        option.textContent = `${voice.name} (${voice.accent || voice.language})`;
+                        option.dataset.audioUrl = ensureHttps(voiceFile);
+                        option.dataset.type = 'default';
+                        dropdown.appendChild(option);
+                        console.log('✅ Added voice:', voice.name);
+                    });
+                    console.log('✅ Default voices loaded successfully!');
+                } else {
+                    console.warn('⚠️ No voices found in response');
+                }
+            } else {
+                console.error('❌ Dropdown element not found: default-voices-dropdown-text-input');
+            }
+        } catch (error) {
+            console.error('❌ Error loading default voices:', error);
+        }
+    }
+
+    // Handle default voice selection
+    async function handleDefaultVoiceSelection(voiceId) {
+        const dropdown = document.getElementById('default-voices-dropdown-text-input');
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+        const previewContainer = document.getElementById('default-audio-preview-container');
+
+        console.log('Default voice selection triggered:', voiceId);
+
+        // Clear saved voices dropdown when default voice is selected
+        const savedDropdown = document.getElementById('saved-voices-dropdown-text-input');
+        if (savedDropdown && voiceId) {
+            savedDropdown.value = '';
+            const savedPreview = document.getElementById('audio-preview-container-text-input');
+            if (savedPreview) savedPreview.innerHTML = '';
+        }
+
+        if (!voiceId) {
+            if (previewContainer) previewContainer.innerHTML = '';
+            return;
+        }
+
+        try {
+            const audioUrl = ensureHttps(selectedOption.dataset.audioUrl);
+            console.log('Selected default voice:', selectedOption.textContent, audioUrl);
+
+            // Show audio preview
+            if (previewContainer) {
+                previewContainer.innerHTML = `
+                    <div style="padding: 12px; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; margin-top: 10px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <i class="fas fa-music" style="color: #0369a1; margin-right: 8px;"></i>
+                            <span style="font-weight: 600; color: #0369a1; font-size: 13px;">
+                                Preview: ${selectedOption.textContent}
+                            </span>
+                        </div>
+                        <audio controls style="width: 100%; height: 40px; border-radius: 4px;">
+                            <source src="${audioUrl}" type="audio/wav">
+                            <source src="${audioUrl}" type="audio/mp3">
+                            <source src="${audioUrl}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                `;
+                console.log('Preview HTML added to container');
+            } else {
+                console.error('Preview container not found!');
+            }
+
+            // Fetch the audio file and set it for TTS
+            const response = await fetch(audioUrl);
+            const blob = await response.blob();
+            console.log('Audio blob fetched:', blob.size, 'bytes');
+
+            // Create File object
+            const file = new File([blob], `default_voice_${voiceId}.wav`, { type: blob.type });
+
+            // Update the hidden file input
+            const refAudioInput = document.getElementById('reference-audio-text-input');
+            if (refAudioInput) {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                refAudioInput.files = dataTransfer.files;
+                refAudioInput.dataset.fromDropdown = 'true';
+                refAudioInput.dataset.voiceType = 'default';
+                console.log('File set to input, files count:', refAudioInput.files.length);
+            } else {
+                console.error('Reference audio input not found!');
+            }
+
+            console.log('Default voice loaded successfully for TTS');
+        } catch (error) {
+            console.error('Error loading default voice:', error);
+            if (previewContainer) {
+                previewContainer.innerHTML = `
+                    <div style="padding: 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b;">
+                        <i class="fas fa-exclamation-triangle"></i> Failed to load voice preview
+                    </div>
+                `;
+            }
+        }
+    }
+
+    // Handle saved voice selection
+    async function handleSavedVoiceSelection(voiceId, previewContainerId) {
+        const previewContainer = document.getElementById(previewContainerId || 'audio-preview-container');
+
+        // Determine which input and save section to use based on preview container
+        const isTextInputSection = previewContainerId === 'audio-preview-container-text-input';
+        const refAudioInputId = isTextInputSection ? 'reference-audio-text-input' : 'reference-audio';
+        const saveSectionId = isTextInputSection ? 'save-voice-section-text-input' : 'save-voice-section';
+        const saveSection = document.getElementById(saveSectionId);
+
+        console.log('handleSavedVoiceSelection called with:', {
+            voiceId,
+            previewContainerId,
+            isTextInputSection,
+            refAudioInputId,
+            saveSectionId
+        });
+
+        // Clear default voices dropdown when saved voice is selected
+        const defaultDropdown = document.getElementById('default-voices-dropdown-text-input');
+        if (defaultDropdown && voiceId) {
+            defaultDropdown.value = '';
+            const defaultPreview = document.getElementById('default-audio-preview-container');
+            if (defaultPreview) defaultPreview.innerHTML = '';
+        }
+
+        if (!voiceId) {
+            // If no voice selected, hide save section and clear preview
+            if (saveSection) saveSection.style.display = 'none';
+            if (previewContainer) previewContainer.innerHTML = '';
+            return;
+        }
+
+        try {
+            console.log('Loading saved voice:', voiceId);
+            const response = await fetch(`/api/voices/saved-voice/${voiceId}/`);
+            const data = await response.json();
+            console.log('Saved voice response:', data);
+
+            if (data.success) {
+                const voice = data.voice;
+                console.log('Voice URL:', voice.url);
+
+                // Fetch audio and create File object
+                const audioResponse = await fetch(ensureHttps(voice.url));
+                const blob = await audioResponse.blob();
+                console.log('Blob created, size:', blob.size, 'type:', blob.type);
+                const file = new File([blob], voice.title + '.wav', { type: 'audio/wav' });
+
+                // Set to the correct file input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                const refAudioInput = document.getElementById(refAudioInputId);
+                if (refAudioInput) {
+                    refAudioInput.files = dataTransfer.files;
+                    console.log('Files set to', refAudioInputId, 'input:', refAudioInput.files.length, 'files');
+
+                    // Mark this as from dropdown to prevent showing save button
+                    refAudioInput.dataset.fromDropdown = 'true';
+                    refAudioInput.dataset.voiceType = 'saved';
+                    // FIXED: Don't trigger change event - it causes double preview (dropdown preview + upload section preview)
+                    // refAudioInput.dispatchEvent(new Event('change'));
+                } else {
+                    console.error('Reference audio input not found:', refAudioInputId);
+                }
+
+                currentAudioFile = file;
+
+                // Show preview in the specified container
+                if (previewContainer) {
+                    previewContainer.innerHTML = `
+                        <div style="padding: 12px; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; margin-top: 10px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <i class="fas fa-file-audio" style="color: #0369a1; margin-right: 8px;"></i>
+                                <span style="font-weight: 600; color: #0369a1; font-size: 13px;">
+                                    Preview: ${voice.title}
+                                </span>
+                            </div>
+                            <audio controls style="width: 100%; height: 40px; border-radius: 4px;">
+                                <source src="${ensureHttps(voice.url)}" type="audio/wav">
+                                <source src="${ensureHttps(voice.url)}" type="audio/mp3">
+                                <source src="${ensureHttps(voice.url)}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    `;
+                    console.log('Saved voice preview added to container');
+                } else {
+                    console.error('Preview container not found:', previewContainerId);
+                }
+
+                // HIDE save button for dropdown-loaded voices (already saved)
+                if (saveSection) saveSection.style.display = 'none';
+
+                showAlert(`Loaded: ${voice.title}`, 'success');
+            } else {
+                console.error('Failed to load voice:', data.error);
+                showAlert('Error: ' + (data.error || 'Failed to load voice'), 'error');
+                if (previewContainer) {
+                    previewContainer.innerHTML = `
+                        <div style="padding: 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b;">
+                            <i class="fas fa-exclamation-triangle"></i> Failed to load voice
+                        </div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading voice:', error);
+            showAlert('Error loading voice: ' + error.message, 'error');
+            if (previewContainer) {
+                previewContainer.innerHTML = `
+                    <div style="padding: 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b;">
+                        <i class="fas fa-exclamation-triangle"></i> Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    }
+
+    // Attach event listener to original dropdown (in Voice Cloning section)
+    const dropdown = document.getElementById('saved-voices-dropdown');
+    if (dropdown) {
+        dropdown.addEventListener('change', function(e) {
+            handleSavedVoiceSelection(e.target.value, 'audio-preview-container');
+        });
+    }
+
+    // Attach event listener to new dropdown (in Text Input section)
+    const dropdownTextInput = document.getElementById('saved-voices-dropdown-text-input');
+    if (dropdownTextInput) {
+        dropdownTextInput.addEventListener('change', function(e) {
+            handleSavedVoiceSelection(e.target.value, 'audio-preview-container-text-input');
+        });
+    }
+
+    // Handle microphone recording in text input section
+    const recordBtnTextInput = document.getElementById('record-btn-text-input');
+    const recordBtnIconTextInput = document.getElementById('record-btn-icon-text-input');
+    const recordingStatusTextInput = document.getElementById('recording-status-text-input');
+    const recordingTimerTextInput = document.getElementById('recording-timer-text-input');
+
+    let mediaRecorderTextInput = null;
+    let audioChunksTextInput = [];
+    let isRecordingTextInput = false;
+    let recordingIntervalTextInput = null;
+
+    if (recordBtnTextInput) {
+        recordBtnTextInput.addEventListener('click', async function() {
+            if (!isRecordingTextInput) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorderTextInput = new MediaRecorder(stream);
+                    audioChunksTextInput = [];
+
+                    mediaRecorderTextInput.ondataavailable = (e) => audioChunksTextInput.push(e.data);
+                    mediaRecorderTextInput.onstop = () => {
+                        const blob = new Blob(audioChunksTextInput, { type: 'audio/wav' });
+                        const file = new File([blob], 'recorded.wav', { type: 'audio/wav' });
+
+                        // Set to text input file input
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        const refAudioTextInput = document.getElementById('reference-audio-text-input');
+                        if (refAudioTextInput) {
+                            refAudioTextInput.files = dt.files;
+                            refAudioTextInput.dispatchEvent(new Event('change'));
+                        }
+
+                        stream.getTracks().forEach(t => t.stop());
+                        showAlert('Voice recorded successfully!', 'success');
+                    };
+
+                    mediaRecorderTextInput.start();
+                    isRecordingTextInput = true;
+                    recordBtnTextInput.classList.remove('secondary');
+                    recordBtnTextInput.style.background = '#dc3545';
+                    recordBtnTextInput.style.color = 'white';
+                    if (recordBtnIconTextInput) {
+                        recordBtnIconTextInput.classList.remove('fa-microphone');
+                        recordBtnIconTextInput.classList.add('fa-stop-circle');
+                    }
+                    recordingStatusTextInput.style.display = 'block';
+
+                    let startTime = Date.now();
+                    recordingIntervalTextInput = setInterval(() => {
+                        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                        const mins = Math.floor(elapsed / 60);
+                        const secs = elapsed % 60;
+                        recordingTimerTextInput.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                    }, 1000);
+                } catch (error) {
+                    console.error('Microphone error:', error);
+                    showAlert('Microphone access denied', 'error');
+                }
+            } else {
+                if (mediaRecorderTextInput) mediaRecorderTextInput.stop();
+                isRecordingTextInput = false;
+                recordBtnTextInput.classList.add('secondary');
+                recordBtnTextInput.style.background = '';
+                recordBtnTextInput.style.color = '';
+                if (recordBtnIconTextInput) {
+                    recordBtnIconTextInput.classList.add('fa-microphone');
+                    recordBtnIconTextInput.classList.remove('fa-stop-circle');
+                }
+                recordingStatusTextInput.style.display = 'none';
+                if (recordingIntervalTextInput) clearInterval(recordingIntervalTextInput);
+                recordingTimerTextInput.textContent = '0:00';
+            }
+        });
+    }
+
+    // Handle new file upload in text input section
+    const refAudioTextInput = document.getElementById('reference-audio-text-input');
+    if (refAudioTextInput) {
+        refAudioTextInput.addEventListener('change', async function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                console.log('Text input - Original audio file:', file.name, file.size);
+
+                // Trim audio to 10 seconds max using Web Audio API
+                let finalFile = file;
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const arrayBuffer = await file.arrayBuffer();
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    const duration = audioBuffer.duration;
+                    console.log('Text input - Original audio duration:', duration, 'seconds');
+
+                    // Trim to 9 seconds if longer
+                    const maxDuration = 9.0;
+                    if (duration > maxDuration) {
+                        console.log('Text input - Trimming audio from', duration, 'to', maxDuration, 'seconds');
+
+                        const sampleRate = audioBuffer.sampleRate;
+                        const numberOfChannels = audioBuffer.numberOfChannels;
+                        const maxSamples = Math.floor(maxDuration * sampleRate);
+
+                        // Create new buffer with trimmed audio
+                        const trimmedBuffer = audioContext.createBuffer(
+                            numberOfChannels,
+                            maxSamples,
+                            sampleRate
+                        );
+
+                        // Copy audio data for each channel
+                        for (let channel = 0; channel < numberOfChannels; channel++) {
+                            const originalData = audioBuffer.getChannelData(channel);
+                            const trimmedData = trimmedBuffer.getChannelData(channel);
+                            for (let i = 0; i < maxSamples; i++) {
+                                trimmedData[i] = originalData[i];
+                            }
+                        }
+
+                        // Convert trimmed buffer to WAV file
+                        const trimmedWav = audioBufferToWav(trimmedBuffer);
+                        const trimmedBlob = new Blob([trimmedWav], { type: 'audio/wav' });
+                        const trimmedFile = new File([trimmedBlob], file.name, { type: 'audio/wav' });
+
+                        finalFile = trimmedFile;
+                        console.log('Text input - Audio trimmed to 10 seconds:', trimmedFile.size, 'bytes');
+                        showAlert('Audio trimmed to 10 seconds for optimal quality', 'info');
+                    } else {
+                        console.log('Text input - Audio duration is optimal, no trimming needed');
+                    }
+
+                    audioContext.close();
+                } catch (trimError) {
+                    console.error('Text input - Audio trimming failed:', trimError);
+                    showAlert('Could not trim audio, using original file', 'warning');
+                }
+
+                currentAudioFile = finalFile;
+                console.log('Text input - Final audio file set:', finalFile.name, finalFile.size);
+
+                // Sync with main reference-audio input
+                const mainRefAudio = document.getElementById('reference-audio');
+                if (mainRefAudio) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(finalFile);
+                    mainRefAudio.files = dataTransfer.files;
+                }
+
+                // Show preview
+                const previewContainer = document.getElementById('audio-upload-preview-text-input');
+                if (previewContainer) {
+                    previewContainer.innerHTML = `
+                        <div style="padding: 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #0369a1;">
+                                    <i class="fas fa-file-audio"></i> ${finalFile.name}
+                                </span>
+                                <span style="color: #64748b; font-size: 12px;">${(finalFile.size / 1024).toFixed(2)} KB</span>
+                            </div>
+                            <audio controls style="width: 100%; margin-top: 8px;" src="${URL.createObjectURL(finalFile)}"></audio>
+                        </div>
+                    `;
+                }
+
+                // Show save button
+                const saveSection = document.getElementById('save-voice-section-text-input');
+                if (saveSection) {
+                    saveSection.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    // Handle save button in text input section
+    const saveBtnTextInput = document.getElementById('save-voice-btn-text-input');
+    if (saveBtnTextInput) {
+        saveBtnTextInput.addEventListener('click', function() {
+            if (!currentAudioFile) {
+                showAlert('No audio file to save', 'error');
+                return;
+            }
+            document.getElementById('save-voice-modal').style.display = 'flex';
+            document.getElementById('voice-title-input').focus();
+        });
+    }
+
+    // Handle audio upload with preview
+    const refAudio = document.getElementById('reference-audio');
+    console.log('Reference audio element:', refAudio);
+
+    if (refAudio) {
+        refAudio.addEventListener('change', async function(e) {
+            console.log('Audio file changed event fired');
+            console.log('Files:', e.target.files);
+
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                console.log('Original audio file:', file.name, file.size);
+
+                // Check if this is from dropdown or manual upload
+                const isFromDropdown = e.target.dataset.fromDropdown === 'true';
+                console.log('Is from dropdown:', isFromDropdown);
+
+                // Trim audio to 10 seconds max using Web Audio API
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const arrayBuffer = await file.arrayBuffer();
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    const duration = audioBuffer.duration;
+                    console.log('Original audio duration:', duration, 'seconds');
+
+                    // Trim to 9 seconds if longer
+                    const maxDuration = 9.0;
+                    if (duration > maxDuration) {
+                        console.log('Trimming audio from', duration, 'to', maxDuration, 'seconds');
+
+                        const sampleRate = audioBuffer.sampleRate;
+                        const numberOfChannels = audioBuffer.numberOfChannels;
+                        const maxSamples = Math.floor(maxDuration * sampleRate);
+
+                        // Create new buffer with trimmed audio
+                        const trimmedBuffer = audioContext.createBuffer(
+                            numberOfChannels,
+                            maxSamples,
+                            sampleRate
+                        );
+
+                        // Copy audio data for each channel
+                        for (let channel = 0; channel < numberOfChannels; channel++) {
+                            const originalData = audioBuffer.getChannelData(channel);
+                            const trimmedData = trimmedBuffer.getChannelData(channel);
+                            for (let i = 0; i < maxSamples; i++) {
+                                trimmedData[i] = originalData[i];
+                            }
+                        }
+
+                        // Convert trimmed buffer to WAV file
+                        const trimmedWav = audioBufferToWav(trimmedBuffer);
+                        const trimmedBlob = new Blob([trimmedWav], { type: 'audio/wav' });
+                        const trimmedFile = new File([trimmedBlob], file.name, { type: 'audio/wav' });
+
+                        currentAudioFile = trimmedFile;
+                        console.log('Audio trimmed to 10 seconds:', trimmedFile.size, 'bytes');
+                        showAlert('Audio trimmed to 10 seconds for optimal quality', 'info');
+                    } else {
+                        currentAudioFile = file;
+                        console.log('Audio duration is optimal, no trimming needed');
+                    }
+
+                    audioContext.close();
+                } catch (trimError) {
+                    console.error('Audio trimming failed:', trimError);
+                    currentAudioFile = file;
+                    showAlert('Could not trim audio, using original file', 'warning');
+                }
+
+                console.log('Final audio file set:', currentAudioFile.name, currentAudioFile.size);
+
+                // Reset the flag for next upload
+                if (isFromDropdown) {
+                    delete e.target.dataset.fromDropdown;
+                }
+
+                // Show audio preview
+                const previewContainer = document.getElementById('audio-preview-container');
+                console.log('Preview container:', previewContainer);
+
+                if (previewContainer) {
+                    previewContainer.innerHTML = `
+                        <div style="margin-top: 10px; padding: 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #0369a1;">
+                                    <i class="fas fa-file-audio"></i> ${file.name}
+                                </span>
+                                <span style="color: #64748b; font-size: 12px;">${(file.size / 1024).toFixed(2)} KB</span>
+                            </div>
+                            <audio controls style="width: 100%; margin-top: 8px;" src="${URL.createObjectURL(file)}"></audio>
+                        </div>
+                    `;
+                    console.log('Preview HTML set');
+                }
+
+                // Show save voice button ONLY if manually uploaded (not from dropdown)
+                const saveSection = document.getElementById('save-voice-section');
+                const saveBtn = document.getElementById('save-voice-btn');
+                console.log('Save section element:', saveSection);
+                console.log('Save section current display:', saveSection ? saveSection.style.display : 'NOT FOUND');
+
+                if (saveSection && saveBtn) {
+                    if (isFromDropdown) {
+                        // Hide save button for dropdown voices (already saved)
+                        saveSection.style.display = 'none';
+                        console.log('Save section hidden (from dropdown)');
+                    } else {
+                        // Show save button for manual uploads with enabled state
+                        saveSection.style.display = 'block';
+                        saveBtn.disabled = false;
+                        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save This Voice for Later';
+                        console.log('Save section display set to block');
+                        console.log('Save section new display value:', saveSection.style.display);
+                        console.log('Save section computed style:', window.getComputedStyle(saveSection).display);
+                    }
+                } else {
+                    console.error('ERROR: save-voice-section or save-voice-btn element not found!');
+                }
+
+                if (!isFromDropdown) {
+                    showAlert('Audio uploaded successfully!', 'success');
+                }
+                console.log('Upload complete');
+            }
+        });
+        console.log('Change event listener added to reference audio');
+    } else {
+        console.error('ERROR: reference-audio element not found!');
+    }
+
+    // Save voice button click
+    const saveBtn = document.getElementById('save-voice-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            if (!currentAudioFile) {
+                showAlert('No audio file to save', 'error');
+                return;
+            }
+            document.getElementById('save-voice-modal').style.display = 'flex';
+            document.getElementById('voice-title-input').focus();
+        });
+    }
+
+    // Load saved voices
+    loadSavedVoices();
+
+    // Load default voices
+    loadDefaultVoices();
+
+    // Attach event listener to default voices dropdown
+    const defaultDropdown = document.getElementById('default-voices-dropdown-text-input');
+    if (defaultDropdown) {
+        console.log('✅ Attaching event listener to default voices dropdown');
+        defaultDropdown.addEventListener('change', function(e) {
+            console.log('🎯 Default voice dropdown changed:', e.target.value);
+            handleDefaultVoiceSelection(e.target.value);
+        });
+    } else {
+        console.error('❌ Default voices dropdown not found!');
+    }
+
+    // Load credits on page load
+    loadCredits();
+});
+</script>
+{% endblock %}

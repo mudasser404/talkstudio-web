@@ -1,0 +1,356 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "My Profile" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 32px;
+        border-radius: var(--radius-lg);
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: 700;
+        background: var(--primary-light);
+        color: var(--primary);
+        margin: 0 auto 16px;
+    }
+
+    .profile-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+    }
+
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 24px;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 16px;
+        background: var(--bg-primary);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Profile Settings" %}</li>
+            </ol>
+        </nav>
+
+        <!-- Profile Header -->
+        <div class="profile-header text-center">
+            <div class="profile-avatar" id="avatar-display">
+                {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+            </div>
+            <h2 id="display-name">{{ request.user.get_full_name }}</h2>
+            <p class="mb-0">{{ request.user.email }}</p>
+
+            <!-- Stats -->
+            <div class="stat-row container mt-4">
+                <div class="stat-item">
+                    <div class="stat-value" id="credits-display">{{ request.user.credits }}</div>
+                    <div class="stat-label">{% trans "Credits Available" %}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="voices-count">0</div>
+                    <div class="stat-label">{% trans "Cloned Voices" %}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="audios-count">0</div>
+                    <div class="stat-label">{% trans "Generated Audios" %}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Personal Information -->
+                <div class="profile-card">
+                    <h4 class="mb-4">{% trans "Personal Information" %}</h4>
+                    <form id="profile-form">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{% trans "First Name" %}</label>
+                                <input type="text" class="form-control" id="first_name" value="{{ request.user.first_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{% trans "Last Name" %}</label>
+                                <input type="text" class="form-control" id="last_name" value="{{ request.user.last_name }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Email" %}</label>
+                            <input type="email" class="form-control" id="email" value="{{ request.user.email }}" readonly>
+                            <small class="text-muted">{% trans "Email cannot be changed" %}</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Username" %}</label>
+                            <input type="text" class="form-control" id="username" value="{{ request.user.username }}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {% trans "Save Changes" %}
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Change Password -->
+                <div class="profile-card">
+                    <h4 class="mb-4">{% trans "Change Password" %}</h4>
+                    <form id="password-form">
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Current Password" %}</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="current_password" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('current_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "New Password" %}</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="new_password" required minlength="8">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('new_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">{% trans "Must be at least 8 characters long" %}</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Confirm New Password" %}</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirm_password" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirm_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> {% trans "Update Password" %}
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Account Information -->
+                <div class="profile-card">
+                    <h4 class="mb-4">{% trans "Account Information" %}</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{% trans "Subscription Type" %}</label>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-{{ request.user.subscription_type|default:'free' }}">
+                                    {{ request.user.get_subscription_type_display|default:'Free' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{% trans "Member Since" %}</label>
+                            <div class="form-control-plaintext">{{ request.user.date_joined|date:"F d, Y" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+
+    // Profile update form
+    document.getElementById('profile-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const data = {
+            first_name: document.getElementById('first_name').value,
+            last_name: document.getElementById('last_name').value,
+            username: document.getElementById('username').value
+        };
+
+        try {
+            const response = await fetch('/api/accounts/profile/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                showNotification('{% trans "Profile updated successfully!" %}', 'success');
+
+                // Update display name
+                document.getElementById('display-name').textContent = `${result.first_name} ${result.last_name}`;
+                document.getElementById('avatar-display').textContent =
+                    `${result.first_name.charAt(0).toUpperCase()}${result.last_name.charAt(0).toUpperCase()}`;
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || '{% trans "Failed to update profile" %}', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            showNotification('{% trans "Failed to update profile" %}', 'error');
+        }
+    });
+
+    // Password change form
+    document.getElementById('password-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const newPassword = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        if (newPassword !== confirmPassword) {
+            showNotification('{% trans "Passwords do not match" %}', 'error');
+            return;
+        }
+
+        const data = {
+            current_password: document.getElementById('current_password').value,
+            new_password: newPassword
+        };
+
+        try {
+            const response = await fetch('/api/accounts/change-password/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                showNotification('{% trans "Password updated successfully!" %}', 'success');
+                document.getElementById('password-form').reset();
+            } else {
+                const error = await response.json();
+                showNotification(error.detail || '{% trans "Failed to update password" %}', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating password:', error);
+            showNotification('{% trans "Failed to update password" %}', 'error');
+        }
+    });
+});
+
+async function loadStats() {
+    try {
+        // Load voices count
+        const voicesResponse = await fetch('/api/voices/cloned/', { credentials: 'include' });
+        const voicesData = await voicesResponse.json();
+        const voices = voicesData.results || voicesData;
+        document.getElementById('voices-count').textContent = voices.length;
+
+        // Load audios count
+        const audiosResponse = await fetch('/api/voices/generated/', { credentials: 'include' });
+        const audiosData = await audiosResponse.json();
+        const audios = audiosData.results || audiosData;
+        document.getElementById('audios-count').textContent = audios.length;
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed top-0 end-0 m-3`;
+    notification.style.zIndex = '9999';
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+        ${message}
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const button = input.parentElement.querySelector('button');
+    const icon = button.querySelector('i');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}

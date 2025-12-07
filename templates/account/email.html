@@ -1,0 +1,170 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Email Addresses" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header mb-4">
+                <h2><i class="fas fa-envelope me-2"></i>{% trans "Email Addresses" %}</h2>
+                <p class="text-muted">{% trans "Manage your email addresses and verification status" %}</p>
+            </div>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>{% trans "Your Email Addresses" %}</h5>
+                </div>
+                <div class="card-body">
+                    {% if user.emailaddress_set.all %}
+                    <p class="text-muted mb-4">
+                        {% trans "The following email addresses are associated with your account:" %}
+                    </p>
+
+                    <form action="{% url 'account_email' %}" method="post" class="email-form">
+                        {% csrf_token %}
+
+                        {% for emailaddress in user.emailaddress_set.all %}
+                        <div class="email-address-item mb-3 p-3" style="background: #f9fafb; border-radius: 12px; border: 2px solid {% if emailaddress.primary %}#3b82f6{% else %}#e5e7eb{% endif %};">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="width: 48px; height: 48px; background: {% if emailaddress.verified %}linear-gradient(135deg, #10b981 0%, #059669 100%){% else %}linear-gradient(135deg, #f59e0b 0%, #d97706 100%){% endif %}; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas {% if emailaddress.verified %}fa-check-circle{% else %}fa-clock{% endif %}" style="color: white; font-size: 20px;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1" style="font-weight: 600; color: #1f2937;">
+                                            {{ emailaddress.email }}
+                                            {% if emailaddress.primary %}
+                                            <span class="badge bg-primary ms-2">{% trans "Primary" %}</span>
+                                            {% endif %}
+                                        </h6>
+                                        <p class="mb-0" style="font-size: 14px; color: #6b7280;">
+                                            {% if emailaddress.verified %}
+                                            <i class="fas fa-check-circle text-success me-1"></i>{% trans "Verified" %}
+                                            {% else %}
+                                            <i class="fas fa-exclamation-circle text-warning me-1"></i>{% trans "Unverified" %}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    {% if not emailaddress.verified %}
+                                    <button type="submit" name="action_send" value="{{ emailaddress.email }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-paper-plane me-1"></i>{% trans "Re-send Verification" %}
+                                    </button>
+                                    {% endif %}
+
+                                    {% if not emailaddress.primary %}
+                                    <button type="submit" name="action_primary" value="{{ emailaddress.email }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-star me-1"></i>{% trans "Make Primary" %}
+                                    </button>
+                                    <button type="submit" name="action_remove" value="{{ emailaddress.email }}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash me-1"></i>{% trans "Remove" %}
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </form>
+
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {% trans "You currently do not have any email address setup. You should really add an email address so you can receive notifications and reset your password." %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>{% trans "Add Email Address" %}</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'account_email' %}" method="post" class="add-email-form">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="id_email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>{% trans "Email Address" %}
+                                    </label>
+                                    <input type="email" name="email" class="form-control" id="id_email"
+                                           placeholder="{% trans 'Enter new email address' %}" required>
+                                    <small class="text-muted">{% trans "A verification email will be sent to this address" %}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" name="action_add" class="btn btn-primary w-100 mb-3">
+                                    <i class="fas fa-plus me-2"></i>{% trans "Add Email" %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'profile' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>{% trans "Back to Profile" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .email-address-item {
+        transition: all 0.2s;
+    }
+
+    .email-address-item:hover {
+        background: #f3f4f6 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .email-address-item {
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    .email-address-item:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .email-address-item:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+</style>
+{% endblock %}

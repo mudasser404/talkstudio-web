@@ -1,0 +1,533 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Model Training" %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{% trans "AI Model Training" %}</h1>
+    <p class="page-subtitle">{% trans "Train F5-TTS model for new languages or improve existing ones" %}</p>
+</div>
+
+<!-- Training Instructions Card -->
+<div class="card mb-4">
+    <div class="card-header" style="background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); color: white;">
+        <h5 class="card-title mb-0"><i class="fas fa-book-open me-2"></i>{% trans "Training Instructions" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>{% trans "Important:" %}</strong> {% trans "Model training requires significant computational resources (GPU recommended) and time." %}
+        </div>
+
+        <h6 class="fw-bold mb-3">{% trans "Step-by-Step Guide:" %}</h6>
+        <ol class="training-steps">
+            <li>
+                <strong>{% trans "Prepare Training Data:" %}</strong>
+                <ul>
+                    <li>{% trans "Collect high-quality audio samples (minimum 30 minutes, recommended 2-5 hours)" %}</li>
+                    <li>{% trans "Audio should be 16kHz or 24kHz, mono, WAV format" %}</li>
+                    <li>{% trans "Each audio file should have corresponding text transcription" %}</li>
+                    <li>{% trans "Organize in pairs: audio.wav + audio.txt" %}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{% trans "Select Target Language:" %}</strong>
+                <ul>
+                    <li>{% trans "Choose the language you want to train the model for" %}</li>
+                    <li>{% trans "Default model supports English & Chinese" %}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{% trans "Configure Training Parameters:" %}</strong>
+                <ul>
+                    <li>{% trans "Batch Size: Smaller = less memory, larger = faster training" %}</li>
+                    <li>{% trans "Learning Rate: Start with 0.0001 for fine-tuning" %}</li>
+                    <li>{% trans "Epochs: 50-100 for fine-tuning, 200+ for new language" %}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{% trans "Upload Training Data:" %}</strong>
+                <ul>
+                    <li>{% trans "Upload ZIP file containing audio files and transcriptions" %}</li>
+                    <li>{% trans "Maximum file size: 2GB" %}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{% trans "Start Training:" %}</strong>
+                <ul>
+                    <li>{% trans "Training will run in background" %}</li>
+                    <li>{% trans "Monitor progress in real-time" %}</li>
+                    <li>{% trans "Receive notification when complete" %}</li>
+                </ul>
+            </li>
+        </ol>
+
+        <div class="alert alert-warning mt-3">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>{% trans "Note:" %}</strong> {% trans "Training can take several hours to days depending on data size and hardware. Do not close this page during training." %}
+        </div>
+    </div>
+</div>
+
+<!-- Training Configuration -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-cog me-2"></i>{% trans "Training Configuration" %}</h5>
+            </div>
+            <div class="card-body">
+                <form id="training-form">
+                    {% csrf_token %}
+
+                    <!-- Language Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-globe me-2"></i>{% trans "Target Language" %}
+                        </label>
+                        <select class="form-select" id="target-language" required>
+                            <option value="">{% trans "Select Language" %}</option>
+                            <option value="en">🇬🇧 English</option>
+                            <option value="zh">🇨🇳 Chinese (中文)</option>
+                            <option value="es">🇪🇸 Spanish (Español)</option>
+                            <option value="fr">🇫🇷 French (Français)</option>
+                            <option value="de">🇩🇪 German (Deutsch)</option>
+                            <option value="it">🇮🇹 Italian (Italiano)</option>
+                            <option value="ja">🇯🇵 Japanese (日本語)</option>
+                            <option value="ru">🇷🇺 Russian (Русский)</option>
+                            <option value="hi">🇮🇳 Hindi (हिन्दी)</option>
+                            <option value="ar">🇸🇦 Arabic (العربية)</option>
+                            <option value="pt">🇧🇷 Portuguese (Português)</option>
+                            <option value="ko">🇰🇷 Korean (한국어)</option>
+                            <option value="tr">🇹🇷 Turkish (Türkçe)</option>
+                            <option value="vi">🇻🇳 Vietnamese (Tiếng Việt)</option>
+                            <option value="th">🇹🇭 Thai (ไทย)</option>
+                            <option value="id">🇮🇩 Indonesian (Bahasa Indonesia)</option>
+                            <option value="ur">🇵🇰 Urdu (اردو)</option>
+                            <option value="bn">🇧🇩 Bengali (বাংলা)</option>
+                        </select>
+                        <small class="text-muted">{% trans "Select the language you want to train the model for" %}</small>
+                    </div>
+
+                    <!-- Training Mode -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-sliders-h me-2"></i>{% trans "Training Mode" %}
+                        </label>
+                        <select class="form-select" id="training-mode" required>
+                            <option value="fine-tune">{% trans "Fine-tune Existing Model (Recommended)" %}</option>
+                            <option value="from-scratch">{% trans "Train from Scratch (Requires More Data)" %}</option>
+                        </select>
+                        <small class="text-muted">{% trans "Fine-tuning is faster and requires less data" %}</small>
+                    </div>
+
+                    <!-- Upload Training Data -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-upload me-2"></i>{% trans "Training Data (ZIP)" %}
+                        </label>
+                        <input type="file" class="form-control" id="training-data" accept=".zip" required>
+                        <small class="text-muted">{% trans "Upload ZIP containing audio files (.wav) and text files (.txt)" %}</small>
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <i class="fas fa-info-circle me-1"></i>
+                                {% trans "Example structure:" %} training_data.zip → [audio1.wav, audio1.txt, audio2.wav, audio2.txt, ...]
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Training Parameters -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{% trans "Training Parameters" %}</label>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">{% trans "Batch Size" %}</label>
+                                <input type="number" class="form-control" id="batch-size" value="8" min="1" max="64">
+                                <small class="text-muted">{% trans "Default: 8" %}</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{% trans "Learning Rate" %}</label>
+                                <input type="text" class="form-control" id="learning-rate" value="0.0001">
+                                <small class="text-muted">{% trans "Default: 0.0001" %}</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{% trans "Epochs" %}</label>
+                                <input type="number" class="form-control" id="epochs" value="100" min="10" max="500">
+                                <small class="text-muted">{% trans "Default: 100" %}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Model Name -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-tag me-2"></i>{% trans "Model Name" %}
+                        </label>
+                        <input type="text" class="form-control" id="model-name" placeholder="e.g., f5tts-spanish-v1" required>
+                        <small class="text-muted">{% trans "Give your trained model a unique name" %}</small>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{% trans "Description (Optional)" %}</label>
+                        <textarea class="form-control" id="description" rows="3" placeholder="{% trans 'Describe your model, training data, and intended use...' %}"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg" id="start-training-btn">
+                            <i class="fas fa-rocket me-2"></i>{% trans "Start Training" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Status & Tips -->
+    <div class="col-lg-4">
+        <!-- System Requirements -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0"><i class="fas fa-server me-2"></i>{% trans "System Requirements" %}</h6>
+            </div>
+            <div class="card-body">
+                <div class="requirement-item">
+                    <i class="fas fa-microchip text-success"></i>
+                    <div>
+                        <strong>GPU:</strong> NVIDIA GPU with 8GB+ VRAM
+                        <small class="d-block text-muted">Recommended: RTX 3060 or better</small>
+                    </div>
+                </div>
+                <div class="requirement-item">
+                    <i class="fas fa-memory text-info"></i>
+                    <div>
+                        <strong>RAM:</strong> 16GB minimum
+                        <small class="d-block text-muted">32GB recommended</small>
+                    </div>
+                </div>
+                <div class="requirement-item">
+                    <i class="fas fa-hdd text-warning"></i>
+                    <div>
+                        <strong>Storage:</strong> 20GB+ free space
+                        <small class="d-block text-muted">For models and training data</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Tips -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0"><i class="fas fa-lightbulb me-2"></i>{% trans "Pro Tips" %}</h6>
+            </div>
+            <div class="card-body">
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{% trans "Use high-quality, noise-free audio" %}</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{% trans "Diverse speakers improve quality" %}</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{% trans "Longer audio = better results" %}</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{% trans "Accurate transcriptions crucial" %}</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{% trans "Monitor loss curves regularly" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Training Progress (Hidden by default) -->
+<div class="card" id="training-progress-card" style="display: none;">
+    <div class="card-header" style="background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); color: white;">
+        <h5 class="card-title mb-0"><i class="fas fa-chart-line me-2"></i>{% trans "Training Progress" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="training-info mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-label">{% trans "Status" %}</div>
+                        <div class="stat-value" id="training-status">{% trans "Initializing..." %}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-label">{% trans "Current Epoch" %}</div>
+                        <div class="stat-value" id="current-epoch">0 / 0</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-label">{% trans "Training Loss" %}</div>
+                        <div class="stat-value" id="training-loss">-</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-label">{% trans "Time Elapsed" %}</div>
+                        <div class="stat-value" id="time-elapsed">00:00:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress mb-3" style="height: 30px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                 id="training-progress-bar"
+                 role="progressbar"
+                 style="width: 0%;">0%</div>
+        </div>
+
+        <div class="training-logs">
+            <h6 class="fw-bold">{% trans "Training Logs:" %}</h6>
+            <div id="training-log-output" class="log-output">
+                <p class="text-muted">{% trans "Logs will appear here..." %}</p>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button class="btn btn-danger" id="stop-training-btn">
+                <i class="fas fa-stop me-2"></i>{% trans "Stop Training" %}
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .training-steps {
+        padding-left: 20px;
+    }
+
+    .training-steps li {
+        margin-bottom: 20px;
+    }
+
+    .training-steps ul {
+        margin-top: 8px;
+        padding-left: 20px;
+    }
+
+    .training-steps ul li {
+        margin-bottom: 6px;
+        color: var(--text-secondary);
+    }
+
+    .requirement-item {
+        display: flex;
+        align-items: start;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .requirement-item:last-child {
+        border-bottom: none;
+    }
+
+    .requirement-item i {
+        font-size: 24px;
+        margin-top: 4px;
+    }
+
+    .tip-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        font-size: 14px;
+    }
+
+    .stat-box {
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .log-output {
+        background: #1e1e1e;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        padding: 16px;
+        border-radius: 8px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .log-output::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .log-output::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 4px;
+    }
+</style>
+
+<script>
+document.getElementById('training-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('language', document.getElementById('target-language').value);
+    formData.append('mode', document.getElementById('training-mode').value);
+    formData.append('training_data', document.getElementById('training-data').files[0]);
+    formData.append('batch_size', document.getElementById('batch-size').value);
+    formData.append('learning_rate', document.getElementById('learning-rate').value);
+    formData.append('epochs', document.getElementById('epochs').value);
+    formData.append('model_name', document.getElementById('model-name').value);
+    formData.append('description', document.getElementById('description').value);
+
+    // Validate
+    if (!formData.get('language')) {
+        alert('{% trans "Please select a target language" %}');
+        return;
+    }
+
+    if (!formData.get('training_data')) {
+        alert('{% trans "Please upload training data" %}');
+        return;
+    }
+
+    // Show progress card
+    document.getElementById('training-progress-card').style.display = 'block';
+    document.getElementById('start-training-btn').disabled = true;
+    document.getElementById('start-training-btn').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{% trans "Training Started..." %}';
+
+    try {
+        console.log('Starting training request...');
+        console.log('FormData contents:', Array.from(formData.entries()));
+
+        const response = await fetch('/api/accounts/admin/start-training/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData,
+            credentials: 'same-origin'
+        });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        console.log('Response content-type:', response.headers.get('content-type'));
+
+        // First get the raw response text
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+
+        if (!response.ok) {
+            console.error('Response error (status not ok):', responseText);
+            throw new Error(`Server returned ${response.status}: ${responseText.substring(0, 200)}`);
+        }
+
+        // Try to parse JSON
+        let data;
+        try {
+            data = JSON.parse(responseText);
+            console.log('Parsed response data:', data);
+        } catch (jsonError) {
+            console.error('JSON parse error:', jsonError);
+            console.error('Response was not valid JSON:', responseText);
+            throw new Error(`Invalid JSON response: ${responseText.substring(0, 200)}`);
+        }
+
+        if (data.success) {
+            // Start monitoring training progress
+            monitorTraining(data.training_id);
+        } else {
+            alert('{% trans "Error:" %} ' + (data.error || '{% trans "Failed to start training" %}'));
+            document.getElementById('training-progress-card').style.display = 'none';
+            document.getElementById('start-training-btn').disabled = false;
+            document.getElementById('start-training-btn').innerHTML = '<i class="fas fa-rocket me-2"></i>{% trans "Start Training" %}';
+        }
+    } catch (error) {
+        console.error('Detailed error:', error);
+        console.error('Error stack:', error.stack);
+        alert('{% trans "An error occurred while starting training:" %} ' + error.message);
+        document.getElementById('training-progress-card').style.display = 'none';
+        document.getElementById('start-training-btn').disabled = false;
+        document.getElementById('start-training-btn').innerHTML = '<i class="fas fa-rocket me-2"></i>{% trans "Start Training" %}';
+    }
+});
+
+function monitorTraining(trainingId) {
+    const interval = setInterval(async () => {
+        try {
+            const response = await fetch(`/api/accounts/admin/training-status/${trainingId}/`);
+            const data = await response.json();
+
+            if (data.success) {
+                updateTrainingProgress(data);
+
+                if (data.status === 'completed' || data.status === 'failed') {
+                    clearInterval(interval);
+                    if (data.status === 'completed') {
+                        alert('{% trans "Training completed successfully!" %}');
+                    } else {
+                        alert('{% trans "Training failed. Check logs for details." %}');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error monitoring training:', error);
+        }
+    }, 5000); // Check every 5 seconds
+}
+
+function updateTrainingProgress(data) {
+    document.getElementById('training-status').textContent = data.status;
+    document.getElementById('current-epoch').textContent = `${data.current_epoch} / ${data.total_epochs}`;
+    document.getElementById('training-loss').textContent = data.loss ? data.loss.toFixed(4) : '-';
+    document.getElementById('time-elapsed').textContent = data.time_elapsed || '00:00:00';
+
+    const progress = (data.current_epoch / data.total_epochs) * 100;
+    document.getElementById('training-progress-bar').style.width = progress + '%';
+    document.getElementById('training-progress-bar').textContent = Math.round(progress) + '%';
+
+    // Update logs
+    if (data.logs && data.logs.length > 0) {
+        const logOutput = document.getElementById('training-log-output');
+        logOutput.innerHTML = data.logs.map(log => `<p>${log}</p>`).join('');
+        logOutput.scrollTop = logOutput.scrollHeight;
+    }
+}
+
+// Stop training
+document.getElementById('stop-training-btn').addEventListener('click', async function() {
+    if (confirm('{% trans "Are you sure you want to stop training?" %}')) {
+        // Implement stop training API call
+        alert('{% trans "Training stopped" %}');
+    }
+});
+</script>
+{% endblock %}

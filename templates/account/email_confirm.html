@@ -1,0 +1,141 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+{% load account %}
+
+{% block title %}{% trans "Confirm Email Address" %}{% endblock %}
+
+{% block header_title %}{% trans "Confirm Your Email" %}{% endblock %}
+{% block header_subtitle %}{% trans "One last step to activate your account" %}{% endblock %}
+
+{% block content %}
+<div class="confirm-container" style="text-align: center; padding: 40px 20px;">
+    {% if confirmation %}
+    <div style="width: 120px; height: 120px; margin: 0 auto 32px; background: linear-gradient(135deg, #1E7A5C 0%, #155740 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 40px rgba(30, 122, 92, 0.3);">
+        <i class="fas fa-check-circle" style="font-size: 56px; color: white;"></i>
+    </div>
+
+    <h2 style="color: #1A3A31; margin-bottom: 16px; font-weight: 700;">{% trans "Confirm Your Email Address" %}</h2>
+
+    <p style="color: #4A6B60; font-size: 16px; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto;">
+        {% trans "Please confirm that" %} <strong style="color: #1A3A31;">{{ confirmation.email_address.email }}</strong> {% trans "is an email address for user" %} <strong style="color: #1A3A31;">{{ confirmation.email_address.user }}</strong>
+    </p>
+
+    <div style="background: linear-gradient(135deg, #E6F5F1 0%, #D4E8E2 100%); border-radius: 16px; padding: 32px; margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto;">
+        <div style="margin-bottom: 24px;">
+            <i class="fas fa-user-check" style="font-size: 48px; color: #1E7A5C;"></i>
+        </div>
+        <h5 style="color: #155740; margin-bottom: 16px; font-weight: 600;">
+            {% trans "What happens after confirmation?" %}
+        </h5>
+        <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <i class="fas fa-check" style="color: #3ECF8E; font-size: 16px;"></i>
+                <span style="color: #4A6B60;">{% trans "Your email will be verified" %}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <i class="fas fa-check" style="color: #3ECF8E; font-size: 16px;"></i>
+                <span style="color: #4A6B60;">{% trans "You'll get 1,000 free credits" %}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <i class="fas fa-check" style="color: #3ECF8E; font-size: 16px;"></i>
+                <span style="color: #4A6B60;">{% trans "You'll get 1 free voice clone" %}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-check" style="color: #3ECF8E; font-size: 16px;"></i>
+                <span style="color: #4A6B60;">{% trans "Full access to your account" %}</span>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-lg" style="padding: 16px 48px; font-size: 18px; box-shadow: 0 4px 12px rgba(30, 122, 92, 0.3);">
+            <i class="fas fa-check-circle me-2"></i>{% trans "Confirm My Email" %}
+        </button>
+    </form>
+
+    {% else %}
+    <div style="width: 120px; height: 120px; margin: 0 auto 32px; background: linear-gradient(135deg, #FED3D1 0%, #fecaca 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-times-circle" style="font-size: 56px; color: #D82C0D;"></i>
+    </div>
+
+    <h2 style="color: #1A3A31; margin-bottom: 16px; font-weight: 700;">{% trans "Invalid Verification Link" %}</h2>
+
+    <p style="color: #4A6B60; font-size: 16px; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto;">
+        {% trans "This email confirmation link has expired or is invalid." %}
+    </p>
+
+    <div style="background: #FED3D1; border-left: 4px solid #D82C0D; border-radius: 8px; padding: 20px; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto; text-align: left;">
+        <p style="margin: 0 0 12px 0; color: #991b1b; font-weight: 600;">
+            <i class="fas fa-exclamation-triangle me-2"></i>{% trans "Common reasons:" %}
+        </p>
+        <ul style="margin: 0; padding-left: 24px; color: #991b1b; font-size: 14px; line-height: 1.8;">
+            <li>{% trans "The link has expired (valid for 24 hours)" %}</li>
+            <li>{% trans "The link has already been used" %}</li>
+            <li>{% trans "The email has already been verified" %}</li>
+        </ul>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'account_email' %}" class="btn btn-primary">
+            <i class="fas fa-redo me-2"></i>{% trans "Request New Verification Email" %}
+        </a>
+        <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-sign-in-alt me-2"></i>{% trans "Go to Login" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% trans "Need help?" %} <a href="{% url 'support' %}">{% trans "Contact Support" %}</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(30, 122, 92, 0.4) !important;
+    }
+
+    .btn-outline-secondary {
+        background: white;
+        border: 2px solid #D4E8E2;
+        color: #1A3A31;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #E6F5F1;
+        border-color: #B8D9CE;
+        color: #155740;
+        text-decoration: none;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .confirm-container > * {
+        animation: fadeInUp 0.6s ease-out;
+    }
+</style>
+{% endblock %}

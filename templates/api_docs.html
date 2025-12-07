@@ -1,0 +1,564 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "API Documentation" %}{% endblock %}
+
+{% block content %}
+<div class="api-docs-container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <!-- Header Section -->
+    <div class="api-header" style="margin-bottom: 40px; text-align: center;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">
+            <i class="fas fa-code"></i> {% trans "API Documentation" %}
+        </h1>
+        <p style="font-size: 1.1rem; opacity: 0.8;">
+            {% trans "Integrate voice cloning into your applications" %}
+        </p>
+    </div>
+
+    <!-- API Access Status -->
+    <div class="api-access-status" style="background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 30px; border: 2px solid {% if user.can_use_api or user.is_staff %}#10b981{% else %}#f59e0b{% endif %};">
+        {% if user.can_use_api or user.is_staff %}
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-check-circle" style="font-size: 2rem; color: #10b981;"></i>
+                <div>
+                    <h3 style="margin: 0; color: #10b981;">{% trans "API Access Enabled" %}</h3>
+                    {% if user.is_staff and not user.can_use_api %}
+                    <p style="margin: 5px 0 0 0; opacity: 0.8;">
+                        {% trans "Admin access - Full API access granted" %}
+                    </p>
+                    {% elif user.subscription_plan %}
+                    <p style="margin: 5px 0 0 0; opacity: 0.8;">
+                        {% trans "Your" %} {{ user.subscription_plan.name }} {% trans "plan includes full API access" %}
+                    </p>
+                    {% else %}
+                    <p style="margin: 5px 0 0 0; opacity: 0.8;">
+                        {% trans "Your plan includes full API access" %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-lock" style="font-size: 2rem; color: #f59e0b;"></i>
+                <div>
+                    <h3 style="margin: 0; color: #f59e0b;">{% trans "API Access Restricted" %}</h3>
+                    <p style="margin: 5px 0 10px 0; opacity: 0.8;">
+                        {% trans "Upgrade to Pro or Yearly plan to access the API" %}
+                    </p>
+                    <a href="{% url 'pricing' %}" class="btn btn-primary" style="display: inline-block; padding: 8px 20px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px;">
+                        <i class="fas fa-arrow-up"></i> {% trans "Upgrade Now" %}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if user.can_use_api or user.is_staff %}
+    <!-- API Keys Section -->
+    <div class="api-keys-section" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">
+                <i class="fas fa-key"></i> {% trans "Your API Keys" %}
+            </h2>
+            <button onclick="generateAPIKey()" class="btn btn-primary" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                <i class="fas fa-plus"></i> {% trans "Generate New Key" %}
+            </button>
+        </div>
+
+        <div id="api-keys-list">
+            {% if api_keys %}
+                <div class="table-responsive">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 12px; text-align: left;">{% trans "Name" %}</th>
+                                <th style="padding: 12px; text-align: left;">{% trans "API Key" %}</th>
+                                <th style="padding: 12px; text-align: left;">{% trans "Created" %}</th>
+                                <th style="padding: 12px; text-align: left;">{% trans "Last Used" %}</th>
+                                <th style="padding: 12px; text-align: center;">{% trans "Actions" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keys-tbody">
+                            {% for key in api_keys %}
+                            <tr id="key-row-{{ key.id }}" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 12px;">{{ key.name }}</td>
+                                <td style="padding: 12px; font-family: monospace;">
+                                    <code style="background: var(--bg-secondary); padding: 5px 10px; border-radius: 4px;">
+                                        {{ key.key|slice:":20" }}...
+                                    </code>
+                                    <button onclick="copyToClipboard('{{ key.key }}')" style="margin-left: 10px; padding: 5px 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </td>
+                                <td style="padding: 12px;">{{ key.created_at|date:"M d, Y" }}</td>
+                                <td style="padding: 12px;">
+                                    {% if key.last_used %}
+                                        {{ key.last_used|date:"M d, Y H:i" }}
+                                    {% else %}
+                                        <span style="opacity: 0.5;">{% trans "Never used" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td style="padding: 12px; text-align: center;">
+                                    <button onclick="deleteAPIKey({{ key.id }})" style="padding: 5px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;" title="Delete this API key">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 40px; opacity: 0.6;">
+                    <i class="fas fa-key" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>{% trans "No API keys yet. Click 'Generate New Key' to create one." %}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Authentication Section -->
+    <div class="auth-section" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">
+            <i class="fas fa-shield-alt"></i> {% trans "Authentication" %}
+        </h2>
+        <p style="margin-bottom: 15px;">
+            {% trans "All API requests require authentication using your API key in the Authorization header:" %}
+        </p>
+        <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto;"><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+
+        <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px; color: #92400e;">
+            <strong><i class="fas fa-exclamation-triangle"></i> {% trans "Important:" %}</strong><br>
+            {% trans "Keep your API keys secure. Do not share them or expose them in client-side code." %}
+        </div>
+    </div>
+
+    <!-- API Endpoints -->
+    <div class="endpoints-section">
+        <h2 style="margin-bottom: 30px;">
+            <i class="fas fa-plug"></i> {% trans "Available Endpoints" %}
+        </h2>
+
+        <!-- Generate Voice Endpoint -->
+        <div class="endpoint" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <span style="background: #10b981; color: white; padding: 5px 15px; border-radius: 6px; font-weight: bold;">POST</span>
+                <code style="font-size: 1.1rem;">/api/tts/generate/</code>
+            </div>
+            <p style="margin-bottom: 20px; opacity: 0.8;">
+                {% trans "Generate speech from text using a reference voice audio file" %}
+            </p>
+
+            <div style="margin-bottom: 20px; padding: 15px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 4px; color: #1e40af;">
+                <strong><i class="fas fa-info-circle"></i> {% trans "Important:" %}</strong><br>
+                {% trans "This endpoint requires" %} <code>multipart/form-data</code> {% trans "format with a reference audio file upload. JSON body is NOT supported." %}
+            </div>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Request (multipart/form-data)" %}</h4>
+            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;">
+                <table style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 0.9rem;">
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 8px; font-weight: bold;">text</td>
+                        <td style="padding: 8px; color: #059669;">Text</td>
+                        <td style="padding: 8px;">Hello, this is a test of the voice cloning API.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 8px; font-weight: bold;">reference_audio</td>
+                        <td style="padding: 8px; color: #dc2626;">File</td>
+                        <td style="padding: 8px;">[Select WAV/MP3 audio file]</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 8px; font-weight: bold;">language</td>
+                        <td style="padding: 8px; color: #059669;">Text</td>
+                        <td style="padding: 8px;">multilingual</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 8px; font-weight: bold;">speed</td>
+                        <td style="padding: 8px; color: #059669;">Text</td>
+                        <td style="padding: 8px;">1.0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; font-weight: bold;">usage_type</td>
+                        <td style="padding: 8px; color: #059669;">Text</td>
+                        <td style="padding: 8px;">short</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Parameters" %}</h4>
+            <ul style="margin-bottom: 20px; line-height: 1.8;">
+                <li><code>text</code> <span style="color: #dc2626;">(required)</span> - Text to convert to speech (max 50,000 characters)</li>
+                <li><code>reference_audio</code> <span style="color: #dc2626;">(required)</span> - Reference voice audio file (WAV, MP3, OGG). This is the voice that will be cloned. <strong style="color: #f59e0b;">⚠️ Maximum duration: 9 seconds.</strong> Longer audio will be automatically trimmed.</li>
+                <li><code>reference_text</code> (optional) - Transcript of the reference audio for better quality</li>
+                <li><code>language</code> (optional) - Language code: <code>multilingual</code> (auto-detect), <code>en</code>, <code>zh</code>, <code>es</code>, <code>fr</code>, <code>de</code>, <code>it</code>, <code>ja</code>, <code>ru</code>, <code>hi</code>, <code>ur</code>. Default: multilingual</li>
+                <li><code>speed</code> (optional) - Speech speed (0.5-2.0). Default: 1.0</li>
+                <li><code>usage_type</code> (optional) - Quality setting: <code>short</code> (32 steps, fast) or <code>long</code> (64 steps, better quality). Default: short</li>
+                <li><code>pitch</code> (optional) - Pitch adjustment (0.5-2.0). Default: 1.0</li>
+            </ul>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Response" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;"><code>{
+  "success": true,
+  "task_id": "abc123-def456-ghi789",
+  "status": "pending",
+  "estimated_time": 15,
+  "character_count": 50,
+  "credits_needed": 50,
+  "model": "TalkStudio"
+}</code></pre>
+
+            <h4 style="margin-bottom: 10px;">{% trans "cURL Example" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;"><code>curl -X POST https://talkstudio.ai/api/tts/generate/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "text=Hello, this is a test of the voice cloning API." \
+  -F "reference_audio=@/path/to/voice.wav" \
+  -F "language=multilingual" \
+  -F "speed=1.0" \
+  -F "usage_type=short"</code></pre>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Postman Setup" %}</h4>
+            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <ol style="margin: 0; padding-left: 20px; line-height: 2;">
+                    <li>Set request type to <strong>POST</strong></li>
+                    <li>URL: <code>https://talkstudio.ai/api/tts/generate/</code></li>
+                    <li>Go to <strong>Body</strong> tab → Select <strong>form-data</strong></li>
+                    <li>Add <code>text</code> as Text type</li>
+                    <li>Add <code>reference_audio</code> as <strong>File</strong> type (click dropdown to change from Text to File)</li>
+                    <li>Add other optional parameters as Text type</li>
+                    <li>In Headers, add: <code>Authorization: Bearer YOUR_API_KEY</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- List Voices Endpoint -->
+        <div class="endpoint" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <span style="background: #3b82f6; color: white; padding: 5px 15px; border-radius: 6px; font-weight: bold;">GET</span>
+                <code style="font-size: 1.1rem;">/api/tts/list/</code>
+            </div>
+            <p style="margin-bottom: 20px; opacity: 0.8;">
+                {% trans "Get a list of all your saved voice clones" %}
+            </p>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Response" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;"><code>{
+  "success": true,
+  "voices": [
+    {
+      "id": "voice-123",
+      "name": "John's Voice",
+      "created_at": "2025-01-10T12:00:00Z"
+    },
+    {
+      "id": "voice-456",
+      "name": "Jane's Voice",
+      "created_at": "2025-01-11T14:30:00Z"
+    }
+  ]
+}</code></pre>
+
+            <h4 style="margin-bottom: 10px;">{% trans "cURL Example" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto;"><code>curl -X GET https://yoursite.com/api/tts/list/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+        </div>
+
+        <!-- Clone Voice Endpoint -->
+        <div class="endpoint" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 20px; border-left: 4px solid #8b5cf6;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <span style="background: #8b5cf6; color: white; padding: 5px 15px; border-radius: 6px; font-weight: bold;">POST</span>
+                <code style="font-size: 1.1rem;">/api/tts/clone/</code>
+            </div>
+            <p style="margin-bottom: 20px; opacity: 0.8;">
+                {% trans "Create a new voice clone from an audio file" %}
+            </p>
+
+            <div style="margin-bottom: 20px; padding: 15px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px; color: #92400e;">
+                <strong><i class="fas fa-exclamation-triangle"></i> {% trans "Audio Requirements:" %}</strong><br>
+                {% trans "Maximum audio duration:" %} <strong>9 seconds</strong>. {% trans "Longer audio will be automatically trimmed. For best results, use clear audio with minimal background noise." %}
+            </div>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Request (multipart/form-data)" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;"><code>audio_file: [binary audio file - max 9 seconds]
+name: "My Voice Clone"
+description: "Description of the voice"</code></pre>
+
+            <h4 style="margin-bottom: 10px;">{% trans "Response" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px;"><code>{
+  "success": true,
+  "voice_id": "voice-789",
+  "name": "My Voice Clone",
+  "message": "Voice clone created successfully"
+}</code></pre>
+
+            <h4 style="margin-bottom: 10px;">{% trans "cURL Example" %}</h4>
+            <pre style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://yoursite.com/api/tts/clone/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "audio_file=@/path/to/voice.wav" \
+  -F "name=My Voice Clone" \
+  -F "description=A sample voice"</code></pre>
+        </div>
+    </div>
+
+    <!-- Rate Limits -->
+    <div class="rate-limits" style="background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">
+            <i class="fas fa-tachometer-alt"></i> {% trans "Rate Limits" %}
+        </h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 12px; text-align: left;">{% trans "Plan" %}</th>
+                    <th style="padding: 12px; text-align: left;">{% trans "Requests per Minute" %}</th>
+                    <th style="padding: 12px; text-align: left;">{% trans "Requests per Day" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;">{% trans "Pro" %}</td>
+                    <td style="padding: 12px;">60</td>
+                    <td style="padding: 12px;">10,000</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">{% trans "Yearly" %}</td>
+                    <td style="padding: 12px;">120</td>
+                    <td style="padding: 12px;">50,000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Error Codes -->
+    <div class="error-codes" style="background: var(--card-bg); border-radius: 12px; padding: 25px;">
+        <h2 style="margin-bottom: 20px;">
+            <i class="fas fa-exclamation-circle"></i> {% trans "Error Codes" %}
+        </h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 12px; text-align: left;">{% trans "Code" %}</th>
+                    <th style="padding: 12px; text-align: left;">{% trans "Description" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><code>400</code></td>
+                    <td style="padding: 12px;">{% trans "Bad Request - Invalid parameters" %}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><code>401</code></td>
+                    <td style="padding: 12px;">{% trans "Unauthorized - Invalid or missing API key" %}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><code>403</code></td>
+                    <td style="padding: 12px;">{% trans "Forbidden - Insufficient credits or plan restrictions" %}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px;"><code>429</code></td>
+                    <td style="padding: 12px;">{% trans "Too Many Requests - Rate limit exceeded" %}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><code>500</code></td>
+                    <td style="padding: 12px;">{% trans "Internal Server Error - Something went wrong" %}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showAlert('{% trans "API key copied to clipboard!" %}', 'success');
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        showAlert('{% trans "Failed to copy API key" %}', 'error');
+    });
+}
+
+async function generateAPIKey() {
+    const name = prompt('{% trans "Enter a name for this API key:" %}');
+    if (!name) return;
+
+    try {
+        const response = await fetch('/api/keys/generate/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ name: name })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert('{% trans "API key generated successfully!" %}', 'success');
+            location.reload();
+        } else {
+            showAlert(data.error || '{% trans "Failed to generate API key" %}', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('{% trans "Failed to generate API key" %}', 'error');
+    }
+}
+
+async function deleteAPIKey(keyId) {
+    if (!confirm('{% trans "Are you sure you want to delete this API key? This action cannot be undone." %}')) {
+        return;
+    }
+
+    try {
+        // Disable the delete button
+        const deleteBtn = event.target.closest('button');
+        if (deleteBtn) {
+            deleteBtn.disabled = true;
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        }
+
+        const response = await fetch(`/api/keys/${keyId}/delete/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert('{% trans "API key deleted successfully" %}', 'success');
+
+            // Remove the row from table with animation
+            const row = document.getElementById(`key-row-${keyId}`);
+            if (row) {
+                row.style.transition = 'opacity 0.3s, transform 0.3s';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    row.remove();
+
+                    // Check if there are any keys left
+                    const tbody = document.getElementById('keys-tbody');
+                    if (tbody && tbody.children.length === 0) {
+                        // Show "no keys" message
+                        const keysList = document.getElementById('api-keys-list');
+                        keysList.innerHTML = `
+                            <div style="text-align: center; padding: 40px; opacity: 0.6;">
+                                <i class="fas fa-key" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                <p>{% trans "No API keys yet. Click 'Generate New Key' to create one." %}</p>
+                            </div>
+                        `;
+                    }
+                }, 300);
+            }
+        } else {
+            showAlert(data.error || '{% trans "Failed to delete API key" %}', 'error');
+            // Re-enable button on error
+            if (deleteBtn) {
+                deleteBtn.disabled = false;
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('{% trans "Failed to delete API key" %}', 'error');
+        // Re-enable button on error
+        const deleteBtn = event.target.closest('button');
+        if (deleteBtn) {
+            deleteBtn.disabled = false;
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        }
+    }
+}
+
+function showAlert(message, type) {
+    // Use existing alert system from dashboard
+    const alertDiv = document.createElement('div');
+    alertDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#10b981' : '#ef4444'};
+        color: white;
+        border-radius: 8px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+
+    setTimeout(() => {
+        alertDiv.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => alertDiv.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<style>
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.api-docs-container code {
+    font-family: 'Courier New', monospace;
+    color: var(--text-primary);
+}
+
+.api-docs-container pre {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.api-docs-container pre code {
+    color: inherit;
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .api-docs-container {
+        padding: 15px !important;
+    }
+
+    .endpoint {
+        padding: 15px !important;
+    }
+
+    pre {
+        font-size: 0.8rem !important;
+    }
+}
+</style>
+{% endblock %}

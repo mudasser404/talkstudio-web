@@ -1,0 +1,57 @@
+{% extends "account/email/base.html" %}
+{% load i18n %}
+
+{% block subject %}{% trans "Please Confirm Your Email Address" %}{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    {% trans "Hello!" %}
+</div>
+
+<div class="message">
+    <p>{% trans "Thank you for signing up with Talk Studio Platform!" %}</p>
+
+    <p>{% trans "To complete your registration and activate your account, please confirm your email address by clicking the button below:" %}</p>
+</div>
+
+<center>
+    <a href="{{ activate_url }}" class="button">
+        ✅ {% trans "Confirm Email Address" %}
+    </a>
+</center>
+
+<div class="info-box">
+    <p style="margin: 0; color: #1e40af; font-size: 14px;">
+        <strong>🎁 {% trans "Welcome Bonus:" %}</strong><br>
+        {% trans "After confirmation, you'll receive:" %}
+    </p>
+    <ul style="margin: 10px 0 0 20px; color: #1e40af; font-size: 14px;">
+        <li>{% trans "1,000 free credits" %}</li>
+        <li>{% trans "1 free voice clone" %}</li>
+        <li>{% trans "Full platform access" %}</li>
+    </ul>
+</div>
+
+<div class="message">
+    <p style="font-size: 14px;">{% trans "If the button doesn't work, copy and paste this link into your browser:" %}</p>
+    <p><a href="{{ activate_url }}" class="link-text">{{ activate_url }}</a></p>
+</div>
+
+<div class="warning-box">
+    <p style="margin: 0; color: #92400e; font-size: 14px;">
+        ⏰ <strong>{% trans "Important:" %}</strong><br>
+        {% trans "This verification link will expire in 24 hours for security reasons." %}
+    </p>
+</div>
+
+<div class="message" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+    <p style="font-size: 14px; color: #6b7280;">
+        {% trans "If you didn't create an account with us, please ignore this email." %}
+    </p>
+</div>
+
+<div class="message">
+    <p>{% trans "Best regards," %}<br>
+    <strong>{% trans "Talk Studio Platform Team" %}</strong></p>
+</div>
+{% endblock %}

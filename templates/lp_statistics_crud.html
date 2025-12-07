@@ -1,0 +1,36 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td><i class="fas {{ item.icon }}"></i> {{ item.icon }}</td>
+<td>{{ item.number }}</td>
+<td>{{ item.label|truncatechars:40 }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Icon" %}</label>
+    <input type="text" class="form-control" name="icon" id="icon" required>
+    <div class="form-help">{% trans "Font Awesome icon name (e.g., fa-users, fa-microphone)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Number" %}</label>
+    <input type="text" class="form-control" name="number" id="number" required>
+    <div class="form-help">{% trans "Statistic number (e.g., 10M+, 50K+, 99.9%)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Label" %}</label>
+    <input type="text" class="form-control" name="label" id="label" required>
+    <div class="form-help">{% trans "Description label (e.g., Active Users, Voices Generated)" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('icon').value = data.icon || '';
+document.getElementById('number').value = data.number || '';
+document.getElementById('label').value = data.label || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

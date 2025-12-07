@@ -1,0 +1,768 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Pricing" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Pricing Page - Theme Aware Colors */
+    .pricing-section {
+        min-height: 100vh;
+        padding: 80px 0;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    .pricing-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .pricing-header h2 {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+    }
+
+    .pricing-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Pricing Cards Grid */
+    .pricing-cards-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 80px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Limit card width when only one card */
+    .pricing-cards-wrapper:has(.pricing-card:only-child) {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+
+    .pricing-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 32px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card.featured {
+        border: 3px solid var(--primary);
+        background: var(--bg-tertiary);
+    }
+
+    .pricing-card.featured::before {
+        content: 'Most Popular';
+        position: absolute;
+        top: 20px;
+        right: -35px;
+        background: var(--primary);
+        color: var(--text-inverse);
+        padding: 4px 40px;
+        font-size: 12px;
+        font-weight: 700;
+        transform: rotate(45deg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .pricing-card-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+
+    .pricing-card-subtitle {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+    }
+
+    .pricing-card-price {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .pricing-card-price .price-amount {
+        font-size: 56px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+    }
+
+    .pricing-card-price .price-amount small {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .pricing-card-price .price-period {
+        font-size: 16px;
+        color: var(--text-secondary);
+        margin-top: 8px;
+    }
+
+    .pricing-card-credits {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 24px;
+        padding: 12px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+
+    .pricing-card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 32px 0;
+    }
+
+    .pricing-card-features li {
+        padding: 12px 0;
+        font-size: 15px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pricing-card-features li i {
+        font-size: 18px;
+        min-width: 20px;
+    }
+
+    .pricing-card-features li .fa-check {
+        color: var(--success);
+    }
+
+    .pricing-card-features li .fa-times {
+        color: var(--danger);
+    }
+
+    .pricing-card-button {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .pricing-card-button.btn-primary {
+        background: var(--primary);
+        color: var(--text-inverse);
+    }
+
+    .pricing-card-button.btn-primary:hover {
+        background: var(--primary-hover);
+        transform: scale(1.05);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card-button.btn-outline {
+        background: transparent;
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .pricing-card-button.btn-outline:hover {
+        border-color: var(--primary);
+        background: var(--bg-tertiary);
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+        text-align: center;
+        margin-top: 60px;
+        padding: 40px 20px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .payment-methods h5 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 24px;
+    }
+
+    .payment-methods-icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+
+    .payment-methods-icons i {
+        font-size: 48px;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+
+    .payment-methods-icons i:hover {
+        color: var(--primary);
+        transform: scale(1.1);
+    }
+
+    .payment-methods-icons img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+        transition: all 0.3s ease;
+        filter: grayscale(20%);
+    }
+
+    .payment-methods-icons img:hover {
+        transform: scale(1.1);
+        filter: grayscale(0%);
+    }
+
+    [data-theme="dark"] .payment-methods-icons img {
+        filter: brightness(0.9) grayscale(20%);
+    }
+
+    [data-theme="dark"] .payment-methods-icons img:hover {
+        filter: brightness(1) grayscale(0%);
+    }
+
+    .payment-methods-icons span {
+        font-size: 16px;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    /* Comparison Table */
+    .comparison-section {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    .comparison-table {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid var(--border-color);
+    }
+
+    .comparison-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .comparison-table thead th {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        font-weight: 700;
+        font-size: 16px;
+        padding: 20px 16px;
+        text-align: center;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .comparison-table thead th:first-child {
+        text-align: left;
+        font-size: 18px;
+    }
+
+    .comparison-table tbody td {
+        padding: 16px;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tbody td:first-child {
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .comparison-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .comparison-table .fa-check {
+        color: var(--success);
+        font-size: 18px;
+    }
+
+    .comparison-table .fa-times {
+        color: var(--danger);
+        font-size: 18px;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        border-color: var(--primary);
+    }
+
+    .faq-question {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+    }
+
+    .faq-answer {
+        font-size: 15px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .pricing-section {
+            padding: 40px 0;
+        }
+
+        .pricing-header h2 {
+            font-size: 32px;
+        }
+
+        .pricing-header p {
+            font-size: 16px;
+        }
+
+        .pricing-cards-wrapper {
+            grid-template-columns: 1fr !important;
+            gap: 20px;
+            padding: 0 15px;
+        }
+
+        .pricing-card {
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1);
+        }
+
+        .pricing-card-title {
+            font-size: 20px;
+        }
+
+        .price-amount {
+            font-size: 32px;
+        }
+
+        .pricing-card-button {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+        }
+
+        .comparison-table table {
+            min-width: 600px;
+        }
+
+        .comparison-table thead th,
+        .comparison-table tbody td {
+            padding: 12px 8px;
+            font-size: 14px;
+        }
+
+        .faq-item {
+            padding: 20px;
+        }
+
+        .faq-question {
+            font-size: 16px;
+        }
+
+        .faq-answer {
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Redirect to checkout page for package purchase
+    function buyPackage(packageId) {
+        console.log('buyPackage called with ID:', packageId);
+
+        if (!packageId) {
+            alert('{% trans "Invalid package selected" %}');
+            return;
+        }
+
+        // Show loading state
+        const btn = document.getElementById('buy-btn-' + packageId);
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Loading..." %}';
+        }
+
+        // Redirect to checkout page with package ID and type
+        const checkoutUrl = '/api/payments/checkout/?type=credit&package_id=' + packageId;
+        console.log('Redirecting to:', checkoutUrl);
+
+        try {
+            window.location.href = checkoutUrl;
+        } catch (error) {
+            console.error('Redirect error:', error);
+            alert('{% trans "Failed to redirect to checkout. Please try again." %}');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '{% trans "Buy Now" %}';
+            }
+        }
+    }
+
+    // Handle subscription plan purchase
+    function buySubscription(planId) {
+        console.log('buySubscription called with ID:', planId);
+
+        if (!planId) {
+            alert('{% trans "Invalid plan selected" %}');
+            return;
+        }
+
+        // Show loading state
+        const btn = document.getElementById('sub-btn-' + planId);
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Loading..." %}';
+        }
+
+        // Redirect to checkout page with subscription plan ID
+        const checkoutUrl = '/api/payments/checkout/?type=subscription&plan_id=' + planId;
+        console.log('Redirecting to:', checkoutUrl);
+
+        try {
+            window.location.href = checkoutUrl;
+        } catch (error) {
+            console.error('Redirect error:', error);
+            alert('{% trans "Failed to redirect to checkout. Please try again." %}');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '{% trans "Get Started" %}';
+            }
+        }
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="pricing-section">
+    <div class="container">
+        <!-- Header -->
+        <div class="pricing-header">
+            <h2>{% trans "Choose Your Plan" %}</h2>
+            <p>{% trans "Select the perfect plan for your voice generation needs" %}</p>
+        </div>
+
+        <!-- Pricing Cards - Dynamic from Database -->
+        <div class="pricing-cards-wrapper">
+            {% for plan in subscription_plans %}
+            <div class="pricing-card {% if plan.plan_type == 'pro' %}featured{% endif %}">
+                <div class="pricing-card-header">
+                    <h3 class="pricing-card-title">{{ plan.name }}</h3>
+                    <p class="pricing-card-subtitle">{{ plan.description }}</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="price-amount">
+                        <small>$</small>{{ plan.price|floatformat:0 }}
+                    </div>
+                    <div class="price-period">
+                        {% if plan.plan_type == 'yearly' %}
+                            {% trans "/year" %}
+                        {% elif plan.plan_type == 'free' %}
+                            {% trans "/forever" %}
+                        {% else %}
+                            {% trans "/month" %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="pricing-card-credits">
+                    {% if plan.credits_per_month >= 1000000 %}
+                        {% widthratio plan.credits_per_month 1000000 1 %}M {% trans "Credits" %}
+                    {% elif plan.credits_per_month >= 1000 %}
+                        {% widthratio plan.credits_per_month 1000 1 %}K {% trans "Credits" %}
+                    {% else %}
+                        {{ plan.credits_per_month }} {% trans "Credits" %}
+                    {% endif %}
+                </div>
+
+                <ul class="pricing-card-features">
+                    {% for feature in plan.features %}
+                    <li>
+                        {% if 'No ' in feature or 'no ' in feature %}
+                            <i class="fas fa-times"></i>
+                        {% else %}
+                            <i class="fas fa-check"></i>
+                        {% endif %}
+                        {{ feature }}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if plan.plan_type == 'free' %}
+                    <a href="{% url 'account_signup' %}" class="pricing-card-button btn-outline">
+                        {% trans "Sign Up Free" %}
+                    </a>
+                {% else %}
+                    <button onclick="buySubscription({{ plan.id }})" class="pricing-card-button {% if plan.plan_type == 'pro' %}btn-primary{% else %}btn-outline{% endif %}" id="sub-btn-{{ plan.id }}">
+                        {% trans "Get Started" %}
+                    </button>
+                {% endif %}
+            </div>
+            {% empty %}
+            <!-- Fallback if no plans in database -->
+            <div class="pricing-card">
+                <p>{% trans "No subscription plans available at the moment." %}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Other Packages (Dynamic from Admin) -->
+        {% if plans %}
+        <div style="margin-top: 80px; margin-bottom: 80px;">
+            <div class="pricing-header">
+                <h2>{% trans "Other Packages" %}</h2>
+                <p>{% trans "Additional credit packages" %}</p>
+            </div>
+
+            <div class="pricing-cards-wrapper">
+                {% for plan in plans %}
+                <div class="pricing-card">
+                    <div class="pricing-card-header">
+                        <h3 class="pricing-card-title">{{ plan.name }}</h3>
+                        <p class="pricing-card-subtitle">{{ plan.description }}</p>
+                    </div>
+
+                    <div class="pricing-card-price">
+                        <div class="price-amount">
+                            <small>$</small>{{ plan.price|floatformat:2 }}
+                        </div>
+                        <div class="price-period">{% trans "/one-time" %}</div>
+                    </div>
+
+                    <div class="pricing-card-credits">
+                        {{ plan.credits }}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <button onclick="buyPackage({{ plan.id }})" class="pricing-card-button btn-outline" id="buy-btn-{{ plan.id }}">
+                            {% trans "Buy Now" %}
+                        </button>
+                    {% else %}
+                        <a href="{% url 'account_signup' %}" class="pricing-card-button btn-outline">
+                            {% trans "Buy Now" %}
+                        </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Detailed Plan Comparison Table -->
+        <div class="comparison-section">
+            <div class="pricing-header">
+                <h2>{% trans "Detailed Plan Comparison" %}</h2>
+                <p>{% trans "Compare features across all plans to find the perfect fit for your voice generation needs" %}</p>
+            </div>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Features" %}</th>
+                            <th>{% trans "Free" %}</th>
+                            <th>{% trans "Starter" %}</th>
+                            <th>{% trans "Pro" %}</th>
+                            <th>{% trans "Yearly" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{% trans "Credits/Credits" %}</td>
+                            <td>1K Credits</td>
+                            <td>5M/month</td>
+                            <td>12M/month</td>
+                            <td>50M/year</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Voice clones" %}</td>
+                            <td>1</td>
+                            <td>{% trans "Unlimited" %}</td>
+                            <td>{% trans "Unlimited" %}</td>
+                            <td>{% trans "Unlimited" %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Audio quality" %}</td>
+                            <td>{% trans "Basic" %}</td>
+                            <td>HD</td>
+                            <td>{% trans "Studio grade" %}</td>
+                            <td>{% trans "Studio grade" %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Commercial use" %}</td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "API access" %}</td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Priority support" %}</td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Team collaboration" %}</td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Custom integrations" %}</td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Frequently Asked Questions -->
+        <div class="faq-section">
+            <div class="pricing-header">
+                <h2>{% trans "Frequently Asked Questions" %}</h2>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">{% trans "Can I change my plan anytime?" %}</div>
+                    <div class="faq-answer">
+                        {% trans "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, and we'll prorate any differences." %}
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">{% trans "What happens if I exceed my character limit?" %}</div>
+                    <div class="faq-answer">
+                        {% trans "You can purchase additional character packs or upgrade to a higher plan. We'll notify you before you reach your limit so you won't experience any interruptions." %}
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">{% trans "Are my voice clones permanent?" %}</div>
+                    <div class="faq-answer">
+                        {% trans "Yes, once created, your voice clones are permanently saved to your account. You can access them anytime, regardless of your current plan." %}
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">{% trans "What payment methods do you accept?" %}</div>
+                    <div class="faq-answer">
+                        {% trans "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Stripe, and local payment methods like JazzCash and Easypaisa. We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied, contact our support team for a full refund." %}
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">{% trans "Can I use the voices commercially?" %}</div>
+                    <div class="faq-answer">
+                        {% trans "Commercial use is available for Starter, Pro, and Yearly plans. The Free plan is for personal use only. Commercial use includes podcasts, YouTube videos, audiobooks, and other monetized content." %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accepted Payment Methods -->
+        <div class="payment-methods">
+            <h5>{% trans "Accepted Payment Methods" %}</h5>
+            <div class="payment-methods-icons">
+                <i class="fab fa-cc-paypal"></i>
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-google-pay" style="color: #4285F4;"></i>
+                <img src="{% static 'logos/jazzcash.png' %}" alt="JazzCash" title="JazzCash">
+                <img src="{% static 'logos/easypaisa.png' %}" alt="Easypaisa" title="Easypaisa">
+                <img src="{% static 'logos/upi.png' %}" alt="UPI" title="UPI">
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,2155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-23 14:28+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: .\templates\activity_logs.html:5
+msgid "Activity Logs - Admin"
+msgstr ""
+
+#: .\templates\activity_logs.html:116 .\templates\activity_logs.html:133
+#: .\templates\admin_dashboard.html:218 .\templates\admin_dashboard.html:323
+msgid "Activity Logs"
+msgstr ""
+
+#: .\templates\activity_logs.html:118
+msgid "Complete audit trail of all admin and user activities"
+msgstr ""
+
+#: .\templates\activity_logs.html:122 .\templates\platform_settings.html:106
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Back to Dashboard"
+msgstr "Tablero"
+
+#: .\templates\activity_logs.html:139
+msgid "Search logs..."
+msgstr ""
+
+#: .\templates\activity_logs.html:143
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "All Actions"
+msgstr "Acciones Rápidas"
+
+#: .\templates\activity_logs.html:144
+#, fuzzy
+#| msgid "Users"
+msgid "User Created"
+msgstr "Usuarios"
+
+#: .\templates\activity_logs.html:145
+#, fuzzy
+#| msgid "Users"
+msgid "User Updated"
+msgstr "Usuarios"
+
+#: .\templates\activity_logs.html:146
+msgid "User Deleted"
+msgstr ""
+
+#: .\templates\activity_logs.html:147
+msgid "User Activated"
+msgstr ""
+
+#: .\templates\activity_logs.html:148
+msgid "User Deactivated"
+msgstr ""
+
+#: .\templates\activity_logs.html:149
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Added"
+msgstr "Comprar Créditos"
+
+#: .\templates\activity_logs.html:150
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Subscription Changed"
+msgstr "Suscripción activa"
+
+#: .\templates\activity_logs.html:151
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voice Cloned"
+msgstr "Clonación de Voz"
+
+#: .\templates\activity_logs.html:152
+#, fuzzy
+#| msgid "Total audio generated"
+msgid "Audio Generated"
+msgstr "Audio total generado"
+
+#: .\templates\activity_logs.html:153
+msgid "Payment Completed"
+msgstr ""
+
+#: .\templates\activity_logs.html:158
+msgid "All Severities"
+msgstr ""
+
+#: .\templates\activity_logs.html:159 .\templates\support.html:307
+msgid "Low"
+msgstr ""
+
+#: .\templates\activity_logs.html:160 .\templates\support.html:308
+msgid "Medium"
+msgstr ""
+
+#: .\templates\activity_logs.html:161 .\templates\support.html:309
+msgid "High"
+msgstr ""
+
+#: .\templates\activity_logs.html:162
+msgid "Critical"
+msgstr ""
+
+#: .\templates\activity_logs.html:167 .\templates\admin_dashboard.html:369
+msgid "10 per page"
+msgstr ""
+
+#: .\templates\activity_logs.html:168
+msgid "20 per page"
+msgstr ""
+
+#: .\templates\activity_logs.html:169 .\templates\admin_dashboard.html:371
+msgid "50 per page"
+msgstr ""
+
+#: .\templates\activity_logs.html:170 .\templates\admin_dashboard.html:372
+msgid "100 per page"
+msgstr ""
+
+#: .\templates\activity_logs.html:179
+msgid "Time"
+msgstr ""
+
+#: .\templates\activity_logs.html:180
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Action"
+msgstr "Acciones Rápidas"
+
+#: .\templates\activity_logs.html:181 .\templates\support.html:316
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Description"
+msgstr "Suscripción activa"
+
+#: .\templates\activity_logs.html:182
+msgid "Severity"
+msgstr ""
+
+#: .\templates\activity_logs.html:183 .\templates\dashboard_base.html:767
+msgid "Admin"
+msgstr "Administrador"
+
+#: .\templates\activity_logs.html:184
+msgid "Target"
+msgstr ""
+
+#: .\templates\activity_logs.html:185
+msgid "IP Address"
+msgstr ""
+
+#: .\templates\activity_logs.html:192 .\templates\admin_dashboard.html:298
+#: .\templates\admin_dashboard.html:393 .\templates\admin_dashboard.html:440
+#: .\templates\admin_dashboard.html:454 .\templates\dashboard.html:25
+#: .\templates\generate.html:326 .\templates\my_audios.html:160
+#: .\templates\my_voices.html:45 .\templates\my_voices.html:64
+#: .\templates\my_voices.html:75 .\templates\support.html:362
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: .\templates\activity_logs.html:202 .\templates\activity_logs.html:341
+#: .\templates\admin_dashboard.html:402
+msgid "Showing 0 of 0"
+msgstr ""
+
+#: .\templates\activity_logs.html:263
+msgid "Failed to load activity logs"
+msgstr ""
+
+#: .\templates\activity_logs.html:340
+msgid "No activity logs found"
+msgstr ""
+
+#: .\templates\activity_logs.html:374
+msgid "Showing"
+msgstr ""
+
+#: .\templates\activity_logs.html:374
+msgid "to"
+msgstr ""
+
+#: .\templates\activity_logs.html:374
+msgid "of"
+msgstr ""
+
+#: .\templates\activity_logs.html:389 .\templates\my_audios.html:209
+msgid "Previous"
+msgstr ""
+
+#: .\templates\activity_logs.html:439 .\templates\my_audios.html:210
+msgid "Next"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:5 .\templates\admin_dashboard.html:213
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Admin Dashboard"
+msgstr "Tablero"
+
+#: .\templates\admin_dashboard.html:214
+#, fuzzy, python-format
+#| msgid "Welcome back, %(username)s! Here's your account overview."
+msgid "Welcome back, %(username)s!"
+msgstr "¡Bienvenido de nuevo, %(username)s! Aquí está el resumen de tu cuenta."
+
+#: .\templates\admin_dashboard.html:220
+#, fuzzy
+#| msgid "Admin"
+msgid "Super Admin"
+msgstr "Administrador"
+
+#: .\templates\admin_dashboard.html:235
+#, fuzzy
+#| msgid "Users"
+msgid "Total Users"
+msgstr "Usuarios"
+
+#: .\templates\admin_dashboard.html:246
+msgid "Total Revenue"
+msgstr "Ingresos Totales"
+
+#: .\templates\admin_dashboard.html:256
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voices Cloned"
+msgstr "Clonación de Voz"
+
+#: .\templates\admin_dashboard.html:266 .\templates\dashboard.html:54
+msgid "Generations"
+msgstr "Generaciones"
+
+#: .\templates\admin_dashboard.html:289
+#, fuzzy
+#| msgid "Overview"
+msgid "Revenue Overview"
+msgstr "Resumen"
+
+#: .\templates\admin_dashboard.html:294 .\templates\dashboard.html:141
+msgid "Recent Activity"
+msgstr "Actividad Reciente"
+
+#: .\templates\admin_dashboard.html:305 .\templates\dashboard.html:87
+msgid "Quick Actions"
+msgstr "Acciones Rápidas"
+
+#: .\templates\admin_dashboard.html:309
+msgid "Add New User"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:310
+msgid "Create a new user account"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:316
+#, fuzzy
+#| msgid "Announcements"
+msgid "Create Announcement"
+msgstr "Anuncios"
+
+#: .\templates\admin_dashboard.html:317
+msgid "Post message to all users"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:324
+msgid "View system activity"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:330 .\templates\platform_settings.html:102
+#, fuzzy
+#| msgid "Profile Settings"
+msgid "Platform Settings"
+msgstr "Configuración del Perfil"
+
+#: .\templates\admin_dashboard.html:331
+msgid "Configure platform"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:341
+msgid "User Management"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:343
+#, fuzzy
+#| msgid "Users"
+msgid "Add User"
+msgstr "Usuarios"
+
+#: .\templates\admin_dashboard.html:350
+msgid "Search users..."
+msgstr ""
+
+#: .\templates\admin_dashboard.html:354
+msgid "All Plans"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:355 .\templates\pricing.html:92
+msgid "Free"
+msgstr "Gratis"
+
+#: .\templates\admin_dashboard.html:356 .\templates\pricing.html:115
+msgid "Basic"
+msgstr "Básico"
+
+#: .\templates\admin_dashboard.html:357 .\templates\pricing.html:144
+msgid "Pro"
+msgstr "Profesional"
+
+#: .\templates\admin_dashboard.html:362
+msgid "All Status"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:363
+msgid "Active"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:364
+msgid "Inactive"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:370
+msgid "25 per page"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:380 .\templates\admin_dashboard.html:428
+#, fuzzy
+#| msgid "Users"
+msgid "User"
+msgstr "Usuarios"
+
+#: .\templates\admin_dashboard.html:381 .\templates\profile.html:133
+msgid "Email"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:382
+msgid "Plan"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:383 .\templates\checkout.html:221
+#: .\templates\pricing.html:248
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\admin_dashboard.html:384 .\templates\admin_dashboard.html:431
+msgid "Status"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:385
+msgid "Joined"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:386 .\templates\admin_dashboard.html:433
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Actions"
+msgstr "Acciones Rápidas"
+
+#: .\templates\admin_dashboard.html:412
+msgid "Payment Transactions"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:415
+msgid "Delete Selected"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:418
+msgid "Export"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:427
+msgid "Transaction ID"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:429
+#, fuzzy
+#| msgid "Account"
+msgid "Amount"
+msgstr "Cuenta"
+
+#: .\templates\admin_dashboard.html:430
+msgid "Type"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:432
+msgid "Date"
+msgstr ""
+
+#: .\templates\admin_dashboard.html:450
+#, fuzzy
+#| msgid "My Voices"
+msgid "All Cloned Voices"
+msgstr "Mis Voces"
+
+#: .\templates\checkout.html:5
+msgid "Checkout"
+msgstr ""
+
+#: .\templates\checkout.html:206
+msgid "Complete Your Purchase"
+msgstr ""
+
+#: .\templates\checkout.html:207
+msgid "Secure checkout powered by Stripe"
+msgstr ""
+
+#: .\templates\checkout.html:214
+msgid "Order Summary"
+msgstr ""
+
+#: .\templates\checkout.html:217
+msgid "Item"
+msgstr ""
+
+#: .\templates\checkout.html:225
+#, fuzzy
+#| msgid "Users"
+msgid "Total"
+msgstr "Usuarios"
+
+#: .\templates\checkout.html:232
+msgid "What you'll get:"
+msgstr ""
+
+#: .\templates\checkout.html:234
+msgid "Instant credit activation"
+msgstr ""
+
+#: .\templates\checkout.html:235
+msgid "Access to all voices"
+msgstr ""
+
+#: .\templates\checkout.html:236
+msgid "High-quality audio output"
+msgstr ""
+
+#: .\templates\checkout.html:237
+#, fuzzy
+#| msgid "Customer Support"
+msgid "24/7 customer support"
+msgstr "Soporte al Cliente"
+
+#: .\templates\checkout.html:246
+msgid "Select Payment Method"
+msgstr ""
+
+#: .\templates\checkout.html:257
+msgid "Credit/Debit Card"
+msgstr ""
+
+#: .\templates\checkout.html:258
+msgid "Visa, Mastercard, Amex"
+msgstr ""
+
+#: .\templates\checkout.html:272 .\templates\platform_settings.html:219
+msgid "PayPal"
+msgstr ""
+
+#: .\templates\checkout.html:273
+msgid "Fast & secure"
+msgstr ""
+
+#: .\templates\checkout.html:287 .\templates\platform_settings.html:265
+#: .\templates\pricing.html:190
+msgid "JazzCash"
+msgstr ""
+
+#: .\templates\checkout.html:288 .\templates\checkout.html:303
+msgid "Mobile wallet"
+msgstr ""
+
+#: .\templates\checkout.html:302 .\templates\platform_settings.html:308
+#: .\templates\pricing.html:191
+msgid "Easypaisa"
+msgstr ""
+
+#: .\templates\checkout.html:316
+msgid "Stripe Payment - Secure Card Processing"
+msgstr ""
+
+#: .\templates\checkout.html:322
+msgid "Cardholder Name"
+msgstr ""
+
+#: .\templates\checkout.html:324 .\templates\home.html:565
+msgid "John Doe"
+msgstr ""
+
+#: .\templates\checkout.html:329
+#, fuzzy
+#| msgid "Account"
+msgid "Card Information"
+msgstr "Cuenta"
+
+#: .\templates\checkout.html:334
+msgid "Enter your card number, expiry date, and CVC"
+msgstr ""
+
+#: .\templates\checkout.html:340 .\templates\checkout.html:770
+#: .\templates\checkout.html:780
+#, python-format
+msgid "Pay $%(amount)s"
+msgstr ""
+
+#: .\templates\checkout.html:346
+msgid "Your payment information is secure and encrypted"
+msgstr ""
+
+#: .\templates\checkout.html:363
+#, fuzzy
+#| msgid "Payments"
+msgid "PayPal Payment"
+msgstr "Pagos"
+
+#: .\templates\checkout.html:364
+msgid "You'll be redirected to PayPal to complete your payment"
+msgstr ""
+
+#: .\templates\checkout.html:367
+msgid "Continue to PayPal"
+msgstr ""
+
+#: .\templates\checkout.html:376 .\templates\checkout.html:403
+msgid "Mobile Number"
+msgstr ""
+
+#: .\templates\checkout.html:378
+msgid "Enter your JazzCash mobile number"
+msgstr ""
+
+#: .\templates\checkout.html:382
+msgid "CNIC (Last 6 digits)"
+msgstr ""
+
+#: .\templates\checkout.html:384
+msgid "Last 6 digits of your CNIC"
+msgstr ""
+
+#: .\templates\checkout.html:389
+#, python-format
+msgid "Pay with JazzCash - $%(amount)s"
+msgstr ""
+
+#: .\templates\checkout.html:394
+msgid "Secure JazzCash payment gateway"
+msgstr ""
+
+#: .\templates\checkout.html:405
+msgid "Enter your Easypaisa mobile number"
+msgstr ""
+
+#: .\templates\checkout.html:409
+msgid "Email Address"
+msgstr ""
+
+#: .\templates\checkout.html:410
+msgid "your@email.com"
+msgstr ""
+
+#: .\templates\checkout.html:411
+#, fuzzy
+#| msgid "Account"
+msgid "For payment confirmation"
+msgstr "Cuenta"
+
+#: .\templates\checkout.html:416
+#, python-format
+msgid "Pay with Easypaisa - $%(amount)s"
+msgstr ""
+
+#: .\templates\checkout.html:421
+msgid "Secure Easypaisa payment gateway"
+msgstr ""
+
+#: .\templates\checkout.html:429
+msgid "Back to Pricing"
+msgstr ""
+
+#: .\templates\checkout.html:440
+msgid "Processing Payment..."
+msgstr ""
+
+#: .\templates\checkout.html:441
+msgid "Please don't close this window"
+msgstr ""
+
+#: .\templates\checkout.html:516 .\templates\checkout.html:563
+#: .\templates\checkout.html:624 .\templates\checkout.html:753
+#, fuzzy
+#| msgid "Payments"
+msgid "Payment failed"
+msgstr "Pagos"
+
+#: .\templates\checkout.html:523
+msgid "No approval URL received"
+msgstr ""
+
+#: .\templates\checkout.html:527
+msgid "PayPal payment error:"
+msgstr ""
+
+#: .\templates\checkout.html:584
+msgid "JazzCash integration in progress"
+msgstr ""
+
+#: .\templates\checkout.html:588
+msgid "JazzCash payment error:"
+msgstr ""
+
+#: .\templates\checkout.html:645
+msgid "Easypaisa integration in progress"
+msgstr ""
+
+#: .\templates\checkout.html:649
+msgid "Easypaisa payment error:"
+msgstr ""
+
+#: .\templates\checkout.html:664
+msgid ""
+"Stripe configuration error: Missing publishable key. Please contact support."
+msgstr ""
+
+#: .\templates\checkout.html:674
+msgid "Stripe initialization error:"
+msgstr ""
+
+#: .\templates\checkout.html:728
+#, fuzzy
+#| msgid "Loading..."
+msgid "Processing..."
+msgstr "Cargando..."
+
+#: .\templates\clone.html:5
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Talk Studio - IndexTTS2"
+msgstr "Clonación de Voz"
+
+#: .\templates\clone.html:263
+msgid "Loading IndexTTS2 Interface..."
+msgstr ""
+
+#: .\templates\clone.html:271
+msgid "IndexTTS2 Server Not Running"
+msgstr ""
+
+#: .\templates\clone.html:273
+msgid ""
+"The IndexTTS2 Gradio interface is not currently running. Please start the "
+"server to use Talk Studio."
+msgstr ""
+
+#: .\templates\clone.html:276
+msgid "Retry Connection"
+msgstr ""
+
+#: .\templates\clone.html:280
+msgid "Quick Start:"
+msgstr ""
+
+#: .\templates\clone.html:282
+msgid "Double-click"
+msgstr ""
+
+#: .\templates\clone.html:282
+msgid "in voice_cloning folder"
+msgstr ""
+
+#: .\templates\clone.html:283
+msgid "Wait for models to load (3-5 minutes first time)"
+msgstr ""
+
+#: .\templates\clone.html:284
+msgid "Click \\"
+msgstr ""
+
+#: .\templates\dashboard.html:5 .\templates\dashboard.html:9
+#: .\templates\dashboard_base.html:725 .\templates\profile.html:86
+msgid "Dashboard"
+msgstr "Tablero"
+
+#: .\templates\dashboard.html:10
+#, python-format
+msgid "Welcome back, %(username)s! Here's your account overview."
+msgstr "¡Bienvenido de nuevo, %(username)s! Aquí está el resumen de tu cuenta."
+
+#: .\templates\dashboard.html:24
+msgid "Available Credits"
+msgstr "Créditos Disponibles"
+
+#: .\templates\dashboard.html:39 .\templates\my_voices.html:16
+#: .\templates\profile.html:107
+#, fuzzy
+#| msgid "My Voices"
+msgid "Cloned Voices"
+msgstr "Mis Voces"
+
+#: .\templates\dashboard.html:40
+msgid "Total voice models"
+msgstr "Modelos de voz totales"
+
+#: .\templates\dashboard.html:55
+msgid "Total audio generated"
+msgstr "Audio total generado"
+
+#: .\templates\dashboard.html:69
+msgid "Current Plan"
+msgstr "Plan Actual"
+
+#: .\templates\dashboard.html:72
+msgid "Upgrade now"
+msgstr "Actualizar ahora"
+
+#: .\templates\dashboard.html:74
+msgid "Active subscription"
+msgstr "Suscripción activa"
+
+#: .\templates\dashboard.html:92 .\templates\my_voices.html:37
+msgid "Clone New Voice"
+msgstr "Clonar Nueva Voz"
+
+#: .\templates\dashboard.html:95
+#, fuzzy
+#| msgid "My Voices"
+msgid "My Voice Library"
+msgstr "Mis Voces"
+
+#: .\templates\dashboard.html:98
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Buy More Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\dashboard.html:107
+#, fuzzy
+#| msgid "Account"
+msgid "Account Info"
+msgstr "Cuenta"
+
+#: .\templates\dashboard.html:111
+msgid "EMAIL"
+msgstr "CORREO"
+
+#: .\templates\dashboard.html:115
+msgid "USERNAME"
+msgstr "NOMBRE DE USUARIO"
+
+#: .\templates\dashboard.html:119
+msgid "PLAN TYPE"
+msgstr "TIPO DE PLAN"
+
+#: .\templates\dashboard.html:125
+msgid "MEMBER SINCE"
+msgstr "MIEMBRO DESDE"
+
+#: .\templates\dashboard.html:130 .\templates\dashboard_base.html:760
+#: .\templates\profile.html:87
+msgid "Profile Settings"
+msgstr "Configuración del Perfil"
+
+#: .\templates\dashboard.html:147 .\templates\dashboard.html:485
+msgid ""
+"No recent transactions. Start by cloning your first voice or generating "
+"audio!"
+msgstr ""
+
+#: .\templates\dashboard.html:156
+msgid "Credits Usage (Last 7 Days)"
+msgstr "Uso de Créditos (Últimos 7 Días)"
+
+#: .\templates\dashboard.html:166
+msgid "Getting Started"
+msgstr "Comenzando"
+
+#: .\templates\dashboard.html:178
+msgid "1. Clone a Voice"
+msgstr "1. Clonar una Voz"
+
+#: .\templates\dashboard.html:179
+msgid "Upload a 5-15 second audio sample of any voice you want to clone."
+msgstr ""
+"Sube una muestra de audio de 5-15 segundos de cualquier voz que quieras "
+"clonar."
+
+#: .\templates\dashboard.html:191
+msgid "2. Generate Audio"
+msgstr "2. Generar Audio"
+
+#: .\templates\dashboard.html:192
+msgid "Enter up to 50,000 characters of text to convert into speech."
+msgstr "Ingresa hasta 50,000 caracteres de texto para convertir en voz."
+
+#: .\templates\dashboard.html:204
+msgid "3. Download & Use"
+msgstr "3. Descargar y Usar"
+
+#: .\templates\dashboard.html:205
+msgid "Download your generated audio in high quality WAV format."
+msgstr "Descarga tu audio generado en formato WAV de alta calidad."
+
+#: .\templates\dashboard.html:217
+msgid "4. Manage Credits"
+msgstr "4. Gestionar Créditos"
+
+#: .\templates\dashboard.html:218
+msgid "Purchase more credits anytime from the pricing page."
+msgstr "Compra más créditos en cualquier momento desde la página de precios."
+
+#: .\templates\dashboard.html:352 .\templates\dashboard.html:388
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Used"
+msgstr "Comprar Créditos"
+
+#: .\templates\dashboard_base.html:721
+msgid "Main"
+msgstr "Principal"
+
+#: .\templates\dashboard_base.html:731 .\templates\home.html:413
+msgid "Talk Studio"
+msgstr "Clonación de Voz"
+
+#: .\templates\dashboard_base.html:737 .\templates\my_voices.html:5
+#: .\templates\my_voices.html:10
+msgid "My Voices"
+msgstr "Mis Voces"
+
+#: .\templates\dashboard_base.html:743
+msgid "Account"
+msgstr "Cuenta"
+
+#: .\templates\dashboard_base.html:747
+msgid "Buy Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\dashboard_base.html:748
+msgid "Hot"
+msgstr "Popular"
+
+#: .\templates\dashboard_base.html:754 .\templates\support.html:5
+#: .\templates\support.html:244
+msgid "Customer Support"
+msgstr "Soporte al Cliente"
+
+#: .\templates\dashboard_base.html:771
+msgid "Overview"
+msgstr "Resumen"
+
+#: .\templates\dashboard_base.html:777
+msgid "Users"
+msgstr "Usuarios"
+
+#: .\templates\dashboard_base.html:783
+msgid "Payments"
+msgstr "Pagos"
+
+#: .\templates\dashboard_base.html:789
+msgid "Voices"
+msgstr "Voces"
+
+#: .\templates\dashboard_base.html:795
+msgid "Settings"
+msgstr "Configuración"
+
+#: .\templates\dashboard_base.html:801
+msgid "Announcements"
+msgstr "Anuncios"
+
+#: .\templates\dashboard_base.html:807
+msgid "Email Marketing"
+msgstr "Marketing por Correo"
+
+#: .\templates\dashboard_base.html:813
+msgid "Packages"
+msgstr "Paquetes"
+
+#: .\templates\dashboard_base.html:823
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: .\templates\generate.html:5
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Generate Voice - Index-TTS2"
+msgstr "Clonación de Voz"
+
+#: .\templates\generate.html:67
+msgid "Advanced emotion-controlled text-to-speech synthesis"
+msgstr ""
+
+#: .\templates\generate.html:83
+msgid "Upload Voice Sample (3-10 seconds)"
+msgstr ""
+
+#: .\templates\generate.html:85
+#, fuzzy
+#| msgid "Upload a 5-15 second audio sample of any voice you want to clone."
+msgid "Upload a clean audio sample of the target voice"
+msgstr ""
+"Sube una muestra de audio de 5-15 segundos de cualquier voz que quieras "
+"clonar."
+
+#: .\templates\generate.html:88
+msgid "Or Select from Library/My Voices"
+msgstr ""
+
+#: .\templates\generate.html:90
+msgid "Select a voice..."
+msgstr ""
+
+#: .\templates\generate.html:116
+msgid "50,000 characters"
+msgstr ""
+
+#: .\templates\generate.html:132
+msgid "Emotion Control Method"
+msgstr ""
+
+#: .\templates\generate.html:158
+msgid "Emotion Reference Audio"
+msgstr ""
+
+#: .\templates\generate.html:228
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Emotion Description"
+msgstr "Suscripción activa"
+
+#: .\templates\generate.html:231
+msgid "Leave empty to use target text as emotion description"
+msgstr ""
+
+#: .\templates\generate.html:236
+msgid "Emotion Weight:"
+msgstr ""
+
+#: .\templates\generate.html:254
+msgid "GPT2 Sampling Parameters"
+msgstr ""
+
+#: .\templates\generate.html:257
+msgid "Temperature:"
+msgstr ""
+
+#: .\templates\generate.html:261
+msgid "Top P:"
+msgstr ""
+
+#: .\templates\generate.html:265
+msgid "Top K:"
+msgstr ""
+
+#: .\templates\generate.html:269
+msgid "Num Beams:"
+msgstr ""
+
+#: .\templates\generate.html:275
+msgid "Text Segmentation"
+msgstr ""
+
+#: .\templates\generate.html:277
+msgid "Max Tokens Per Segment:"
+msgstr ""
+
+#: .\templates\generate.html:279
+msgid "Recommended: 80-200. Affects audio quality and generation speed."
+msgstr ""
+
+#: .\templates\generate.html:282
+msgid "Segment Preview"
+msgstr ""
+
+#: .\templates\generate.html:284
+msgid "Enter text to see segments"
+msgstr ""
+
+#: .\templates\generate.html:317
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Used:"
+msgstr "Comprar Créditos"
+
+#: .\templates\generate.html:318
+#, fuzzy
+#| msgid "4. Manage Credits"
+msgid "Remaining Credits:"
+msgstr "4. Gestionar Créditos"
+
+#: .\templates\generate.html:328
+#, fuzzy
+#| msgid "Generations"
+msgid "Generating voice..."
+msgstr "Generaciones"
+
+#: .\templates\generate.html:329
+msgid "This may take a minute depending on text length"
+msgstr ""
+
+#: .\templates\generate.html:334
+msgid "You have"
+msgstr ""
+
+#: .\templates\generate.html:334
+msgid "credits remaining."
+msgstr ""
+
+#: .\templates\generate.html:335
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Buy more credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\home.html:5
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Home - Talk Studio Platform"
+msgstr "Clonación de Voz"
+
+#: .\templates\home.html:303
+msgid "AI-Powered Voice Technology"
+msgstr ""
+
+#: .\templates\home.html:305
+msgid "Transform Text into Natural, Human-Like Speech"
+msgstr ""
+
+#: .\templates\home.html:307
+msgid ""
+"Clone any voice and generate professional-quality speech with our advanced "
+"AI technology. Perfect for content creators, businesses, and developers."
+msgstr ""
+
+#: .\templates\home.html:312
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Get Started Free"
+msgstr "Comenzando"
+
+#: .\templates\home.html:315
+msgid "Try Demo"
+msgstr ""
+
+#: .\templates\home.html:319
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate Voice"
+msgstr "2. Generar Audio"
+
+#: .\templates\home.html:322 .\templates\home.html:624
+#, fuzzy
+#| msgid "My Voices"
+msgid "Clone Voice"
+msgstr "Mis Voces"
+
+#: .\templates\home.html:329 .\templates\pricing.html:99
+msgid "1,000 free credits"
+msgstr ""
+
+#: .\templates\home.html:333
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "1 free voice clone"
+msgstr "Clonación de Voz"
+
+#: .\templates\home.html:337
+msgid "No credit card required"
+msgstr ""
+
+#: .\templates\home.html:366
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Words Generated"
+msgstr "2. Generar Audio"
+
+#: .\templates\home.html:372
+#, fuzzy
+#| msgid "Users"
+msgid "Happy Users"
+msgstr "Usuarios"
+
+#: .\templates\home.html:378
+#, fuzzy
+#| msgid "Voices"
+msgid "Voice Options"
+msgstr "Voces"
+
+#: .\templates\home.html:384
+msgid "Uptime"
+msgstr ""
+
+#: .\templates\home.html:395
+msgid "Powerful Features"
+msgstr ""
+
+#: .\templates\home.html:396
+msgid "Everything you need to create professional voice content"
+msgstr ""
+
+#: .\templates\home.html:404
+msgid "Text-to-Speech"
+msgstr ""
+
+#: .\templates\home.html:405
+msgid ""
+"Convert up to 50k characters at once into natural-sounding speech with "
+"adjustable parameters."
+msgstr ""
+
+#: .\templates\home.html:414
+msgid ""
+"Upload or record a voice sample and clone it for unlimited text-to-speech "
+"generation."
+msgstr ""
+
+#: .\templates\home.html:422
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voice Control"
+msgstr "Clonación de Voz"
+
+#: .\templates\home.html:423
+msgid ""
+"Fine-tune speed, pitch, and tone to get the perfect voice output for your "
+"needs."
+msgstr ""
+
+#: .\templates\home.html:431
+#, fuzzy
+#| msgid "My Voices"
+msgid "Voice Library"
+msgstr "Mis Voces"
+
+#: .\templates\home.html:432
+msgid "Access default voices with various male, female accents and languages."
+msgstr ""
+
+#: .\templates\home.html:440
+#, fuzzy
+#| msgid "3. Download & Use"
+msgid "Easy Downloads"
+msgstr "3. Descargar y Usar"
+
+#: .\templates\home.html:441
+msgid "Download generated audio files instantly and manage your voice library."
+msgstr ""
+
+#: .\templates\home.html:449
+msgid "Secure & Private"
+msgstr ""
+
+#: .\templates\home.html:450
+msgid "Your voice data is encrypted and stored securely. Delete anytime."
+msgstr ""
+
+#: .\templates\home.html:461
+msgid "How It Works"
+msgstr "Cómo Funciona"
+
+#: .\templates\home.html:462
+msgid "Get started in three simple steps"
+msgstr ""
+
+#: .\templates\home.html:468 .\templates\pricing.html:106
+msgid "Sign Up Free"
+msgstr ""
+
+#: .\templates\home.html:469
+msgid ""
+"Create your account and get 1,000 free credits plus 1 free voice clone to "
+"start."
+msgstr ""
+
+#: .\templates\home.html:478
+msgid "Choose or Clone"
+msgstr ""
+
+#: .\templates\home.html:479
+msgid "Select from our voice library or clone your own voice in seconds."
+msgstr ""
+
+#: .\templates\home.html:488
+#, fuzzy
+#| msgid "Generations"
+msgid "Generate & Download"
+msgstr "Generaciones"
+
+#: .\templates\home.html:489
+msgid ""
+"Enter your text, customize settings, and download high-quality audio "
+"instantly."
+msgstr ""
+
+#: .\templates\home.html:500
+#, fuzzy
+#| msgid "My Voices"
+msgid "Try Demo Voices"
+msgstr "Mis Voces"
+
+#: .\templates\home.html:501
+msgid "Listen to sample voices from our library"
+msgstr ""
+
+#: .\templates\home.html:511
+msgid "Sarah - Female (American)"
+msgstr ""
+
+#: .\templates\home.html:512
+msgid "Professional and friendly voice"
+msgstr ""
+
+#: .\templates\home.html:515 .\templates\home.html:526
+#: .\templates\home.html:537
+msgid "Play"
+msgstr ""
+
+#: .\templates\home.html:522
+msgid "John - Male (British)"
+msgstr ""
+
+#: .\templates\home.html:523
+msgid "Clear and authoritative voice"
+msgstr ""
+
+#: .\templates\home.html:533
+msgid "Emma - Female (Australian)"
+msgstr ""
+
+#: .\templates\home.html:534
+msgid "Warm and engaging voice"
+msgstr ""
+
+#: .\templates\home.html:553
+msgid "What Our Users Say"
+msgstr ""
+
+#: .\templates\home.html:554 .\templates\pricing.html:198
+msgid "Join thousands of satisfied customers"
+msgstr ""
+
+#: .\templates\home.html:560
+msgid ""
+"This is the best Talk Studio platform I've used. The quality is amazing "
+"and the interface is so easy to use!"
+msgstr ""
+
+#: .\templates\home.html:566
+msgid "Content Creator"
+msgstr ""
+
+#: .\templates\home.html:574
+msgid ""
+"I use this for my podcast and audiobooks. The Talk Studio feature saved me "
+"countless hours of recording."
+msgstr ""
+
+#: .\templates\home.html:579
+msgid "Sarah Miller"
+msgstr ""
+
+#: .\templates\home.html:580
+msgid "Podcast Host"
+msgstr ""
+
+#: .\templates\home.html:588
+msgid ""
+"Outstanding API and customer support. Perfect for integrating voice "
+"generation into our applications."
+msgstr ""
+
+#: .\templates\home.html:593
+msgid "Robert Chen"
+msgstr ""
+
+#: .\templates\home.html:594
+msgid "Software Developer"
+msgstr ""
+
+#: .\templates\home.html:606
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Ready to Get Started?"
+msgstr "Comenzando"
+
+#: .\templates\home.html:608
+msgid "Sign up now and get 1,000 free credits plus 1 free voice clone!"
+msgstr ""
+
+#: .\templates\home.html:609
+msgid "No credit card required."
+msgstr ""
+
+#: .\templates\home.html:614 .\templates\pricing.html:200
+msgid "Start Free Trial"
+msgstr ""
+
+#: .\templates\home.html:617
+msgid "View Pricing"
+msgstr ""
+
+#: .\templates\home.html:621
+#, fuzzy
+#| msgid "Generations"
+msgid "Start Generating"
+msgstr "Generaciones"
+
+#: .\templates\home.html:631
+msgid "Secure payment processing"
+msgstr ""
+
+#: .\templates\home.html:634
+msgid "Your data is encrypted"
+msgstr ""
+
+#: .\templates\home.html:637
+msgid "24/7 support"
+msgstr ""
+
+#: .\templates\my_audios.html:5 .\templates\my_audios.html:88
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "My Generated Audios"
+msgstr "2. Generar Audio"
+
+#: .\templates\my_audios.html:90 .\templates\my_voices.html:56
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate New Audio"
+msgstr "2. Generar Audio"
+
+#: .\templates\my_audios.html:99
+#, fuzzy
+#| msgid "Users"
+msgid "Total Audios"
+msgstr "Usuarios"
+
+#: .\templates\my_audios.html:105
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Characters Used"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:111
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Spent"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:117
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Remaining"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:126
+msgid "Search by text"
+msgstr ""
+
+#: .\templates\my_audios.html:127
+msgid "Search..."
+msgstr ""
+
+#: .\templates\my_audios.html:130
+msgid "Sort by"
+msgstr ""
+
+#: .\templates\my_audios.html:132
+msgid "Newest First"
+msgstr ""
+
+#: .\templates\my_audios.html:133
+msgid "Oldest First"
+msgstr ""
+
+#: .\templates\my_audios.html:134
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Most Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:135
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Least Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:139
+msgid "Date Range"
+msgstr ""
+
+#: .\templates\my_audios.html:141
+msgid "All Time"
+msgstr ""
+
+#: .\templates\my_audios.html:142
+msgid "Today"
+msgstr ""
+
+#: .\templates\my_audios.html:143
+msgid "This Week"
+msgstr ""
+
+#: .\templates\my_audios.html:144
+msgid "This Month"
+msgstr ""
+
+#: .\templates\my_audios.html:149
+msgid "Apply"
+msgstr ""
+
+#: .\templates\my_audios.html:162
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading your audio files..."
+msgstr "Cargando..."
+
+#: .\templates\my_audios.html:178
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Delete Audio"
+msgstr "2. Generar Audio"
+
+#: .\templates\my_audios.html:182
+msgid ""
+"Are you sure you want to delete this audio? This action cannot be undone."
+msgstr ""
+
+#: .\templates\my_audios.html:185 .\templates\support.html:326
+msgid "Cancel"
+msgstr ""
+
+#: .\templates\my_audios.html:186 .\templates\my_audios.html:205
+msgid "Delete"
+msgstr ""
+
+#: .\templates\my_audios.html:197
+msgid "Failed to load audios. Please try again."
+msgstr ""
+
+#: .\templates\my_audios.html:198
+msgid "Retry"
+msgstr ""
+
+#: .\templates\my_audios.html:199
+msgid "No audio files found. Generate your first audio!"
+msgstr ""
+
+#: .\templates\my_audios.html:200
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate Audio"
+msgstr "2. Generar Audio"
+
+#: .\templates\my_audios.html:201
+msgid "Audio"
+msgstr ""
+
+#: .\templates\my_audios.html:202
+msgid "chars"
+msgstr ""
+
+#: .\templates\my_audios.html:203
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\my_audios.html:204
+#, fuzzy
+#| msgid "3. Download & Use"
+msgid "Download"
+msgstr "3. Descargar y Usar"
+
+#: .\templates\my_audios.html:206
+msgid "Show more"
+msgstr ""
+
+#: .\templates\my_audios.html:207
+msgid "Show less"
+msgstr ""
+
+#: .\templates\my_audios.html:208
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+#: .\templates\my_audios.html:211
+msgid "Audio deleted successfully"
+msgstr ""
+
+#: .\templates\my_audios.html:212
+msgid "Failed to delete audio"
+msgstr ""
+
+#: .\templates\my_audios.html:213
+msgid "Unknown"
+msgstr ""
+
+#: .\templates\my_voices.html:21
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generated Audio"
+msgstr "2. Generar Audio"
+
+#: .\templates\my_voices.html:26
+#, fuzzy
+#| msgid "Generations"
+msgid "Generation History"
+msgstr "Generaciones"
+
+#: .\templates\platform_settings.html:5
+#, fuzzy
+#| msgid "Profile Settings"
+msgid "Platform Settings - Admin"
+msgstr "Configuración del Perfil"
+
+#: .\templates\platform_settings.html:103
+msgid "Configure credit system and payment gateways"
+msgstr ""
+
+#: .\templates\platform_settings.html:120
+msgid "Credit Configuration"
+msgstr "Configuración de Créditos"
+
+#: .\templates\platform_settings.html:124
+msgid "How it works:"
+msgstr ""
+
+#: .\templates\platform_settings.html:124
+msgid "Configure how credits are calculated for text-to-speech generation."
+msgstr ""
+
+#: .\templates\platform_settings.html:129
+msgid "Credit Calculation Method"
+msgstr ""
+
+#: .\templates\platform_settings.html:131
+msgid "Per Character"
+msgstr ""
+
+#: .\templates\platform_settings.html:132
+msgid "Per Word"
+msgstr ""
+
+#: .\templates\platform_settings.html:133
+msgid "Per Letter"
+msgstr ""
+
+#: .\templates\platform_settings.html:135
+msgid "Choose how to calculate credits for voice generation"
+msgstr ""
+
+#: .\templates\platform_settings.html:139
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Per Unit"
+msgstr "Comprar Créditos"
+
+#: .\templates\platform_settings.html:141
+msgid "How many credits per character/word/letter"
+msgstr ""
+
+#: .\templates\platform_settings.html:145
+#, fuzzy
+#| msgid "Available Credits"
+msgid "Free Trial Credits"
+msgstr "Créditos Disponibles"
+
+#: .\templates\platform_settings.html:147
+msgid "Credits given to new free users"
+msgstr ""
+
+#: .\templates\platform_settings.html:151
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Free Voice Clones"
+msgstr "Clonación de Voz"
+
+#: .\templates\platform_settings.html:153
+msgid "Number of free voice clones for new users"
+msgstr ""
+
+#: .\templates\platform_settings.html:160
+#, fuzzy
+#| msgid "Payments"
+msgid "Payment Gateways"
+msgstr "Pagos"
+
+#: .\templates\platform_settings.html:164
+msgid "Security Note:"
+msgstr ""
+
+#: .\templates\platform_settings.html:164
+msgid ""
+"All payment credentials are stored securely. Enable only the gateways you "
+"need."
+msgstr ""
+
+#: .\templates\platform_settings.html:173
+msgid "Stripe"
+msgstr ""
+
+#: .\templates\platform_settings.html:174
+msgid "Credit/Debit Cards, Digital Wallets"
+msgstr ""
+
+#: .\templates\platform_settings.html:179
+#: .\templates\platform_settings.html:225
+#: .\templates\platform_settings.html:271
+#: .\templates\platform_settings.html:314
+msgid "Enable"
+msgstr ""
+
+#: .\templates\platform_settings.html:186
+msgid "Public Key"
+msgstr ""
+
+#: .\templates\platform_settings.html:190
+msgid "Secret Key"
+msgstr ""
+
+#: .\templates\platform_settings.html:197
+msgid "Webhook Secret"
+msgstr ""
+
+#: .\templates\platform_settings.html:205
+#: .\templates\platform_settings.html:251
+#: .\templates\platform_settings.html:297
+#: .\templates\platform_settings.html:333
+msgid "Test Connection"
+msgstr ""
+
+#: .\templates\platform_settings.html:208
+#: .\templates\platform_settings.html:254
+msgid "Get API Keys"
+msgstr ""
+
+#: .\templates\platform_settings.html:220
+msgid "PayPal Accounts, Credit/Debit Cards"
+msgstr ""
+
+#: .\templates\platform_settings.html:232
+#: .\templates\platform_settings.html:233
+msgid "Client ID"
+msgstr ""
+
+#: .\templates\platform_settings.html:236
+#: .\templates\platform_settings.html:238
+msgid "Client Secret"
+msgstr ""
+
+#: .\templates\platform_settings.html:243
+msgid "Mode"
+msgstr ""
+
+#: .\templates\platform_settings.html:245
+msgid "Sandbox (Testing)"
+msgstr ""
+
+#: .\templates\platform_settings.html:246
+msgid "Live (Production)"
+msgstr ""
+
+#: .\templates\platform_settings.html:266
+#: .\templates\platform_settings.html:309
+msgid "Pakistan - Mobile Wallet"
+msgstr ""
+
+#: .\templates\platform_settings.html:278
+#: .\templates\platform_settings.html:279
+msgid "Merchant ID"
+msgstr ""
+
+#: .\templates\platform_settings.html:282
+#: .\templates\platform_settings.html:284
+#: .\templates\platform_settings.html:325
+#: .\templates\platform_settings.html:327
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Password"
+msgstr "Plan Actual"
+
+#: .\templates\platform_settings.html:289
+#: .\templates\platform_settings.html:291
+msgid "Integrity Salt"
+msgstr ""
+
+#: .\templates\platform_settings.html:321
+#: .\templates\platform_settings.html:322
+msgid "Store ID"
+msgstr ""
+
+#: .\templates\platform_settings.html:342
+#, fuzzy
+#| msgid "Settings"
+msgid "Save All Settings"
+msgstr "Configuración"
+
+#: .\templates\pricing.html:5
+msgid "Pricing"
+msgstr "Precios"
+
+#: .\templates\pricing.html:84
+msgid "Choose Your Plan"
+msgstr "Elige Tu Plan"
+
+#: .\templates\pricing.html:85
+msgid "Select the perfect plan for your needs"
+msgstr ""
+
+#: .\templates\pricing.html:96
+msgid "Forever"
+msgstr ""
+
+#: .\templates\pricing.html:100
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "1 voice clone"
+msgstr "Clonación de Voz"
+
+#: .\templates\pricing.html:101
+msgid "Access to library voices"
+msgstr ""
+
+#: .\templates\pricing.html:102
+msgid "Basic audio quality"
+msgstr ""
+
+#: .\templates\pricing.html:103
+msgid "No commercial use"
+msgstr ""
+
+#: .\templates\pricing.html:116
+msgid "Popular"
+msgstr ""
+
+#: .\templates\pricing.html:120 .\templates\pricing.html:148
+msgid "Per month"
+msgstr ""
+
+#: .\templates\pricing.html:123
+msgid "50,000 credits/month"
+msgstr ""
+
+#: .\templates\pricing.html:124
+#, fuzzy
+#| msgid "Total voice models"
+msgid "10 voice clones"
+msgstr "Modelos de voz totales"
+
+#: .\templates\pricing.html:125 .\templates\pricing.html:153
+msgid "All library voices"
+msgstr ""
+
+#: .\templates\pricing.html:126
+msgid "HD audio quality"
+msgstr ""
+
+#: .\templates\pricing.html:127 .\templates\pricing.html:155
+msgid "Commercial use allowed"
+msgstr ""
+
+#: .\templates\pricing.html:128
+msgid "Priority support"
+msgstr ""
+
+#: .\templates\pricing.html:132 .\templates\pricing.html:161
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Get Started"
+msgstr "Comenzando"
+
+#: .\templates\pricing.html:134 .\templates\pricing.html:163
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\pricing.html:151
+msgid "200,000 credits/month"
+msgstr ""
+
+#: .\templates\pricing.html:152
+msgid "Unlimited voice clones"
+msgstr ""
+
+#: .\templates\pricing.html:154
+msgid "Studio audio quality"
+msgstr ""
+
+#: .\templates\pricing.html:156
+msgid "Premium support"
+msgstr ""
+
+#: .\templates\pricing.html:157
+msgid "API access"
+msgstr ""
+
+#: .\templates\pricing.html:172
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Or Buy Credits"
+msgstr "Comprar Créditos"
+
+#: .\templates\pricing.html:173
+msgid "One-time credit purchases for flexibility"
+msgstr ""
+
+#: .\templates\pricing.html:178
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading packages..."
+msgstr "Cargando..."
+
+#: .\templates\pricing.html:185
+msgid "Accepted Payment Methods"
+msgstr ""
+
+#: .\templates\pricing.html:197
+msgid "Ready to get started?"
+msgstr ""
+
+#: .\templates\pricing.html:230
+msgid "Most Popular"
+msgstr ""
+
+#: .\templates\pricing.html:231
+msgid "Save"
+msgstr ""
+
+#: .\templates\pricing.html:237
+msgid "Purchase"
+msgstr ""
+
+#: .\templates\pricing.html:239
+msgid "Sign Up to Purchase"
+msgstr ""
+
+#: .\templates\pricing.html:259
+msgid "No packages available at the moment."
+msgstr ""
+
+#: .\templates\pricing.html:263
+msgid "Error loading packages. Please try again later."
+msgstr ""
+
+#: .\templates\profile.html:5
+msgid "My Profile"
+msgstr ""
+
+#: .\templates\profile.html:103
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Available"
+msgstr "Comprar Créditos"
+
+#: .\templates\profile.html:111
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generated Audios"
+msgstr "2. Generar Audio"
+
+#: .\templates\profile.html:120
+msgid "Personal Information"
+msgstr ""
+
+#: .\templates\profile.html:124
+msgid "First Name"
+msgstr ""
+
+#: .\templates\profile.html:128
+msgid "Last Name"
+msgstr ""
+
+#: .\templates\profile.html:135
+msgid "Email cannot be changed"
+msgstr ""
+
+#: .\templates\profile.html:138
+#, fuzzy
+#| msgid "Users"
+msgid "Username"
+msgstr "Usuarios"
+
+#: .\templates\profile.html:142
+msgid "Save Changes"
+msgstr ""
+
+#: .\templates\profile.html:149
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\profile.html:152
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Current Password"
+msgstr "Plan Actual"
+
+#: .\templates\profile.html:161
+msgid "New Password"
+msgstr ""
+
+#: .\templates\profile.html:168
+msgid "Must be at least 8 characters long"
+msgstr ""
+
+#: .\templates\profile.html:171
+msgid "Confirm New Password"
+msgstr ""
+
+#: .\templates\profile.html:180
+msgid "Update Password"
+msgstr ""
+
+#: .\templates\profile.html:187
+#, fuzzy
+#| msgid "Account"
+msgid "Account Information"
+msgstr "Cuenta"
+
+#: .\templates\profile.html:190
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Subscription Type"
+msgstr "Suscripción activa"
+
+#: .\templates\profile.html:198
+msgid "Member Since"
+msgstr ""
+
+#: .\templates\profile.html:237
+msgid "Profile updated successfully!"
+msgstr ""
+
+#: .\templates\profile.html:245 .\templates\profile.html:249
+msgid "Failed to update profile"
+msgstr ""
+
+#: .\templates\profile.html:261
+msgid "Passwords do not match"
+msgstr ""
+
+#: .\templates\profile.html:282
+msgid "Password updated successfully!"
+msgstr ""
+
+#: .\templates\profile.html:286 .\templates\profile.html:290
+msgid "Failed to update password"
+msgstr ""
+
+#: .\templates\support.html:245
+msgid "Get help with your account, ask questions, or report issues."
+msgstr ""
+
+#: .\templates\support.html:250
+msgid "My Tickets"
+msgstr ""
+
+#: .\templates\support.html:251
+msgid "New Ticket"
+msgstr ""
+
+#: .\templates\support.html:252
+msgid "FAQ"
+msgstr ""
+
+#: .\templates\support.html:259
+msgid "Your Support Tickets"
+msgstr ""
+
+#: .\templates\support.html:261
+msgid "All"
+msgstr ""
+
+#: .\templates\support.html:262
+msgid "Open"
+msgstr ""
+
+#: .\templates\support.html:263
+msgid "Resolved"
+msgstr ""
+
+#: .\templates\support.html:270
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading tickets..."
+msgstr "Cargando..."
+
+#: .\templates\support.html:281
+msgid "Create New Support Ticket"
+msgstr ""
+
+#: .\templates\support.html:286
+msgid "Subject"
+msgstr ""
+
+#: .\templates\support.html:287
+msgid "Brief description of your issue"
+msgstr ""
+
+#: .\templates\support.html:292
+msgid "Category"
+msgstr ""
+
+#: .\templates\support.html:294
+#, fuzzy
+#| msgid "Generations"
+msgid "General Inquiry"
+msgstr "Generaciones"
+
+#: .\templates\support.html:295
+msgid "Technical Issue"
+msgstr ""
+
+#: .\templates\support.html:296
+#, fuzzy
+#| msgid "Payments"
+msgid "Billing & Payments"
+msgstr "Pagos"
+
+#: .\templates\support.html:297
+#, fuzzy
+#| msgid "Account"
+msgid "Account Management"
+msgstr "Cuenta"
+
+#: .\templates\support.html:298
+msgid "Feature Request"
+msgstr ""
+
+#: .\templates\support.html:299
+msgid "Bug Report"
+msgstr ""
+
+#: .\templates\support.html:300
+msgid "Other"
+msgstr ""
+
+#: .\templates\support.html:305
+msgid "Priority"
+msgstr ""
+
+#: .\templates\support.html:310
+msgid "Urgent"
+msgstr ""
+
+#: .\templates\support.html:317
+msgid "Please provide detailed information about your issue..."
+msgstr ""
+
+#: .\templates\support.html:318
+msgid ""
+"Include as much detail as possible to help us resolve your issue quickly."
+msgstr ""
+
+#: .\templates\support.html:323
+msgid "Submit Ticket"
+msgstr ""
+
+#: .\templates\support.html:338
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: .\templates\support.html:344
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading FAQs..."
+msgstr "Cargando..."
+
+#: .\templates\support.html:356
+msgid "Ticket Details"
+msgstr ""
+
+#: .\templates\support.html:357
+msgid "Close"
+msgstr ""
+
+#: .\templates\support.html:377
+msgid "No support tickets yet."
+msgstr ""
+
+#: .\templates\support.html:378
+msgid "Create Your First Ticket"
+msgstr ""
+
+#: .\templates\support.html:379
+msgid "Error loading tickets. Please try again."
+msgstr ""
+
+#: .\templates\support.html:380
+msgid "replies"
+msgstr ""
+
+#: .\templates\support.html:381
+#, fuzzy
+#| msgid "Generations"
+msgid "Conversation"
+msgstr "Generaciones"
+
+#: .\templates\support.html:382
+msgid "Add Reply"
+msgstr ""
+
+#: .\templates\support.html:383
+msgid "Type your message here..."
+msgstr ""
+
+#: .\templates\support.html:384
+msgid "Send Reply"
+msgstr ""
+
+#: .\templates\support.html:385
+msgid "This ticket is closed."
+msgstr ""
+
+#: .\templates\support.html:386
+msgid "Error loading ticket details."
+msgstr ""
+
+#: .\templates\support.html:387
+msgid "Error sending reply. Please try again."
+msgstr ""
+
+#: .\templates\support.html:388
+msgid "Ticket created successfully!"
+msgstr ""
+
+#: .\templates\support.html:389
+msgid "Error creating ticket. Please try again."
+msgstr ""
+
+#: .\templates\support.html:390
+#, fuzzy
+#| msgid "Available Credits"
+msgid "No FAQs available yet."
+msgstr "Créditos Disponibles"
+
+#: .\templates\support.html:391
+msgid "Error loading FAQs. Please try again."
+msgstr ""

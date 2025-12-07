@@ -1,0 +1,36 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td><i class="fas {{ item.icon }}"></i> {{ item.icon }}</td>
+<td>{{ item.title|truncatechars:40 }}</td>
+<td>{{ item.description|truncatechars:60 }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Icon" %}</label>
+    <input type="text" class="form-control" name="icon" id="icon" required>
+    <div class="form-help">{% trans "Font Awesome icon name (e.g., fa-magic, fa-microphone)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Title" %}</label>
+    <input type="text" class="form-control" name="title" id="title" required>
+    <div class="form-help">{% trans "Feature title" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Description" %}</label>
+    <textarea class="form-control" name="description" id="description" required></textarea>
+    <div class="form-help">{% trans "Feature description" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('icon').value = data.icon || '';
+document.getElementById('title').value = data.title || '';
+document.getElementById('description').value = data.description || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

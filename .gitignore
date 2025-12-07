@@ -1,0 +1,128 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+/static
+
+# Environment variables
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+logs/
+*.log
+
+# Backup files
+*.bak
+*.backup
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Node modules (if using npm)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Model files and weights (large files)
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.pkl
+
+# Audio files (except library defaults)
+media/cloned_voices/
+media/voice_embeddings/
+media/generated_audio/
+
+# Stripe webhook signing keys
+stripe_*
+
+# Database backups
+*.sql
+*.dump
+voice_cloning/db_config.json
+
+# Test files
+test_*.py
+test_*.html
+TEST_*.html
+TEST_*.md
+
+# Documentation (keep only README.md)
+*.md
+!README.md
+
+# Windows batch files
+*.bat
+
+# Wheel files
+*.whl
+
+# Zip archives
+*.zip
+
+# pip temp
+pip-unpack-*/
+
+# F5-TTS cache (large)
+F5-TTS/
+.cache/

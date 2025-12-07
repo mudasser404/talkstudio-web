@@ -1,0 +1,579 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Terms of Service - TalkStudio.ai{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    .legal-page {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 48px;
+    }
+
+    /* Sidebar Navigation */
+    .legal-sidebar {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .legal-sidebar h3 {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+    }
+
+    .legal-nav {
+        list-style: none;
+    }
+
+    .legal-nav li {
+        margin-bottom: 4px;
+    }
+
+    .legal-nav a {
+        display: block;
+        padding: 10px 16px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .legal-nav a:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+        padding-left: 20px;
+    }
+
+    .legal-nav a.active {
+        background: var(--primary);
+        color: white;
+        font-weight: 600;
+    }
+
+    /* Main Content */
+    .legal-main {
+        background: var(--bg-primary);
+        min-height: 100vh;
+    }
+
+    .legal-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 60px;
+        border-radius: 24px;
+        margin-bottom: 48px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    }
+
+    .legal-hero h1 {
+        font-size: 56px;
+        font-weight: 900;
+        margin-bottom: 16px;
+        letter-spacing: -0.03em;
+    }
+
+    .legal-hero .meta {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        margin-top: 24px;
+        font-size: 14px;
+        opacity: 0.95;
+    }
+
+    .legal-hero .meta span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .legal-content {
+        max-width: 800px;
+    }
+
+    .section {
+        margin-bottom: 56px;
+        scroll-margin-top: 100px;
+    }
+
+    .section h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .section h2::before {
+        content: '';
+        width: 6px;
+        height: 32px;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        border-radius: 3px;
+    }
+
+    .section h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 32px 0 16px;
+    }
+
+    .section p {
+        font-size: 17px;
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+        line-height: 1.8;
+    }
+
+    .section ul {
+        margin: 20px 0;
+        padding-left: 28px;
+    }
+
+    .section li {
+        font-size: 17px;
+        color: var(--text-secondary);
+        margin-bottom: 14px;
+        line-height: 1.7;
+    }
+
+    .section li strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .highlight-box {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border-left: 4px solid #667eea;
+        padding: 24px 28px;
+        border-radius: 12px;
+        margin: 28px 0;
+    }
+
+    .highlight-box p {
+        margin: 0;
+        font-size: 17px;
+        color: var(--text-primary);
+    }
+
+    .warning-box {
+        background: #fff4e6;
+        border-left: 4px solid #ff9800;
+        padding: 24px 28px;
+        border-radius: 12px;
+        margin: 28px 0;
+    }
+
+    [data-theme="dark"] .warning-box {
+        background: #4a2800;
+    }
+
+    .warning-box p {
+        margin: 0;
+        font-size: 17px;
+        color: var(--text-primary);
+    }
+
+    .contact-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 48px;
+        border-radius: 20px;
+        text-align: center;
+        margin-top: 64px;
+        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    }
+
+    .contact-banner h3 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .contact-banner p {
+        font-size: 17px;
+        opacity: 0.95;
+        margin-bottom: 24px;
+    }
+
+    .contact-banner a {
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        border-bottom: 2px solid white;
+        transition: opacity 0.2s;
+    }
+
+    .contact-banner a:hover {
+        opacity: 0.8;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+        .legal-page {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .legal-sidebar {
+            position: relative;
+            top: 0;
+        }
+
+        .legal-hero {
+            padding: 60px 40px;
+        }
+
+        .legal-hero h1 {
+            font-size: 42px;
+        }
+
+        .section h2 {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .legal-page {
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+
+        .legal-hero {
+            padding: 40px 24px;
+            border-radius: 16px;
+        }
+
+        .legal-hero h1 {
+            font-size: 32px;
+        }
+
+        .legal-hero .meta {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+        }
+
+        .section h3 {
+            font-size: 20px;
+        }
+
+        .section p,
+        .section li {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-page">
+    <!-- Sidebar Navigation -->
+    <aside class="legal-sidebar">
+        <h3>Table of Contents</h3>
+        <ul class="legal-nav">
+            <li><a href="#acceptance">Acceptance of Terms</a></li>
+            <li><a href="#services">Service Description</a></li>
+            <li><a href="#account">Account & Security</a></li>
+            <li><a href="#acceptable-use">Acceptable Use</a></li>
+            <li><a href="#pricing">Pricing & Billing</a></li>
+            <li><a href="#refunds">Refunds & Cancellation</a></li>
+            <li><a href="#intellectual-property">Intellectual Property</a></li>
+            <li><a href="#privacy">Data Privacy</a></li>
+            <li><a href="#service-availability">Service Availability</a></li>
+            <li><a href="#liability">Limitation of Liability</a></li>
+            <li><a href="#termination">Termination</a></li>
+            <li><a href="#disputes">Dispute Resolution</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="legal-main">
+        <div class="legal-hero">
+            <h1>📜 Terms of Service</h1>
+            <div class="meta">
+                <span><i class="fas fa-calendar-check"></i> Effective: January 11, 2025</span>
+                <span><i class="fas fa-sync-alt"></i> Last Updated: January 11, 2025</span>
+            </div>
+        </div>
+
+        <div class="legal-content">
+            <div class="highlight-box">
+                <p><strong>Welcome to TalkStudio.ai!</strong> These Terms of Service govern your use of our AI-powered voice cloning platform. By using our services, you agree to these terms. Please read them carefully.</p>
+            </div>
+
+            <section id="acceptance" class="section">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By creating an account or using TalkStudio.ai, you agree to be bound by these Terms of Service. If you don't agree, please don't use our platform.</p>
+                <p>We may update these terms at any time. Continued use after changes means you accept the new terms.</p>
+            </section>
+
+            <section id="services" class="section">
+                <h2>2. Our Services</h2>
+                <p>TalkStudio.ai provides advanced AI voice cloning and text-to-speech services:</p>
+                <ul>
+                    <li><strong>Voice Cloning:</strong> Create custom voice models from audio samples</li>
+                    <li><strong>Text-to-Speech:</strong> Generate natural-sounding speech in 11+ languages</li>
+                    <li><strong>API Access:</strong> Programmatic integration (Pro/Yearly plans)</li>
+                    <li><strong>Voice Library:</strong> Save and manage custom voice profiles</li>
+                    <li><strong>Real-time Generation:</strong> Fast, high-quality audio output</li>
+                </ul>
+            </section>
+
+            <section id="account" class="section">
+                <h2>3. Account & Security</h2>
+                <h3>Account Requirements</h3>
+                <ul>
+                    <li>You must be at least 18 years old</li>
+                    <li>Provide accurate and complete information</li>
+                    <li>Keep your login credentials secure</li>
+                    <li>Notify us immediately of unauthorized access</li>
+                </ul>
+
+                <h3>Your Responsibilities</h3>
+                <ul>
+                    <li>Don't share your account with others</li>
+                    <li>Don't create multiple accounts to bypass limits</li>
+                    <li>Don't use bots or automated systems</li>
+                    <li>Maintain accurate account information</li>
+                </ul>
+            </section>
+
+            <section id="acceptable-use" class="section">
+                <h2>4. Acceptable Use Policy</h2>
+
+                <div class="warning-box">
+                    <p><strong>⚠️ Warning:</strong> Misuse of our service will result in immediate account termination without refund.</p>
+                </div>
+
+                <h3>Prohibited Activities</h3>
+                <p>You may NOT use TalkStudio.ai to:</p>
+                <ul>
+                    <li><strong>Impersonate others</strong> without explicit written consent</li>
+                    <li><strong>Create deepfakes</strong> or non-consensual content</li>
+                    <li><strong>Generate misleading content</strong> for fraud or deception</li>
+                    <li><strong>Violate copyrights</strong> or clone protected voices</li>
+                    <li><strong>Create harmful content</strong> that's defamatory, threatening, or hateful</li>
+                    <li><strong>Political manipulation</strong> or disinformation campaigns</li>
+                    <li><strong>Spam, scams, or robocalls</strong></li>
+                    <li><strong>Phishing or social engineering</strong></li>
+                </ul>
+
+                <h3>Content Ownership</h3>
+                <p>When uploading voice samples, you confirm that:</p>
+                <ul>
+                    <li>You own the audio rights or have proper authorization</li>
+                    <li>You have consent from the voice owner</li>
+                    <li>Content doesn't violate any third-party rights</li>
+                </ul>
+            </section>
+
+            <section id="pricing" class="section">
+                <h2>5. Pricing & Billing</h2>
+                <h3>Subscription Plans</h3>
+                <ul>
+                    <li><strong>Free:</strong> Limited credits for evaluation</li>
+                    <li><strong>Starter:</strong> Entry-level with moderate limits</li>
+                    <li><strong>Pro:</strong> Advanced features + API access</li>
+                    <li><strong>Yearly:</strong> Annual subscription with savings</li>
+                </ul>
+
+                <h3>Payment Terms</h3>
+                <ul>
+                    <li>All prices in USD</li>
+                    <li>Auto-renewal unless cancelled</li>
+                    <li>Failed payments may suspend service</li>
+                    <li>Price changes notified 30 days in advance</li>
+                </ul>
+
+                <h3>Credits System</h3>
+                <ul>
+                    <li>Credits consumed per character generated</li>
+                    <li>Credits expire at end of billing cycle (non-rollover)</li>
+                    <li>Unused credits forfeited on cancellation</li>
+                </ul>
+            </section>
+
+            <section id="refunds" class="section">
+                <h2>6. Refunds & Cancellation</h2>
+                <h3>Refund Policy</h3>
+                <ul>
+                    <li><strong>7-Day Money-Back Guarantee</strong> on first purchase</li>
+                    <li><strong>Technical Issues:</strong> Refunds for documented service failures</li>
+                    <li><strong>Unauthorized Charges:</strong> Full refund</li>
+                </ul>
+
+                <h3>Non-Refundable</h3>
+                <ul>
+                    <li>Used credits or partial months</li>
+                    <li>Cancellations after 7-day period</li>
+                    <li>Terms of Service violations</li>
+                </ul>
+
+                <p>Cancel anytime through your dashboard. Access continues until period ends.</p>
+            </section>
+
+            <section id="intellectual-property" class="section">
+                <h2>7. Intellectual Property</h2>
+                <h3>Your Content</h3>
+                <ul>
+                    <li>You retain ownership of uploaded audio and generated content</li>
+                    <li>You grant us license to process and generate using our AI</li>
+                    <li>We don't claim ownership of your voice clones</li>
+                </ul>
+
+                <h3>Our Platform</h3>
+                <ul>
+                    <li>TalkStudio.ai technology and branding are our property</li>
+                    <li>No copying, modifying, or reverse-engineering</li>
+                    <li>API access doesn't grant rights to underlying models</li>
+                </ul>
+            </section>
+
+            <section id="privacy" class="section">
+                <h2>8. Data Privacy & Security</h2>
+                <p>Your privacy matters. We implement:</p>
+                <ul>
+                    <li>End-to-end encryption (TLS 1.3, AES-256)</li>
+                    <li>No selling or sharing personal data</li>
+                    <li>Optional data deletion on account closure</li>
+                    <li>GDPR, CCPA compliance</li>
+                </ul>
+                <p>See our <a href="{% url 'privacy' %}" style="color: #667eea; font-weight: 600;">Privacy Policy</a> for details.</p>
+            </section>
+
+            <section id="service-availability" class="section">
+                <h2>9. Service Availability</h2>
+                <h3>Uptime & Maintenance</h3>
+                <p>We target 99.9% uptime but don't guarantee uninterrupted service. Maintenance will be announced when possible.</p>
+
+                <h3>Service Limits</h3>
+                <ul>
+                    <li><strong>Rate Limits:</strong> Based on your plan</li>
+                    <li><strong>File Size:</strong> Max 25MB uploads</li>
+                    <li><strong>Text Length:</strong> Max 50,000 characters</li>
+                    <li><strong>Storage:</strong> Plan-based limits</li>
+                </ul>
+            </section>
+
+            <section id="liability" class="section">
+                <h2>10. Limitation of Liability</h2>
+                <p><strong>Service provided "AS IS" without warranties.</strong></p>
+                <ul>
+                    <li>Not liable for indirect or consequential damages</li>
+                    <li>Total liability capped at amount paid in last 12 months</li>
+                    <li>Not responsible for how you use generated content</li>
+                    <li>You assume all risks of AI-generated voice content</li>
+                </ul>
+            </section>
+
+            <section id="termination" class="section">
+                <h2>11. Termination</h2>
+                <h3>By You</h3>
+                <p>Cancel anytime through account settings or support.</p>
+
+                <h3>By Us</h3>
+                <p>We may terminate your account for:</p>
+                <ul>
+                    <li>Terms of Service violations</li>
+                    <li>Security risks</li>
+                    <li>Fraudulent activity</li>
+                    <li>Non-payment</li>
+                </ul>
+
+                <p>Upon termination: access revoked, unused credits forfeited, data deleted after 30 days.</p>
+            </section>
+
+            <section id="disputes" class="section">
+                <h2>12. Dispute Resolution</h2>
+                <ul>
+                    <li><strong>Governing Law:</strong> [Your Jurisdiction]</li>
+                    <li><strong>Arbitration:</strong> Binding arbitration for disputes</li>
+                    <li><strong>No Class Actions:</strong> Individual resolution only</li>
+                </ul>
+            </section>
+
+            <section id="contact" class="contact-banner">
+                <h3>📧 Questions About These Terms?</h3>
+                <p>We're here to help clarify anything you need.</p>
+                <p>
+                    <strong>Legal:</strong> <a href="mailto:legal@talkstudio.ai">legal@talkstudio.ai</a><br>
+                    <strong>Support:</strong> <a href="mailto:support@talkstudio.ai">support@talkstudio.ai</a>
+                </p>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+// Smooth scroll for navigation
+document.querySelectorAll('.legal-nav a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Update active state
+        document.querySelectorAll('.legal-nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+// Highlight active section on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.legal-nav a');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.pageYOffset >= sectionTop - 150) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
+{% endblock %}

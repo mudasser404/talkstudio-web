@@ -1,0 +1,1231 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% trans "Voice Library" %}{% endblock %}
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">{% trans "Voice Library" %}</h2>
+        <!-- Tab Pills Navigation -->
+        <ul class="nav nav-pills mb-4" id="voiceLibraryTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="my-voices-tab" data-bs-toggle="pill" data-bs-target="#my-voices" type="button" role="tab">
+                    <i class="fas fa-microphone me-2"></i>{% trans "My Cloned Voices" %}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="default-voices-tab" data-bs-toggle="pill" data-bs-target="#default-voices" type="button" role="tab">
+                    <i class="fas fa-music me-2"></i>{% trans "Default Voices" %}
+                </button>
+            </li>
+        </ul>
+        <!-- Tab Content -->
+        <div class="tab-content" id="voiceLibraryTabContent">
+            <!-- My Cloned Voices Tab -->
+            <div class="tab-pane fade show active" id="my-voices" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>{% trans "Your Cloned Voices" %}</h4>
+                    <button class="btn btn-primary" onclick="openAddVoiceModal()">
+                        <i class="fas fa-plus"></i> {% trans "Clone New Voice" %}
+                    </button>
+                </div>
+                <div id="cloned-voices-list">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{% trans "Loading..." %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Default Voices Tab -->
+            <div class="tab-pane fade" id="default-voices" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>{% trans "Default Voice Library" %}</h4>
+                    {% if user.is_staff or user.is_superuser %}
+                    <button class="btn btn-primary" onclick="openAddDefaultVoiceModal()">
+                        <i class="fas fa-plus"></i> {% trans "Add Default Voice" %}
+                    </button>
+                    {% endif %}
+                </div>
+                <div id="default-voices-list">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{% trans "Loading..." %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Add/Edit Cloned Voice Modal -->
+<div class="modal fade" id="voiceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="voiceModalLabel">
+                    <i class="fas fa-microphone"></i> {% trans "Clone New Voice" %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="voiceForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="voiceName" class="form-label">
+                            {% trans "Voice Name" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="voiceName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="voiceAudio" class="form-label">
+                            {% trans "Audio File" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" class="form-control" id="voiceAudio" name="audio_file" accept="audio/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="voiceImage" class="form-label">
+                            {% trans "Voice Avatar (Optional)" %}
+                        </label>
+                        <input type="file" class="form-control" id="voiceImage" name="image" accept="image/*">
+                        <div id="imagePreview" class="mt-2" style="display: none;">
+                            <img id="previewImg" src="" style="max-width: 200px; border-radius: 8px;">
+                        </div>
+                    </div>
+                    <div id="audioPreview" class="mt-3" style="display: none;"></div>
+                    <input type="hidden" id="voiceId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" onclick="saveVoice()">
+                    <span id="saveButtonText">{% trans "Save Voice" %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add/Edit Default Voice Modal (admin only) -->
+<div class="modal fade" id="defaultVoiceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="defaultVoiceModalLabel">
+                    <i class="fas fa-music"></i> {% trans "Add Default Voice" %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="defaultVoiceForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="defaultVoiceName" class="form-label">
+                            {% trans "Voice Name" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="defaultVoiceName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="defaultVoiceFile" class="form-label">
+                            {% trans "Voice File" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" class="form-control" id="defaultVoiceFile" name="voice_file" accept="audio/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="defaultVoiceImage" class="form-label">
+                            {% trans "Voice Image (Optional)" %}
+                        </label>
+                        <input type="file" class="form-control" id="defaultVoiceImage" name="image" accept="image/*">
+                        <small class="text-muted">If not uploaded, default image will be used</small>
+                    </div>
+                    <div id="defaultAudioPreview" class="mt-3" style="display: none;"></div>
+                    <input type="hidden" id="defaultVoiceId">
+                    <input type="hidden" name="gender" value="neutral">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" onclick="saveDefaultVoice()">
+                    <span id="saveDefaultButtonText">{% trans "Save Voice" %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_css %}
+<style>
+/* Tab Pills Styling */
+.nav-pills .nav-link {
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    margin-right: 10px;
+}
+.nav-pills .nav-link:hover {
+    background: var(--bg-hover);
+    color: var(--primary);
+}
+.nav-pills .nav-link.active {
+    background: var(--primary);
+    color: white !important;
+    box-shadow: var(--shadow-md);
+}
+/* Button Overrides - Website Colors */
+.btn-primary {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: white !important;
+}
+.btn-primary:hover {
+    background: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+}
+.btn-success {
+    background: var(--success) !important;
+    border-color: var(--success) !important;
+    color: white !important;
+}
+.btn-success:hover {
+    background: #006b50 !important;
+    border-color: #006b50 !important;
+}
+/* Voice Cards Styling */
+.voice-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    transition: none;
+    position: relative;
+    overflow: visible;
+    box-shadow: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.voice-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    margin: 0 auto 24px auto;
+    display: block;
+}
+.custom-audio-player {
+    position: relative;
+    border-radius: 25px;
+    padding: 24px 20px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.custom-audio-player::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(43, 76, 126, 0.95) 0%, rgba(30, 58, 95, 0.95) 100%);
+    z-index: 0;
+}
+.custom-audio-player > * {
+    position: relative;
+    z-index: 1;
+}
+.custom-audio-player .delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 59, 48, 0.9);
+    border: 2px solid white;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+.custom-audio-player .delete-btn:hover {
+    background: rgba(255, 59, 48, 1);
+    transform: scale(1.1);
+}
+.custom-audio-player .audio-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.4);
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.custom-audio-player .audio-icon i {
+    font-size: 48px;
+    color: white;
+}
+.custom-audio-player .player-info {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 16px;
+}
+.custom-audio-player .status-text {
+    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+.custom-audio-player .voice-name {
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    padding: 0 10px;
+}
+.custom-audio-player .voice-name:hover::after {
+    content: attr(data-full-name);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    background: rgba(0,0,0,0.95);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    white-space: normal;
+    z-index: 1000;
+    max-width: 280px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    font-size: 14px;
+    margin-top: 8px;
+}
+.custom-audio-player .waveform {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+.custom-audio-player .waveform .bar {
+    width: 4px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 3px;
+    animation: wave 1s ease-in-out infinite;
+}
+.custom-audio-player .waveform .bar:nth-child(2) { animation-delay: 0.1s; }
+.custom-audio-player .waveform .bar:nth-child(3) { animation-delay: 0.2s; }
+.custom-audio-player .waveform .bar:nth-child(4) { animation-delay: 0.3s; }
+.custom-audio-player .waveform .bar:nth-child(5) { animation-delay: 0.4s; }
+.custom-audio-player .waveform .bar:nth-child(6) { animation-delay: 0.5s; }
+.custom-audio-player .waveform .bar:nth-child(7) { animation-delay: 0.4s; }
+.custom-audio-player .waveform .bar:nth-child(8) { animation-delay: 0.3s; }
+.custom-audio-player .waveform .bar:nth-child(9) { animation-delay: 0.2s; }
+.custom-audio-player .waveform .bar:nth-child(10) { animation-delay: 0.1s; }
+.custom-audio-player .time-info {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+}
+.custom-audio-player .player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+.custom-audio-player .player-controls button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+.custom-audio-player .player-controls button:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.12);
+}
+.custom-audio-player .player-controls .play-btn {
+    width: 60px;
+    height: 60px;
+    background: white;
+    color: #1e3c72;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    font-size: 20px;
+}
+.custom-audio-player .player-controls .play-btn:hover {
+    background: rgba(255,255,255,0.98);
+    transform: scale(1.15);
+}
+.custom-audio-player .delete-section {
+    width: 100%;
+    text-align: center;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+.custom-audio-player .delete-section button {
+    background: rgba(255, 59, 48, 0.15);
+    border: 1.5px solid rgba(255, 59, 48, 0.4);
+    color: rgba(255, 255, 255, 0.95);
+    padding: 10px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    font-weight: 600;
+}
+.custom-audio-player .delete-section button:hover {
+    background: rgba(255, 59, 48, 0.85);
+    border-color: rgba(255, 59, 48, 0.9);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+}
+/* Gender Badge */
+.gender-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    z-index: 10;
+}
+.gender-badge.male {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.gender-badge.female {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+.gender-badge.neutral {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    border-radius: 24px;
+}
+.empty-state i {
+    font-size: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 24px;
+}
+/* Custom Audio Player */
+.preview-audio-player {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    margin-top: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.preview-audio-player .audio-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    border: 4px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.preview-audio-player .audio-icon::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+}
+.preview-audio-player .audio-icon i {
+    font-size: 48px;
+    color: white;
+    z-index: 1;
+}
+.preview-audio-player .status-text {
+    color: rgba(255,255,255,0.8);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+.preview-audio-player .voice-name {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.preview-audio-player .waveform {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin: 20px 0;
+}
+.preview-audio-player .waveform .bar {
+    width: 4px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+    animation: wave 1s ease-in-out infinite;
+}
+@keyframes wave {
+    0%, 100% { height: 8px; }
+    50% { height: 24px; }
+}
+.preview-audio-player .waveform .bar:nth-child(2) { animation-delay: 0.1s; }
+.preview-audio-player .waveform .bar:nth-child(3) { animation-delay: 0.2s; }
+.preview-audio-player .waveform .bar:nth-child(4) { animation-delay: 0.3s; }
+.preview-audio-player .waveform .bar:nth-child(5) { animation-delay: 0.4s; }
+.preview-audio-player .waveform .bar:nth-child(6) { animation-delay: 0.5s; }
+.preview-audio-player .waveform .bar:nth-child(7) { animation-delay: 0.4s; }
+.preview-audio-player .waveform .bar:nth-child(8) { animation-delay: 0.3s; }
+.preview-audio-player .waveform .bar:nth-child(9) { animation-delay: 0.2s; }
+.preview-audio-player .waveform .bar:nth-child(10) { animation-delay: 0.1s; }
+.preview-audio-player .player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.preview-audio-player .player-controls button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.preview-audio-player .player-controls button:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+.preview-audio-player .player-controls .play-btn {
+    width: 70px;
+    height: 70px;
+    background: rgba(255,255,255,0.9);
+    color: #1e3c72;
+}
+.preview-audio-player .player-controls .play-btn:hover {
+    background: white;
+}
+.preview-audio-player .time-info {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    margin-top: 10px;
+}
+</style>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/table_utils.js' %}?v=2.0"></script>
+<script>
+let voiceModal, defaultVoiceModal;
+let currentAudioFile = null;
+let currentGenderFilter = 'all';
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modals
+    voiceModal = new bootstrap.Modal(document.getElementById('voiceModal'));
+    defaultVoiceModal = new bootstrap.Modal(document.getElementById('defaultVoiceModal'));
+    // Load both tabs data
+    loadClonedVoices();
+    loadDefaultVoices();
+    // Image preview for cloned voices
+    document.getElementById('voiceImage')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    // Audio trimming for cloned voices
+    document.getElementById('voiceAudio')?.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            showAlert('Processing audio...', 'info');
+            try {
+                const trimmedFile = await trimAudioTo10Seconds(file);
+                currentAudioFile = trimmedFile;
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(trimmedFile);
+                e.target.files = dataTransfer.files;
+                // Show preview with custom player
+                createCustomAudioPlayer('audioPreview', trimmedFile, document.getElementById('voiceName').value || 'Voice Preview');
+                showAlert('Audio trimmed to 9 seconds', 'success');
+            } catch (error) {
+                console.error('Audio trim error:', error);
+                currentAudioFile = file;
+            }
+        }
+    });
+    // Audio trimming for default voices
+    document.getElementById('defaultVoiceFile')?.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            showAlert('Processing audio...', 'info');
+            try {
+                const trimmedFile = await trimAudioTo10Seconds(file);
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(trimmedFile);
+                e.target.files = dataTransfer.files;
+                // Show preview with custom player
+                createCustomAudioPlayer('defaultAudioPreview', trimmedFile, document.getElementById('defaultVoiceName').value || 'Voice Preview');
+                showAlert('Audio trimmed to 9 seconds', 'success');
+            } catch (error) {
+                console.error('Audio trim error:', error);
+            }
+        }
+    });
+    // Tab change handler
+    document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function(e) {
+            if (e.target.id === 'default-voices-tab') {
+                loadDefaultVoices();
+            } else {
+                loadClonedVoices();
+            }
+        });
+    });
+});
+// ==================== CLONED VOICES FUNCTIONS ====================
+function openAddVoiceModal() {
+    document.getElementById('voiceModalLabel').innerHTML = '<i class="fas fa-microphone"></i> Clone New Voice';
+    document.getElementById('voiceForm').reset();
+    document.getElementById('voiceId').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('audioPreview').style.display = 'none';
+    voiceModal.show();
+}
+async function saveVoice() {
+    const form = document.getElementById('voiceForm');
+    const formData = new FormData(form);
+    const voiceId = document.getElementById('voiceId').value;
+    const name = document.getElementById('voiceName').value.trim();
+    const audioFile = document.getElementById('voiceAudio').files[0];
+    if (!name || (!voiceId && !audioFile)) {
+        alert('Please fill required fields');
+        return;
+    }
+    const saveButton = document.querySelector('#voiceModal .btn-primary');
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+    try {
+        const url = voiceId ? `/api/voices/cloned/${voiceId}/` : '/api/voices/cloned/';
+        const method = voiceId ? 'PUT' : 'POST';
+        console.log('Saving cloned voice to:', url);
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            },
+            body: formData
+        });
+        console.log('Response status:', response.status);
+        if (response.ok) {
+            // Parse JSON safely
+            let data = {};
+            try {
+                const text = await response.text();
+                if (text) {
+                    data = JSON.parse(text);
+                }
+            } catch (jsonError) {
+                console.log('No JSON response, continuing anyway');
+            }
+            console.log('✅ Voice saved successfully, closing modal...');
+            voiceModal.hide();
+            loadClonedVoices();
+            showAlert('Voice saved successfully!', 'success');
+        } else {
+            // Handle different error status codes
+            let errorMessage = 'Failed to save voice';
+            let data = {};
+            try {
+                const text = await response.text();
+                if (text) {
+                    data = JSON.parse(text);
+                }
+            } catch (jsonError) {
+                console.error('JSON parse error:', jsonError);
+            }
+            // Provide specific error messages
+            if (response.status === 404) {
+                errorMessage = 'API endpoint not found. Please check your server configuration.';
+            } else if (response.status === 403) {
+                errorMessage = data.error || data.detail || 'Permission denied or limit reached.';
+            } else if (response.status === 401) {
+                errorMessage = 'Authentication required. Please log in again.';
+                setTimeout(() => window.location.href = '/accounts/login/', 2000);
+            } else if (response.status === 400) {
+                errorMessage = data.error || 'Invalid data. Please check your inputs.';
+            } else if (data.error) {
+                errorMessage = data.error;
+            } else if (data.detail) {
+                errorMessage = data.detail;
+            }
+            console.error('❌ Error response:', response.status, errorMessage);
+            showAlert(errorMessage, 'error');
+        }
+    } catch (error) {
+        console.error('❌ Save error:', error);
+        showAlert('An error occurred: ' + error.message, 'error');
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML = 'Save Voice';
+    }
+}
+async function loadClonedVoices() {
+    const container = document.getElementById('cloned-voices-list');
+    try {
+        const response = await fetch('/api/voices/cloned/', {credentials: 'include'});
+        const responseData = await response.json();
+        const data = responseData.results || responseData;
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-microphone-slash"></i>
+                    <h4>No Voices Yet</h4>
+                    <p>Start by cloning your first voice</p>
+                    <button class="btn btn-primary" onclick="openAddVoiceModal()">
+                        <i class="fas fa-plus"></i> Clone Your First Voice
+                    </button>
+                </div>`;
+            return;
+        }
+        let html = '<div class="row">';
+        data.forEach(voice => {
+            const imageUrl = voice.image || '{% static "voice/defualt.png" %}';
+            const audioUrl = getAudioUrl(voice.audio_file);
+            const playerId = 'player_cloned_' + voice.id;
+            html += `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="voice-card">
+                        <div id="${playerId}"></div>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        // Initialize custom players for each voice
+        data.forEach(voice => {
+            const audioUrl = getAudioUrl(voice.audio_file);
+            const playerId = 'player_cloned_' + voice.id;
+            const imageUrl = voice.image || '{% static "voice/defualt.png" %}';
+            createCardAudioPlayer(playerId, audioUrl, voice.name, imageUrl, voice.id, 'cloned');
+        });
+    } catch (error) {
+        console.error('Error loading cloned voices:', error);
+        container.innerHTML = `<div class="text-center py-5"><p class="text-danger">Failed to load voices</p></div>`;
+    }
+}
+async function deleteVoice(voiceId) {
+    if (!confirm('Are you sure?')) return;
+    try {
+        const response = await fetch(`/api/voices/cloned/${voiceId}/`, {
+            method: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')}
+        });
+        if (response.ok) {
+            loadClonedVoices();
+            showAlert('Voice deleted successfully', 'success');
+        }
+    } catch (error) {
+        showAlert('An error occurred', 'error');
+    }
+}
+// ==================== DEFAULT VOICES FUNCTIONS ====================
+function openAddDefaultVoiceModal() {
+    document.getElementById('defaultVoiceModalLabel').innerHTML = '<i class="fas fa-music"></i> Add Default Voice';
+    document.getElementById('defaultVoiceForm').reset();
+    document.getElementById('defaultVoiceId').value = '';
+    defaultVoiceModal.show();
+}
+async function saveDefaultVoice() {
+    const form = document.getElementById('defaultVoiceForm');
+    const formData = new FormData(form);
+    const voiceId = document.getElementById('defaultVoiceId').value;
+    const name = formData.get('name');
+    const voiceFile = document.getElementById('defaultVoiceFile').files[0];
+    if (!name || (!voiceId && !voiceFile)) {
+        alert('Please fill required fields');
+        return;
+    }
+    const saveButton = document.querySelector('#defaultVoiceModal .btn-primary');
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+    try {
+        const url = voiceId ? `/api/voices/default-voices/${voiceId}/` : '/api/voices/default-voices/';
+        const method = voiceId ? 'PUT' : 'POST';
+        console.log('Saving default voice to:', url);
+        const response = await fetch(url, {
+            method: method,
+            headers: {'X-CSRFToken': formData.get('csrfmiddlewaretoken')},
+            body: formData
+        });
+        console.log('Response status:', response.status);
+        if (response.ok) {
+            // Parse JSON safely
+            let data = {};
+            try {
+                const text = await response.text();
+                if (text) {
+                    data = JSON.parse(text);
+                }
+            } catch (jsonError) {
+                console.log('No JSON response, continuing anyway');
+            }
+            console.log('✅ Voice saved successfully, closing modal...');
+            defaultVoiceModal.hide();
+            loadDefaultVoices();
+            showAlert('Default voice saved successfully!', 'success');
+        } else {
+            // Handle different error status codes
+            let errorMessage = 'Failed to save voice';
+            let data = {};
+            try {
+                const text = await response.text();
+                if (text) {
+                    data = JSON.parse(text);
+                }
+            } catch (jsonError) {
+                console.error('JSON parse error:', jsonError);
+            }
+            // Provide specific error messages
+            if (response.status === 404) {
+                errorMessage = 'API endpoint not found. Please check your server configuration.';
+            } else if (response.status === 403) {
+                errorMessage = data.error || data.detail || 'Permission denied. Only admins can add default voices.';
+            } else if (response.status === 401) {
+                errorMessage = 'Authentication required. Please log in again.';
+                // Redirect to login after 2 seconds
+                setTimeout(() => window.location.href = '/accounts/login/', 2000);
+            } else if (response.status === 400) {
+                errorMessage = data.error || 'Invalid data. Please check your inputs.';
+            } else if (data.error) {
+                errorMessage = data.error;
+            } else if (data.detail) {
+                errorMessage = data.detail;
+            }
+            console.error('❌ Error response:', response.status, errorMessage);
+            showAlert(errorMessage, 'error');
+        }
+    } catch (error) {
+        console.error('❌ Save error:', error);
+        showAlert('An error occurred: ' + error.message, 'error');
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML = 'Save Voice';
+    }
+}
+async function loadDefaultVoices(gender = currentGenderFilter) {
+    currentGenderFilter = gender;
+    const container = document.getElementById('default-voices-list');
+    container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    try {
+        let url = '/api/voices/library/';
+        if (gender && gender !== 'all') {
+            url += `?gender=${gender}`;
+        }
+        console.log('Loading default voices from:', url);
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('HTTP error ' + response.status);
+        }
+        const responseData = await response.json();
+        console.log('Received voices:', responseData);
+        // Handle paginated response
+        const data = responseData.results || responseData;
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-music"></i>
+                    <h4>No Default Voices</h4>
+                    <p>No default voices available yet</p>
+                </div>`;
+            return;
+        }
+        let html = '<div class="row">';
+        data.forEach(voice => {
+            // FIXED: Use safe property access with fallbacks
+            const voiceFile = voice.voice_file || voice.audio_file || voice.file;
+            const voiceUrl = getAudioUrl(voiceFile);
+            const playerId = 'player_default_' + voice.id;
+            const imageUrl = voice.image || '{% static "voice/defualt.png" %}';
+            const voiceName = voice.name || 'Unnamed Voice';
+            html += `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="voice-card">
+                        <div id="${playerId}"></div>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        // Initialize custom players for each voice
+        data.forEach(voice => {
+            const voiceFile = voice.voice_file || voice.audio_file || voice.file;
+            const voiceUrl = getAudioUrl(voiceFile);
+            const playerId = 'player_default_' + voice.id;
+            const imageUrl = voice.image || '{% static "voice/defualt.png" %}';
+            const voiceName = voice.name || 'Unnamed Voice';
+            const isAdmin = {% if user.is_staff or user.is_superuser %}true{% else %}false{% endif %};
+            createCardAudioPlayer(playerId, voiceUrl, voiceName, imageUrl, voice.id, 'default', isAdmin);
+        });
+    } catch (error) {
+        console.error('Error loading default voices:', error);
+        container.innerHTML = `
+            <div class="alert alert-danger text-center">
+                <h5>Failed to load voices</h5>
+                <p>${error.message}</p>
+                <button class="btn btn-primary btn-sm" onclick="loadDefaultVoices()">Retry</button>
+            </div>`;
+    }
+}
+// ==================== DEFAULT VOICES - DELETE FUNCTION ====================
+async function deleteDefaultVoice(voiceId) {
+    if (!confirm('Are you sure you want to permanently delete this default voice? This cannot be undone.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/voices/default-voices/${voiceId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            showAlert('Default voice deleted successfully', 'success');
+            loadDefaultVoices(); // Refresh the list
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            const message = errorData.detail || errorData.error || 'Failed to delete voice';
+            showAlert(message, 'error');
+        }
+    } catch (error) {
+        console.error('Delete error:', error);
+        showAlert('An error occurred while deleting the voice', 'error');
+    }
+}
+// ==================== UTILITY FUNCTIONS ====================
+// NEW: Safe function to get audio URL
+function getAudioUrl(filePath) {
+    if (!filePath) {
+        console.warn('Audio file path is undefined or null');
+        return '';
+    }
+   
+    if (typeof filePath === 'string' && (filePath.startsWith('/') || filePath.startsWith('http'))) {
+        return filePath;
+    }
+   
+    // Default to media URL
+    return '/media/' + filePath;
+}
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    const alertType = type === 'success' ? 'success' : type === 'info' ? 'info' : 'danger';
+    alertDiv.className = `alert alert-${alertType} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => alertDiv.remove(), 5000);
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function escapeHtml(text) {
+    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+function createCustomAudioPlayer(containerId, audioFile, voiceName) {
+    const container = document.getElementById(containerId);
+    const audioUrl = URL.createObjectURL(audioFile);
+    container.style.display = 'block';
+    container.innerHTML = `
+        <div style="margin-top: 15px;">
+            <p class="text-muted small mb-2"><i class="fas fa-info-circle"></i> Audio Preview (Trimmed to 10 seconds)</p>
+            <audio controls style="width: 100%;" src="${audioUrl}"></audio>
+        </div>
+    `;
+}
+function createCardAudioPlayer(containerId, audioUrl, voiceName, imageUrl, voiceId, voiceType, isAdmin = false) {
+    const container = document.getElementById(containerId);
+    const audioId = 'audio_' + containerId;
+    // Check if audioUrl is valid
+    if (!audioUrl) {
+        container.innerHTML = `
+            <div class="alert alert-warning text-center">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Audio file not available for "${escapeHtml(voiceName)}"</p>
+            </div>
+        `;
+        return;
+    }
+    const deleteFunction = voiceType === 'cloned' ? 'deleteVoice' : 'deleteDefaultVoice';
+    const showDelete = voiceType === 'cloned' || (voiceType === 'default' && isAdmin);
+    container.innerHTML = `
+        <div class="custom-audio-player" style="background-image: url('${imageUrl}'); flex-wrap: wrap;">
+            <div class="audio-icon">
+                <img src="${imageUrl}" alt="${escapeHtml(voiceName)}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="player-info">
+                <div class="status-text">READY</div>
+                <div class="voice-name" data-full-name="${escapeHtml(voiceName)}">${escapeHtml(voiceName)}</div>
+                <div class="waveform">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="time-info">
+                    <span id="${audioId}_current">0:00</span>
+                    <span>/</span>
+                    <span id="${audioId}_duration">0:00</span>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button onclick="toggleVolume('${audioId}', this)" title="Toggle Mute">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <button onclick="toggleFavorite('${voiceId}')" title="Favorite">
+                    <i class="far fa-heart"></i>
+                </button>
+                <button class="play-btn" onclick="toggleAudioPlay('${audioId}', this)" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button onclick="downloadVoice('${audioUrl}', '${voiceName}')" title="Download">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button onclick="shareVoice('${voiceName}', '${audioUrl}')" title="Share">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+            ${showDelete ? `
+            <div class="delete-section">
+                <button onclick="confirmDelete('${voiceId}', '${deleteFunction}', '${escapeHtml(voiceName)}')">
+                    <i class="fas fa-trash"></i> Delete Voice
+                </button>
+            </div>
+            ` : ''}
+            <audio id="${audioId}" src="${audioUrl}" style="display: none;"></audio>
+        </div>
+    `;
+    const audio = document.getElementById(audioId);
+    if (audio) {
+        audio.addEventListener('loadedmetadata', function() {
+            document.getElementById(audioId + '_duration').textContent = formatTime(audio.duration);
+        });
+        audio.addEventListener('timeupdate', function() {
+            document.getElementById(audioId + '_current').textContent = formatTime(audio.currentTime);
+        });
+        audio.addEventListener('ended', function() {
+            const button = document.querySelector(`button[onclick*="${audioId}"]`);
+            if (button) {
+                button.querySelector('i').className = 'fas fa-play';
+            }
+        });
+    }
+}
+function confirmDelete(voiceId, deleteFunction, voiceName) {
+    if (confirm(`Are you sure you want to delete "${voiceName}"?`)) {
+        if (deleteFunction === 'deleteVoice') {
+            deleteVoice(voiceId);
+        } else {
+            deleteDefaultVoice(voiceId);
+        }
+    }
+}
+function toggleAudioPlay(audioId, button) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
+   
+    const icon = button.querySelector('i');
+    if (audio.paused) {
+        audio.play();
+        icon.className = 'fas fa-pause';
+    } else {
+        audio.pause();
+        icon.className = 'fas fa-play';
+    }
+}
+function toggleVolume(audioId, button) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
+   
+    const icon = button.querySelector('i');
+    if (audio.muted) {
+        audio.muted = false;
+        icon.className = 'fas fa-volume-up';
+    } else {
+        audio.muted = true;
+        icon.className = 'fas fa-volume-mute';
+    }
+}
+function toggleFavorite(voiceId) {
+    showAlert('Favorite feature will be available soon!', 'info');
+}
+function downloadVoice(audioUrl, voiceName) {
+    if (!audioUrl) {
+        showAlert('Cannot download: Audio file not available', 'error');
+        return;
+    }
+   
+    const a = document.createElement('a');
+    a.href = audioUrl;
+    a.download = voiceName + '.wav';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showAlert('Downloading voice...', 'success');
+}
+function shareVoice(voiceName, audioUrl) {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Voice: ' + voiceName,
+            text: 'Check out this voice!',
+            url: window.location.href
+        }).then(() => {
+            showAlert('Shared successfully!', 'success');
+        }).catch(() => {
+            copyToClipboard(window.location.href);
+        });
+    } else {
+        copyToClipboard(window.location.href);
+    }
+}
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showAlert('Link copied to clipboard!', 'success');
+    }).catch(() => {
+        showAlert('Could not copy link', 'error');
+    });
+}
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+}
+// ==================== AUDIO TRIMMING FUNCTIONS ====================
+async function trimAudioTo10Seconds(audioFile) {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const arrayBuffer = await audioFile.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const duration = audioBuffer.duration;
+        const maxDuration = 9.0;
+        if (duration <= maxDuration) {
+            return audioFile;
+        }
+        const sampleRate = audioBuffer.sampleRate;
+        const numberOfChannels = audioBuffer.numberOfChannels;
+        const maxSamples = Math.floor(maxDuration * sampleRate);
+        const trimmedBuffer = audioContext.createBuffer(numberOfChannels, maxSamples, sampleRate);
+        for (let channel = 0; channel < numberOfChannels; channel++) {
+            const originalData = audioBuffer.getChannelData(channel);
+            const trimmedData = trimmedBuffer.getChannelData(channel);
+            for (let i = 0; i < maxSamples; i++) {
+                trimmedData[i] = originalData[i];
+            }
+        }
+        const wavBlob = audioBufferToWav(trimmedBuffer);
+        const trimmedFile = new File([wavBlob], audioFile.name.replace(/\.[^/.]+$/, '.wav'), {type: 'audio/wav'});
+        audioContext.close();
+        return trimmedFile;
+    } catch (error) {
+        console.error('Error trimming audio:', error);
+        return audioFile;
+    }
+}
+function audioBufferToWav(buffer) {
+    const nc = buffer.numberOfChannels, sr = buffer.sampleRate, bd = 16;
+    const bps = bd / 8, ba = nc * bps;
+    const data = [];
+    for (let i = 0; i < buffer.length; i++) {
+        for (let c = 0; c < nc; c++) {
+            const s = Math.max(-1, Math.min(1, buffer.getChannelData(c)[i]));
+            data.push(s < 0 ? s * 0x8000 : s * 0x7FFF);
+        }
+    }
+    const dl = data.length * bps, bl = 44 + dl;
+    const ab = new ArrayBuffer(bl), v = new DataView(ab);
+    const ws = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    ws(0, 'RIFF'); v.setUint32(4, 36 + dl, true); ws(8, 'WAVE');
+    ws(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+    v.setUint16(22, nc, true); v.setUint32(24, sr, true);
+    v.setUint32(28, sr * ba, true); v.setUint16(32, ba, true);
+    v.setUint16(34, bd, true); ws(36, 'data'); v.setUint32(40, dl, true);
+    let o = 44;
+    for (let i = 0; i < data.length; i++, o += 2) v.setInt16(o, data[i], true);
+    return new Blob([ab], {type: 'audio/wav'});
+}
+</script>
+{% endblock %}

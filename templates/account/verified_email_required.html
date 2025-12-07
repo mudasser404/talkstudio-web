@@ -1,0 +1,164 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Email Verification Required" %}{% endblock %}
+
+{% block header_title %}{% trans "Verify Your Email" %}{% endblock %}
+{% block header_subtitle %}{% trans "Please verify your email to continue" %}{% endblock %}
+
+{% block content %}
+<div class="verify-required-container" style="text-align: center; padding: 40px 20px;">
+    <div style="width: 120px; height: 120px; margin: 0 auto 32px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3);">
+        <i class="fas fa-envelope-open" style="font-size: 56px; color: #d97706;"></i>
+    </div>
+
+    <h2 style="color: #1f2937; margin-bottom: 16px; font-weight: 700;">{% trans "Email Verification Required" %}</h2>
+
+    <p style="color: #6b7280; font-size: 16px; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto;">
+        {% trans "To access your account, you need to verify your email address first. This helps us keep your account secure." %}
+    </p>
+
+    <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 16px; padding: 32px; margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto;">
+        <div style="margin-bottom: 24px;">
+            <i class="fas fa-shield-alt" style="font-size: 48px; color: #f59e0b;"></i>
+        </div>
+        <h5 style="color: #92400e; margin-bottom: 16px; font-weight: 600;">
+            {% trans "Why verify your email?" %}
+        </h5>
+        <div style="text-align: left; max-width: 420px; margin: 0 auto;">
+            <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 14px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 18px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #78350f; display: block; margin-bottom: 4px;">{% trans "Account Security" %}</strong>
+                    <span style="color: #92400e; font-size: 14px;">{% trans "Protects your account from unauthorized access" %}</span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 14px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 18px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #78350f; display: block; margin-bottom: 4px;">{% trans "Password Recovery" %}</strong>
+                    <span style="color: #92400e; font-size: 14px;">{% trans "Allows you to reset your password if needed" %}</span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: start; gap: 12px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 18px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #78350f; display: block; margin-bottom: 4px;">{% trans "Important Notifications" %}</strong>
+                    <span style="color: #92400e; font-size: 14px;">{% trans "Receive account updates and notifications" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">
+            {% trans "We've sent a verification email to your registered address." %}
+        </p>
+        <a href="{% url 'account_email' %}" class="btn btn-primary btn-lg" style="padding: 16px 48px; font-size: 18px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+            <i class="fas fa-paper-plane me-2"></i>{% trans "Resend Verification Email" %}
+        </a>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
+        <a href="{% url 'account_email' %}" class="btn btn-outline-primary">
+            <i class="fas fa-envelope me-2"></i>{% trans "Change Email Address" %}
+        </a>
+        <a href="{% url 'account_logout' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-sign-out-alt me-2"></i>{% trans "Logout" %}
+        </a>
+    </div>
+
+    <div style="padding: 20px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px; max-width: 560px; margin: 0 auto;">
+        <div style="text-align: left;">
+            <p style="margin: 0 0 12px 0; color: #1e40af; font-weight: 600;">
+                <i class="fas fa-info-circle me-2"></i>{% trans "Helpful Tips:" %}
+            </p>
+            <ul style="margin: 0; padding-left: 24px; color: #1e40af; font-size: 14px; line-height: 1.8;">
+                <li>{% trans "Check your spam/junk folder" %}</li>
+                <li>{% trans "Add our email to your contacts" %}</li>
+                <li>{% trans "Make sure the email address is correct" %}</li>
+                <li>{% trans "Wait a few minutes if you just signed up" %}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% trans "Need assistance?" %} <a href="{% url 'support' %}">{% trans "Get Help" %}</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+    }
+
+    .btn-outline-primary {
+        background: white;
+        border: 2px solid #3b82f6;
+        color: #3b82f6;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-primary:hover {
+        background: #3b82f6;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-outline-secondary {
+        background: white;
+        border: 2px solid #e5e7eb;
+        color: #374151;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+        text-decoration: none;
+    }
+
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3) translateY(50px);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .verify-required-container > div:first-child {
+        animation: bounceIn 0.7s ease-out;
+    }
+</style>
+{% endblock %}

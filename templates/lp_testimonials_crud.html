@@ -1,0 +1,43 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.author_name }}</td>
+<td>{{ item.author_title|truncatechars:30 }}</td>
+<td>{{ item.quote|truncatechars:60 }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Quote" %}</label>
+    <textarea class="form-control" name="quote" id="quote" required></textarea>
+    <div class="form-help">{% trans "Customer testimonial quote" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Author Name" %}</label>
+    <input type="text" class="form-control" name="author_name" id="author_name" required>
+    <div class="form-help">{% trans "Customer name" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Author Title" %}</label>
+    <input type="text" class="form-control" name="author_title" id="author_title">
+    <div class="form-help">{% trans "Job title or company (e.g., CEO at Company)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Author Initials" %}</label>
+    <input type="text" class="form-control" name="author_initials" id="author_initials" maxlength="2">
+    <div class="form-help">{% trans "Two letters for avatar (e.g., JD for John Doe)" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('quote').value = data.quote || '';
+document.getElementById('author_name').value = data.author_name || '';
+document.getElementById('author_title').value = data.author_title || '';
+document.getElementById('author_initials').value = data.author_initials || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

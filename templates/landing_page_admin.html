@@ -1,0 +1,427 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Landing Page Management" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #000000 0%, #1A1A1A 100%);
+        color: white;
+        padding: 32px;
+        border-radius: 12px;
+        margin-bottom: 32px;
+    }
+
+    .sections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 32px;
+    }
+
+    .section-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--primary);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .section-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+    }
+
+    .section-card:hover::before {
+        transform: scaleY(1);
+    }
+
+    .section-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+
+    .section-description {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+    }
+
+    .section-count {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 4px;
+    }
+
+    .section-label {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .quick-btn {
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 13px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        color: var(--text-secondary);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .quick-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+    }
+
+    .setup-card {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        padding: 32px;
+        border-radius: 12px;
+        margin-bottom: 32px;
+    }
+
+    .setup-card h3 {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .setup-steps {
+        display: flex;
+        gap: 16px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .setup-step {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 16px;
+        border-radius: 8px;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .setup-step-number {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        opacity: 0.8;
+    }
+
+    .setup-step-text {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: white;
+        color: #6366f1;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 16px;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .stat-box {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="mb-2"><i class="fas fa-home me-2"></i>{% trans "Landing Page Management" %}</h1>
+        <p class="mb-0 opacity-75">{% trans "Manage all sections of your landing page from here" %}</p>
+    </div>
+
+    <!-- Setup Guide (Show if no data) -->
+    {% if show_setup %}
+    <div class="setup-card">
+        <h3><i class="fas fa-rocket me-2"></i>{% trans "Quick Setup Required" %}</h3>
+        <p>{% trans "Your landing page content needs to be initialized. Follow these simple steps:" %}</p>
+
+        <div class="setup-steps">
+            <div class="setup-step">
+                <div class="setup-step-number">1</div>
+                <div class="setup-step-text">{% trans "Run migrations to create database tables" %}</div>
+            </div>
+            <div class="setup-step">
+                <div class="setup-step-number">2</div>
+                <div class="setup-step-text">{% trans "Click 'Populate Data' to add sample content" %}</div>
+            </div>
+            <div class="setup-step">
+                <div class="setup-step-number">3</div>
+                <div class="setup-step-text">{% trans "Edit sections and customize your content" %}</div>
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="populateData()">
+            <i class="fas fa-database"></i>
+            {% trans "Populate Sample Data" %}
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-value">{{ total_sections }}</div>
+            <div class="stat-label">{% trans "Total Sections" %}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value">{{ active_sections }}</div>
+            <div class="stat-label">{% trans "Active Sections" %}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value">{{ total_items }}</div>
+            <div class="stat-label">{% trans "Total Items" %}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value">{{ media_files }}</div>
+            <div class="stat-label">{% trans "Media Files" %}</div>
+        </div>
+    </div>
+
+    <!-- Sections Grid -->
+    <h2 class="mb-4">{% trans "Manage Sections" %}</h2>
+    <div class="sections-grid">
+        <!-- Hero Section -->
+        <div class="section-card" onclick="window.location.href='/admin/homepage/herosection/'">
+            <div class="section-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="section-title">{% trans "Hero Section" %}</div>
+            <div class="section-description">{% trans "Main banner at the top of the page" %}</div>
+            <div class="section-count">{{ hero_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="section-card" onclick="window.location.href='/admin/homepage/statistic/'">
+            <div class="section-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="section-title">{% trans "Statistics" %}</div>
+            <div class="section-description">{% trans "4 statistics displayed below hero" %}</div>
+            <div class="section-count">{{ stats_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Features -->
+        <div class="section-card" onclick="window.location.href='/admin/homepage/feature/'">
+            <div class="section-icon">
+                <i class="fas fa-magic"></i>
+            </div>
+            <div class="section-title">{% trans "Features" %}</div>
+            <div class="section-description">{% trans "6 feature cards with icons" %}</div>
+            <div class="section-count">{{ features_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Demo Voices -->
+        <div class="section-card" onclick="window.location.href='/lp-demo-voices/'">
+            <div class="section-icon">
+                <i class="fas fa-microphone"></i>
+            </div>
+            <div class="section-title">{% trans "Demo Voices" %}</div>
+            <div class="section-description">{% trans "Sample voices with audio playback" %}</div>
+            <div class="section-count">{{ demo_voices_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="section-card" onclick="window.location.href='/lp-steps/'">
+            <div class="section-icon">
+                <i class="fas fa-list-ol"></i>
+            </div>
+            <div class="section-title">{% trans "How It Works" %}</div>
+            <div class="section-description">{% trans "3-step process explanation" %}</div>
+            <div class="section-count">{{ steps_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="section-card" onclick="window.location.href='/lp-testimonials/'">
+            <div class="section-icon">
+                <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="section-title">{% trans "Testimonials" %}</div>
+            <div class="section-description">{% trans "Customer reviews and feedback" %}</div>
+            <div class="section-count">{{ testimonials_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Pricing Plans -->
+        <div class="section-card" onclick="window.location.href='/lp-pricing/'">
+            <div class="section-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="section-title">{% trans "Pricing Plans" %}</div>
+            <div class="section-description">{% trans "3 pricing tiers with features" %}</div>
+            <div class="section-count">{{ pricing_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- FAQs -->
+        <div class="section-card" onclick="window.location.href='/lp-faqs/'">
+            <div class="section-icon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <div class="section-title">{% trans "FAQs" %}</div>
+            <div class="section-description">{% trans "Frequently asked questions" %}</div>
+            <div class="section-count">{{ faqs_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="section-card" onclick="window.location.href='/lp-usecases/'">
+            <div class="section-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="section-title">{% trans "Use Cases" %}</div>
+            <div class="section-description">{% trans "Carousel with use case cards" %}</div>
+            <div class="section-count">{{ usecases_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="section-card" onclick="window.location.href='/lp-video/'">
+            <div class="section-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <div class="section-title">{% trans "Video Section" %}</div>
+            <div class="section-description">{% trans "Video demo with features list" %}</div>
+            <div class="section-count">{{ video_count }}</div>
+            <div class="section-label">{% trans "items" %}</div>
+        </div>
+
+        <!-- More Sections... -->
+        <div class="section-card" onclick="window.location.href='/'">
+            <div class="section-icon">
+                <i class="fas fa-th"></i>
+            </div>
+            <div class="section-title">{% trans "View All Sections" %}</div>
+            <div class="section-description">{% trans "Access all 17 content sections" %}</div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="alert alert-info mt-4">
+        <h5><i class="fas fa-info-circle me-2"></i>{% trans "Need Help?" %}</h5>
+        <p class="mb-2">{% trans "Check these documentation files in your project root:" %}</p>
+        <ul class="mb-0">
+            <li><code>SETUP_KAISE_KAREN.md</code> - {% trans "Step-by-step setup guide (Urdu/English)" %}</li>
+            <li><code>ADMIN_QUICK_GUIDE.md</code> - {% trans "Complete usage guide" %}</li>
+            <li><code>ADMIN_PANEL_STRUCTURE.txt</code> - {% trans "Visual structure diagram" %}</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function populateData() {
+    if (confirm('{% trans "This will populate your landing page with sample data. Continue?" %}')) {
+        fetch('/api/homepage/populate/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('{% trans "Sample data populated successfully!" %}');
+                location.reload();
+            } else {
+                alert('{% trans "Error: " %}' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('{% trans "Error populating data. Please run: python manage.py populate_homepage" %}');
+        });
+    }
+}
+</script>
+{% endblock %}

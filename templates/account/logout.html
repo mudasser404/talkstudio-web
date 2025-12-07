@@ -1,0 +1,34 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}Sign Out{% endblock %}
+
+{% block header_title %}Sign Out{% endblock %}
+{% block header_subtitle %}Come back soon!{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+
+    <div class="text-center mb-4">
+        <div style="font-size: 64px; color: #64748b; margin-bottom: 20px;">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <p class="text-muted">
+            Are you sure you want to sign out?
+        </p>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-sign-out-alt me-2"></i>Yes, Sign Me Out
+    </button>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary w-100 mt-2">
+        <i class="fas fa-arrow-left me-2"></i>No, Take Me Back
+    </a>
+</form>
+{% endblock %}
+
+{% block footer %}
+    <a href="{% url 'home' %}">Return to Homepage</a>
+{% endblock %}

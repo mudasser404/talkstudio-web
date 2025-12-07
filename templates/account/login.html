@@ -1,0 +1,138 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block header_title %}Welcome Back{% endblock %}
+{% block header_subtitle %}Sign in to continue to your account{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_login" class="form-label">
+            <i class="fas fa-envelope me-2"></i>Email Address
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            <input type="email" name="login" class="form-control" id="id_login"
+                   placeholder="Enter your email" required autofocus
+                   value="{{ form.login.value|default:'' }}">
+        </div>
+        {% if form.login.errors %}
+            <small class="text-danger">{{ form.login.errors.0 }}</small>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_password" class="form-label">
+            <i class="fas fa-lock me-2"></i>Password
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password" class="form-control" id="id_password"
+                   placeholder="Enter your password" required>
+        </div>
+        {% if form.password.errors %}
+            <small class="text-danger">{{ form.password.errors.0 }}</small>
+        {% endif %}
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="form-check">
+            <input type="checkbox" name="remember" class="form-check-input" id="id_remember">
+            <label class="form-check-label" for="id_remember">
+                Remember me
+            </label>
+        </div>
+        <div class="forgot-password">
+            <a href="{% url 'account_reset_password' %}">
+                Forgot Password?
+            </a>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+    </button>
+
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+</form>
+
+{% load socialaccount %}
+
+{% comment %} <div class="divider">
+    <span>OR CONTINUE WITH</span>
+</div> {% endcomment %}
+
+{% comment %} {% if google_oauth_enabled %}
+<a href="{% provider_login_url 'google' %}" class="btn-google">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+        <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+        <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+        <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+    </svg>
+    Sign in with Google
+</a>
+{% else %} {% endcomment %}
+{% comment %} <button type="button" class="btn-google" disabled style="opacity: 0.6; cursor: not-allowed;" onclick="alert('Google Sign-In is not configured. Please contact the administrator.')">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+        <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+        <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+        <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+    </svg>
+    Sign in with Google (Not Configured)
+</button>
+{% endif %} {% endcomment %}
+
+<ul class="features-list">
+    <li>
+        <i class="fas fa-check-circle"></i>
+        <span>1,000 free credits on signup</span>
+    </li>
+    <li>
+        <i class="fas fa-check-circle"></i>
+        <span>1 free voice clone included</span>
+    </li>
+    <li>
+        <i class="fas fa-check-circle"></i>
+        <span>No credit card required</span>
+    </li>
+</ul>
+{% endblock %}
+
+{% block footer %}
+    Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add password visibility toggle
+const passwordInput = document.getElementById('id_password');
+const passwordGroup = passwordInput.closest('.input-group');
+
+if (passwordGroup && !document.getElementById('toggle-password')) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.id = 'toggle-password';
+    toggleBtn.className = 'btn btn-outline-secondary';
+    toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+    toggleBtn.style.cssText = 'position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 10; border: none; background: transparent; color: #64748b;';
+
+    toggleBtn.addEventListener('click', function() {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    passwordGroup.style.position = 'relative';
+    passwordGroup.appendChild(toggleBtn);
+    passwordInput.style.paddingRight = '48px';
+}
+</script>
+{% endblock %}

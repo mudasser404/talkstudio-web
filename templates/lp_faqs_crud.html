@@ -1,0 +1,28 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.question|truncatechars:60 }}</td>
+<td>{{ item.answer|truncatechars:80 }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Question" %}</label>
+    <input type="text" class="form-control" name="question" id="question" required>
+    <div class="form-help">{% trans "Frequently asked question" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Answer" %}</label>
+    <textarea class="form-control" name="answer" id="answer" required></textarea>
+    <div class="form-help">{% trans "Answer to the question" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('question').value = data.question || '';
+document.getElementById('answer').value = data.answer || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "account/email/base.html" %}
+{% load i18n %}
+
+{% block subject %}{% trans "Account Already Exists" %}{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    {% trans "Hello!" %}
+</div>
+
+<div class="message">
+    <p>{% trans "You are receiving this email because you or someone else tried to sign up for an account using this email address:" %}</p>
+
+    <p style="text-align: center; font-size: 18px; font-weight: 600; color: #3b82f6; padding: 15px; background: #eff6ff; border-radius: 8px; margin: 20px 0;">
+        {{ email }}
+    </p>
+</div>
+
+<div class="info-box">
+    <p style="margin: 0; color: #1e40af;">
+        ℹ️ <strong>{% trans "Good News:" %}</strong><br>
+        {% trans "An account with this email address already exists on Talk Studio Platform!" %}
+    </p>
+</div>
+
+<div class="message">
+    <p>{% trans "If this was you and you forgot about your account, you can:" %}</p>
+
+    <ul style="margin: 10px 0 20px 20px; color: #4b5563;">
+        <li>{% trans "Sign in with your existing password" %}</li>
+        <li>{% trans "Or reset your password if you forgot it" %}</li>
+    </ul>
+</div>
+
+<center>
+    <a href="{{ password_reset_url }}" class="button">
+        🔑 {% trans "Reset Password" %}
+    </a>
+</center>
+
+<div class="message" style="margin-top: 20px;">
+    <p style="font-size: 14px;">{% trans "Or click here to sign in:" %}</p>
+    <p><a href="{{ login_url }}" class="link-text">{{ login_url }}</a></p>
+</div>
+
+<div class="warning-box">
+    <p style="margin: 0; color: #92400e; font-size: 14px;">
+        🔒 <strong>{% trans "Security Notice:" %}</strong><br>
+        {% trans "If you didn't try to sign up, someone may be attempting to use your email address. Your account is safe - they cannot access it without your password." %}
+    </p>
+</div>
+
+<div class="message" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+    <p style="font-size: 14px; color: #6b7280;">
+        {% trans "If you need any assistance, our support team is here to help!" %}
+    </p>
+</div>
+
+<div class="message">
+    <p>{% trans "Best regards," %}<br>
+    <strong>{% trans "Talk Studio Platform Team" %}</strong></p>
+</div>
+{% endblock %}

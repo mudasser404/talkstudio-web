@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py startapp:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(python manage.py makemigrations:*)",
+      "Bash(pip --version)",
+      "Bash(python:*)",
+      "Bash(./venv/Scripts/pip install:*)",
+      "Read(//c/Users/Fafcom Technology/Desktop/New folder (2)/VoiceCloning/**)",
+      "Bash(curl -s \"http://127.0.0.1:8000/\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/clone/\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/pricing/\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/dashboard/\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/admin-dashboard/\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/static/css/style.css\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/static/js/pricing.js\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/static/js/clone.js\")",
+      "Read(//c/Users/**)",
+      "Bash(source:*)",
+      "Bash(.venv/Scripts/pip.exe install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

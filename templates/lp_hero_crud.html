@@ -1,0 +1,64 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.badge_text|truncatechars:30 }}</td>
+<td>{{ item.title|truncatechars:40 }}</td>
+<td>{{ item.subtitle|truncatechars:50 }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Badge Text" %}</label>
+    <input type="text" class="form-control" name="badge_text" id="badge_text" required>
+    <div class="form-help">{% trans "Small badge above title (e.g., 'AI-Powered')" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Title" %}</label>
+    <input type="text" class="form-control" name="title" id="title" required>
+    <div class="form-help">{% trans "Main hero title - keep it catchy and clear" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Subtitle" %}</label>
+    <textarea class="form-control" name="subtitle" id="subtitle" required></textarea>
+    <div class="form-help">{% trans "Subtitle/description below the title" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Primary Button Text" %}</label>
+    <input type="text" class="form-control" name="primary_button_text" id="primary_button_text">
+    <div class="form-help">{% trans "Text for main CTA button" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Primary Button URL" %}</label>
+    <input type="text" class="form-control" name="primary_button_url" id="primary_button_url">
+    <div class="form-help">{% trans "Link for primary button (e.g., #)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Secondary Button Text" %}</label>
+    <input type="text" class="form-control" name="secondary_button_text" id="secondary_button_text">
+    <div class="form-help">{% trans "Text for secondary button (optional)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Secondary Button URL" %}</label>
+    <input type="text" class="form-control" name="secondary_button_url" id="secondary_button_url">
+    <div class="form-help">{% trans "Link for secondary button (optional)" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('badge_text').value = data.badge_text || '';
+document.getElementById('title').value = data.title || '';
+document.getElementById('subtitle').value = data.subtitle || '';
+document.getElementById('primary_button_text').value = data.primary_button_text || '';
+document.getElementById('primary_button_url').value = data.primary_button_url || '';
+document.getElementById('secondary_button_text').value = data.secondary_button_text || '';
+document.getElementById('secondary_button_url').value = data.secondary_button_url || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Pricing" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Pricing Page - Theme Aware Colors */
+    .pricing-section {
+        min-height: 100vh;
+        padding: 80px 0;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    .pricing-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .pricing-header h2 {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+    }
+
+    .pricing-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Pricing Cards Grid */
+    .pricing-cards-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 80px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pricing-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 32px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card.featured {
+        border: 3px solid var(--primary);
+        background: var(--bg-tertiary);
+    }
+
+    .pricing-card.featured::before {
+        content: 'Most Popular';
+        position: absolute;
+        top: 20px;
+        right: -35px;
+        background: var(--primary);
+        color: var(--text-inverse);
+        padding: 4px 40px;
+        font-size: 12px;
+        font-weight: 700;
+        transform: rotate(45deg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .pricing-card-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+
+    .pricing-card-subtitle {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+    }
+
+    .pricing-card-price {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .pricing-card-price .price-amount {
+        font-size: 56px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+    }
+
+    .pricing-card-price .price-amount small {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .pricing-card-price .price-period {
+        font-size: 16px;
+        color: var(--text-secondary);
+        margin-top: 8px;
+    }
+
+    .pricing-card-credits {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 24px;
+        padding: 12px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+
+    .pricing-card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 32px 0;
+    }
+
+    .pricing-card-features li {
+        padding: 12px 0;
+        font-size: 15px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pricing-card-features li i {
+        font-size: 18px;
+        min-width: 20px;
+    }
+
+    .pricing-card-features li .fa-check {
+        color: var(--success);
+    }
+
+    .pricing-card-features li .fa-times {
+        color: var(--danger);
+    }
+
+    .pricing-card-button {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .pricing-card-button.btn-primary {
+        background: var(--primary);
+        color: var(--text-inverse);
+    }
+
+    .pricing-card-button.btn-primary:hover {
+        background: var(--primary-hover);
+        transform: scale(1.05);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card-button.btn-outline {
+        background: transparent;
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .pricing-card-button.btn-outline:hover {
+        border-color: var(--primary);
+        background: var(--bg-tertiary);
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+        text-align: center;
+        margin-top: 60px;
+        padding: 40px 20px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .payment-methods h5 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 24px;
+    }
+
+    .payment-methods-icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .payment-methods-icons i {
+        font-size: 36px;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+
+    .payment-methods-icons i:hover {
+        color: var(--primary);
+        transform: scale(1.1);
+    }
+
+    .payment-methods-icons span {
+        font-size: 16px;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .pricing-header h2 {
+            font-size: 36px;
+        }
+
+        .pricing-cards-wrapper {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="pricing-section">
+    <div class="container">
+        <!-- Header -->
+        <div class="pricing-header">
+            <h2>{% trans "Choose Your Plan" %}</h2>
+            <p>{% trans "Select the perfect plan for your voice generation needs" %}</p>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-cards-wrapper">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="pricing-card-header">
+                    <h3 class="pricing-card-title">{% trans "Free" %}</h3>
+                    <p class="pricing-card-subtitle">{% trans "Perfect for trying out our platform" %}</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="price-amount">
+                        <small>$</small>0
+                    </div>
+                    <div class="price-period">{% trans "/forever" %}</div>
+                </div>
+
+                <div class="pricing-card-credits">
+                    {% trans "1,000 Credits" %}
+                </div>
+
+                <ul class="pricing-card-features">
+                    <li><i class="fas fa-check"></i> {% trans "1 voice clone" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Basic audio quality" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Community support" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Personal use only" %}</li>
+                    <li><i class="fas fa-times"></i> {% trans "Commercial use" %}</li>
+                    <li><i class="fas fa-times"></i> {% trans "API access" %}</li>
+                </ul>
+
+                <a href="{% url 'account_signup' %}" class="pricing-card-button btn-outline">
+                    {% trans "Sign Up Free" %}
+                </a>
+            </div>
+
+            <!-- Starter Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="pricing-card-header">
+                    <h3 class="pricing-card-title">{% trans "Starter" %}</h3>
+                    <p class="pricing-card-subtitle">{% trans "Great for individuals and small projects" %}</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="price-amount">
+                        <small>$</small>29
+                    </div>
+                    <div class="price-period">{% trans "/month" %}</div>
+                </div>
+
+                <div class="pricing-card-credits">
+                    {% trans "5 Million Characters" %}
+                </div>
+
+                <ul class="pricing-card-features">
+                    <li><i class="fas fa-check"></i> {% trans "Unlimited voice cloning" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "HD audio quality" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Priority support" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Commercial use rights" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Download in multiple formats" %}</li>
+                    <li><i class="fas fa-times"></i> {% trans "API access" %}</li>
+                </ul>
+
+                <a href="{% url 'account_signup' %}" class="pricing-card-button btn-primary">
+                    {% trans "Get Started" %}
+                </a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card">
+                <div class="pricing-card-header">
+                    <h3 class="pricing-card-title">{% trans "Pro" %}</h3>
+                    <p class="pricing-card-subtitle">{% trans "Best value for power users" %}</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="price-amount">
+                        <small>$</small>49
+                    </div>
+                    <div class="price-period">{% trans "/month" %}</div>
+                </div>
+
+                <div class="pricing-card-credits">
+                    {% trans "12 Million Characters" %}
+                </div>
+
+                <ul class="pricing-card-features">
+                    <li><i class="fas fa-check"></i> {% trans "Unlimited voice cloning" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Studio-grade audio quality" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Premium support" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Commercial & team use" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Advanced voice customization" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "API access" %}</li>
+                </ul>
+
+                <a href="{% url 'account_signup' %}" class="pricing-card-button btn-outline">
+                    {% trans "Get Started" %}
+                </a>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <h5>{% trans "Accepted Payment Methods" %}</h5>
+            <div class="payment-methods-icons">
+                <i class="fab fa-cc-stripe"></i>
+                <i class="fab fa-cc-paypal"></i>
+                <i class="fas fa-credit-card"></i>
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <span>{% trans "JazzCash" %}</span>
+                <span>{% trans "Easypaisa" %}</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

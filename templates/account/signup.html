@@ -1,0 +1,201 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block header_title %}Create Account{% endblock %}
+{% block header_subtitle %}Start generating voices in seconds{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'account_signup' %}" id="signup_form">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_username" class="form-label">
+            <i class="fas fa-user me-2"></i>Username
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-user"></i></span>
+            <input type="text" name="username" class="form-control" id="id_username"
+                   placeholder="Choose a username" required autofocus
+                   value="{{ form.username.value|default:'' }}">
+        </div>
+        {% if form.username.errors %}
+            <small class="text-danger">{{ form.username.errors.0 }}</small>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_email" class="form-label">
+            <i class="fas fa-envelope me-2"></i>Email Address
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            <input type="email" name="email" class="form-control" id="id_email"
+                   placeholder="Enter your email" required
+                   value="{{ form.email.value|default:'' }}">
+        </div>
+        {% if form.email.errors %}
+            <small class="text-danger">{{ form.email.errors.0 }}</small>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_password1" class="form-label">
+            <i class="fas fa-lock me-2"></i>Password
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password1" class="form-control" id="id_password1"
+                   placeholder="Create a strong password" required>
+        </div>
+        {% if form.password1.errors %}
+            <small class="text-danger">{{ form.password1.errors.0 }}</small>
+        {% endif %}
+        <small class="text-muted">Minimum 8 characters</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_password2" class="form-label">
+            <i class="fas fa-lock me-2"></i>Confirm Password
+        </label>
+        <div class="input-group">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password2" class="form-control" id="id_password2"
+                   placeholder="Confirm your password" required>
+        </div>
+        {% if form.password2.errors %}
+            <small class="text-danger">{{ form.password2.errors.0 }}</small>
+        {% endif %}
+    </div>
+
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="terms" required>
+        <label class="form-check-label" for="terms">
+            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-user-plus me-2"></i>Create Account
+    </button>
+
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+</form>
+
+{% load socialaccount %}
+
+{% comment %} <div class="divider">
+    <span>OR SIGN UP WITH</span>
+</div> {% endcomment %}
+
+{% comment %} {% if google_oauth_enabled %}
+<a href="{% provider_login_url 'google' %}" class="btn-google">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+        <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+        <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+        <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+    </svg>
+    Sign up with Google
+</a>
+{% else %} {% endcomment %}
+{% comment %} <button type="button" class="btn-google" disabled style="opacity: 0.6; cursor: not-allowed;" onclick="alert('Google Sign-Up is not configured. Please contact the administrator.')">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+        <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+        <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+        <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+    </svg>
+    Sign up with Google (Not Configured)
+</button>
+{% endif %} {% endcomment %}
+
+<ul class="features-list">
+    <li>
+        <i class="fas fa-gift"></i>
+        <span><strong>1,000 free credits</strong> to get started</span>
+    </li>
+    <li>
+        <i class="fas fa-clone"></i>
+        <span><strong>1 free voice clone</strong> included</span>
+    </li>
+    <li>
+        <i class="fas fa-credit-card"></i>
+        <span><strong>No payment</strong> required</span>
+    </li>
+    <li>
+        <i class="fas fa-shield-alt"></i>
+        <span><strong>Secure & private</strong> - Your data is encrypted</span>
+    </li>
+</ul>
+{% endblock %}
+
+{% block footer %}
+    Already have an account? <a href="{% url 'account_login' %}">Sign In</a>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add password visibility toggles
+function addPasswordToggle(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const passwordGroup = passwordInput.closest('.input-group');
+
+    if (passwordGroup && !passwordGroup.querySelector('.toggle-password')) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'toggle-password';
+        toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        toggleBtn.style.cssText = 'position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 10; border: none; background: transparent; color: #64748b;';
+
+        toggleBtn.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        passwordGroup.style.position = 'relative';
+        passwordGroup.appendChild(toggleBtn);
+        passwordInput.style.paddingRight = '48px';
+    }
+}
+
+addPasswordToggle('id_password1');
+addPasswordToggle('id_password2');
+
+// Password strength indicator
+const password1 = document.getElementById('id_password1');
+password1.addEventListener('input', function() {
+    const value = this.value;
+    let strength = 0;
+
+    if (value.length >= 8) strength++;
+    if (value.length >= 12) strength++;
+    if (/[a-z]/.test(value) && /[A-Z]/.test(value)) strength++;
+    if (/\d/.test(value)) strength++;
+    if (/[^a-zA-Z\d]/.test(value)) strength++;
+
+    const strengthText = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'][Math.min(strength - 1, 4)];
+    const strengthColor = ['#ef4444', '#f59e0b', '#10b981', '#10b981', '#10b981'][Math.min(strength - 1, 4)];
+
+    let indicator = document.getElementById('password-strength');
+    if (!indicator && value.length > 0) {
+        indicator = document.createElement('small');
+        indicator.id = 'password-strength';
+        indicator.style.display = 'block';
+        indicator.style.marginTop = '4px';
+        password1.parentNode.parentNode.appendChild(indicator);
+    }
+
+    if (indicator && value.length > 0) {
+        indicator.textContent = `Password Strength: ${strengthText}`;
+        indicator.style.color = strengthColor;
+    } else if (indicator && value.length === 0) {
+        indicator.remove();
+    }
+});
+</script>
+{% endblock %}

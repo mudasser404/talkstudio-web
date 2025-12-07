@@ -1,0 +1,119 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign In Via Google" %}{% endblock %}
+
+{% block header_title %}{% trans "Connect with Google" %}{% endblock %}
+{% block header_subtitle %}{% trans "Secure authentication powered by Google" %}{% endblock %}
+
+{% block content %}
+<div class="google-auth-container" style="text-align: center; padding: 40px 20px;">
+    <div style="width: 120px; height: 120px; margin: 0 auto 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);">
+        <svg width="64" height="64" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+            <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+            <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+            <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+        </svg>
+    </div>
+
+    <h2 style="color: #1f2937; margin-bottom: 16px; font-weight: 700;">{% trans "Sign In Via Google" %}</h2>
+
+    <p style="color: #6b7280; font-size: 16px; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto;">
+        {% trans "You are about to sign in using a third-party account from Google. This is a secure and convenient way to access your account." %}
+    </p>
+
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 16px; padding: 32px; margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <h5 style="color: #1e40af; margin-bottom: 20px; font-weight: 600;">
+            <i class="fas fa-shield-alt me-2"></i>{% trans "Why use Google Sign-In?" %}
+        </h5>
+
+        <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+            <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 16px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 20px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #1f2937; display: block; margin-bottom: 4px;">{% trans "Fast & Secure" %}</strong>
+                    <span style="color: #6b7280; font-size: 14px;">{% trans "No need to remember another password" %}</span>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 16px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 20px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #1f2937; display: block; margin-bottom: 4px;">{% trans "Privacy Protected" %}</strong>
+                    <span style="color: #6b7280; font-size: 14px;">{% trans "We never store your Google password" %}</span>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: start; gap: 12px;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 20px; margin-top: 2px;"></i>
+                <div>
+                    <strong style="color: #1f2937; display: block; margin-bottom: 4px;">{% trans "Trusted Platform" %}</strong>
+                    <span style="color: #6b7280; font-size: 14px;">{% trans "Used by millions worldwide" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" style="max-width: 400px; margin: 0 auto;">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; padding: 16px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="white"/>
+                <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="white"/>
+                <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="white"/>
+                <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="white"/>
+            </svg>
+            <span>{% trans "Continue with Google" %}</span>
+        </button>
+
+        <div style="margin-top: 24px;">
+            <a href="{% url 'account_login' %}" style="color: #6b7280; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">
+                <i class="fas fa-arrow-left"></i>
+                <span>{% trans "Back to Login" %}</span>
+            </a>
+        </div>
+    </form>
+
+    <div style="margin-top: 40px; padding: 20px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; max-width: 560px; margin-left: auto; margin-right: auto;">
+        <p style="margin: 0; color: #92400e; font-size: 14px; text-align: left;">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>{% trans "Note:" %}</strong> {% trans "By continuing, you'll be redirected to Google's secure login page. After authentication, you'll be brought back here automatically." %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% trans "Need help?" %} <a href="{% url 'support' %}">{% trans "Contact Support" %}</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+    }
+
+    a[href*="account_login"]:hover {
+        background: #f3f4f6;
+        color: #1f2937;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .google-auth-container > * {
+        animation: fadeIn 0.5s ease-out;
+    }
+</style>
+{% endblock %}

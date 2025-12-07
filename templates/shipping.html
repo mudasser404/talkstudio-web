@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Shipping / Service Delivery Policy - TalkStudio.ai{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+        --border-color: #e5e7eb;
+        --link-color: #3b82f6;
+        --link-hover: #2563eb;
+        --accent: #1f2937;
+        --pill-hover: #f1f5f9;
+        --pill-active: #000000;
+        --pill-active-text: #ffffff;
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0a;
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --text-muted: #6b7280;
+        --border-color: #1f2937;
+        --link-color: #60a5fa;
+        --link-hover: #93c5fd;
+        --accent: #e5e7eb;
+        --pill-hover: #1a1a1a;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background 0.3s ease, color 0.3s ease;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .shipping-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem;
+        line-height: 1.75;
+    }
+
+    /* Back Button */
+    .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.925rem;
+        font-weight: 500;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+    .back:hover { color: var(--link-color); }
+    .back i { font-size: 1rem; }
+
+    /* Header */
+    .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .header .icon {
+        font-size: 3rem;
+        color: var(--link-color);
+        margin-bottom: 1rem;
+    }
+    .header h1 {
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin: 0 0 0.75rem;
+        background: linear-gradient(135deg, var(--accent), #374151);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    [data-theme="dark"] .header h1 {
+        background: linear-gradient(135deg, #f3f4f6, #9ca3af);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .meta-date {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        background: var(--bg-secondary);
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+    }
+
+    /* Intro */
+    .intro {
+        text-align: center;
+        max-width: 680px;
+(() => {
+        margin: 0 auto 3rem;
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+    }
+
+    /* Sections */
+    .section {
+        margin-bottom: 3rem;
+        scroll-margin-top: 120px;
+    }
+    .section h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0 0 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-primary);
+    }
+    .section h2 i {
+        font-size: 1.35rem;
+        color: var(--link-color);
+    }
+
+    .section p,
+    .section li {
+        color: var(--text-secondary);
+        margin-bottom: 0.9rem;
+        font-size: 1rem;
+    }
+
+    .section ul {
+        padding-left: 1.4rem;
+        margin: 1rem 0;
+    }
+    .section ul li {
+        margin-bottom: 0.75rem;
+    }
+    .section ul li::marker {
+        color: var(--link-color);
+    }
+
+    /* Contact Box */
+    .contact-box {
+        text-align: center;
+        background: linear-gradient(135deg, #111827, #1f2937);
+        color: #f3f4f6;
+        padding: 3rem 2rem;
+        border-radius: 16px;
+        margin: 4rem 0 2rem;
+    }
+    [data-theme="dark"] .contact-box {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    }
+    .contact-box h3 {
+        font-size: 1.5rem;
+        margin: 0 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .contact-box p {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+    .contact-box a {
+        color: #93c5fd;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+    .contact-box a:hover {
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .shipping-page { padding: 2rem 1rem; }
+        .header h1 { font-size: 2.1rem; }
+        .header .icon { font-size: 2.5rem; }
+        .section h2 { 
+            font-size: 1.5rem; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 0.5rem; 
+        }
+        .contact-box { padding: 2.5rem 1.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="shipping-page">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="icon">
+            <i class="fas fa-shipping-fast"></i>
+        </div>
+        <h1>Shipping / Service Delivery Policy</h1>
+        <p class="meta-date">Last Updated: November 4, 2025</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="intro">
+        <p>At <strong>TalkStudio.ai</strong>, all our products and services are delivered digitally through our online platform.</p>
+    </section>
+
+    <!-- Instant Service Activation -->
+    <section class="section" id="activation">
+        <h2><i class="fas fa-bolt"></i> Instant Service Activation</h2>
+        <p>Once your payment is successfully processed, your purchased credits or features are <strong>instantly available</strong> in your account dashboard.</p>
+    </section>
+
+    <!-- No Physical Shipping -->
+    <section class="section" id="no-shipping">
+        <h2><i class="fas fa-digital-tachograph"></i> No Physical Shipping</h2>
+        <p>As we provide <strong>digital AI tools and services</strong>, no physical goods are shipped.</p>
+    </section>
+
+    <!-- Support Assistance -->
+    <section class="section" id="support">
+        <h2><i class="fas fa-headset"></i> Support Assistance</h2>
+        <p>If you face any issue accessing your account or features after payment, please contact our team at <a href="mailto:support@talkstudio.ai">support@talkstudio.ai</a> for <strong>immediate assistance</strong>.</p>
+    </section>
+
+    <!-- Contact Box -->
+    <div class="contact-box">
+        <h3><i class="fas fa-envelope"></i> Need Help with Delivery?</h3>
+        <p>Contact our support team: <a href="mailto:support@talkstudio.ai">support@talkstudio.ai</a></p>
+    </div>
+</div>
+
+<script>
+    // Theme sync with root data-theme
+    const syncTheme = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.body.style.background = isDark ? '#000' : '#fff';
+    };
+    syncTheme();
+    new MutationObserver(syncTheme).observe(document.documentElement, { 
+        attributes: true, 
+        attributeFilter: ['data-theme'] 
+    });
+</script>
+{% endblock %}

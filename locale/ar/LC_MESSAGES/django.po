@@ -1,0 +1,5351 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-11 22:48+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Language Code"
+msgstr "دعم العملاء"
+
+msgid "ISO language code (e.g., 'en', 'zh', 'es')"
+msgstr ""
+
+msgid "Language Name"
+msgstr ""
+
+msgid "Full language name (e.g., 'English', 'Chinese')"
+msgstr ""
+
+#, fuzzy
+#| msgid "Last Name"
+msgid "Native Name"
+msgstr "اسم العائلة"
+
+msgid "Language name in native script (e.g., '中文', 'Español')"
+msgstr ""
+
+msgid "Flag Emoji"
+msgstr ""
+
+msgid "Flag emoji for the language"
+msgstr ""
+
+#, fuzzy
+#| msgid "Enable"
+msgid "Enabled"
+msgstr "تفعيل"
+
+msgid "Whether this language is available for users"
+msgstr ""
+
+msgid "Model Trained"
+msgstr ""
+
+msgid "Whether a model is trained for this language"
+msgstr ""
+
+msgid "Model Path"
+msgstr ""
+
+msgid "Path to the trained model file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Not Started"
+msgstr "البدء"
+
+msgid "Training"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Training Status"
+msgstr ""
+
+msgid "Quality Score"
+msgstr ""
+
+msgid "Model quality score (0-100)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Description"
+msgstr "اشتراك نشط"
+
+msgid "Additional information about this language model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Supported Language"
+msgstr "الحساب"
+
+#, fuzzy
+#| msgid "Account"
+msgid "Supported Languages"
+msgstr "الحساب"
+
+msgid "Content"
+msgstr ""
+
+msgid "Button"
+msgstr ""
+
+msgid "Design"
+msgstr ""
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Author"
+msgstr ""
+
+msgid "Media"
+msgstr ""
+
+msgid "Plan Details"
+msgstr ""
+
+msgid "Code Example"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Button Text"
+msgstr ""
+
+msgid "Button URL"
+msgstr ""
+
+msgid "Background Image"
+msgstr ""
+
+msgid "Background Color"
+msgstr ""
+
+msgid "Text Color"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Carousel Slide"
+msgstr ""
+
+msgid "Carousel Slides"
+msgstr ""
+
+msgid "Badge Text"
+msgstr ""
+
+msgid "Primary Button Text"
+msgstr ""
+
+msgid "Primary Button URL"
+msgstr ""
+
+msgid "Secondary Button Text"
+msgstr ""
+
+msgid "Secondary Button URL"
+msgstr ""
+
+msgid "Hero Section"
+msgstr "قسم الأبطال"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Hero Sections"
+msgstr "إجراءات سريعة"
+
+msgid "Feature Text"
+msgstr ""
+
+msgid "Hero Feature"
+msgstr ""
+
+msgid "Hero Features"
+msgstr ""
+
+msgid "Font Awesome Icon"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Statistic"
+msgstr ""
+
+msgid "Statistics"
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "Step Number"
+msgstr ""
+
+msgid "How It Works Step"
+msgstr ""
+
+msgid "How It Works Steps"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voice Name"
+msgstr "استنساخ الصوت"
+
+msgid "Audio File"
+msgstr ""
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Demo Voice"
+msgstr "أصواتي"
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Demo Voices"
+msgstr "أصواتي"
+
+msgid "Quote"
+msgstr ""
+
+msgid "Author Name"
+msgstr ""
+
+msgid "Author Title"
+msgstr ""
+
+msgid "Author Initials"
+msgstr ""
+
+msgid "Testimonial"
+msgstr ""
+
+msgid "Testimonials"
+msgstr ""
+
+msgid "Slide Number"
+msgstr ""
+
+msgid "Use Case"
+msgstr ""
+
+msgid "Use Cases"
+msgstr "حالات الاستخدام"
+
+msgid "Video File"
+msgstr ""
+
+msgid "Video Thumbnail"
+msgstr ""
+
+#, fuzzy
+#| msgid "Voices"
+msgid "Video Section"
+msgstr "الأصوات"
+
+#, fuzzy
+#| msgid "Voices"
+msgid "Video Sections"
+msgstr "الأصوات"
+
+msgid "Video Feature"
+msgstr ""
+
+msgid "Video Features"
+msgstr ""
+
+msgid "Plan Name"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Popular/Recommended"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Featured Plan"
+msgstr "الخطة الحالية"
+
+msgid "Pricing Plan"
+msgstr ""
+
+msgid "Pricing Plans"
+msgstr "خطط الأسعار"
+
+msgid "Pricing Feature"
+msgstr ""
+
+msgid "Pricing Features"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Question"
+msgstr "اشتراك نشط"
+
+msgid "Answer"
+msgstr ""
+
+msgid "FAQ"
+msgstr "الأسئلة الشائعة"
+
+msgid "FAQs"
+msgstr ""
+
+msgid "Trust Badge"
+msgstr ""
+
+msgid "Trust Badges"
+msgstr ""
+
+msgid "Comparison Type"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Quality Comparison Point"
+msgstr ""
+
+msgid "Quality Comparison Points"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Trend Percentage"
+msgstr ""
+
+msgid "Live Statistic"
+msgstr ""
+
+msgid "Live Statistics"
+msgstr ""
+
+msgid "API Feature"
+msgstr ""
+
+msgid "API Features"
+msgstr ""
+
+msgid "Code Language"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "API Section"
+msgstr "إجراءات سريعة"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "API Sections"
+msgstr "إجراءات سريعة"
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Language Support"
+msgstr "دعم العملاء"
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Language Supports"
+msgstr "دعم العملاء"
+
+msgid "Extra Subtitle"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "CTA Section"
+msgstr "إجراءات سريعة"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "CTA Sections"
+msgstr "إجراءات سريعة"
+
+msgid "CTA Feature"
+msgstr ""
+
+msgid "CTA Features"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Authentication"
+msgstr "إجراءات سريعة"
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Manage your email addresses and verification status"
+msgstr ""
+
+msgid "Your Email Addresses"
+msgstr ""
+
+msgid "The following email addresses are associated with your account:"
+msgstr ""
+
+msgid "Primary"
+msgstr ""
+
+msgid "Verified"
+msgstr ""
+
+msgid "Unverified"
+msgstr ""
+
+msgid "Re-send Verification"
+msgstr ""
+
+msgid "Make Primary"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid ""
+"You currently do not have any email address setup. You should really add an "
+"email address so you can receive notifications and reset your password."
+msgstr ""
+
+msgid "Add Email Address"
+msgstr ""
+
+msgid "Email Address"
+msgstr ""
+
+msgid "Enter new email address"
+msgstr ""
+
+msgid "A verification email will be sent to this address"
+msgstr ""
+
+msgid "Add Email"
+msgstr ""
+
+msgid "Back to Profile"
+msgstr ""
+
+msgid "Account Already Exists"
+msgstr ""
+
+msgid "Hello!"
+msgstr ""
+
+msgid ""
+"You are receiving this email because you or someone else tried to sign up "
+"for an account using this email address:"
+msgstr ""
+
+msgid "Good News:"
+msgstr ""
+
+msgid ""
+"An account with this email address already exists on Talk Studio Platform!"
+msgstr ""
+
+msgid "If this was you and you forgot about your account, you can:"
+msgstr ""
+
+msgid "Sign in with your existing password"
+msgstr ""
+
+msgid "Or reset your password if you forgot it"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Reset Password"
+msgstr "الخطة الحالية"
+
+msgid "Or click here to sign in:"
+msgstr ""
+
+msgid "Security Notice:"
+msgstr ""
+
+msgid ""
+"If you didn't try to sign up, someone may be attempting to use your email "
+"address. Your account is safe - they cannot access it without your password."
+msgstr ""
+
+msgid "If you need any assistance, our support team is here to help!"
+msgstr ""
+
+msgid "Best regards,"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Talk Studio Platform Team"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Clone Voices. Create Magic."
+msgstr "أصواتي"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "This email was sent from Talk Studio Platform"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Support"
+msgstr "دعم العملاء"
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Terms"
+msgstr ""
+
+msgid "All rights reserved."
+msgstr ""
+
+msgid "You received this email because you have an account with us."
+msgstr ""
+
+msgid "Please Confirm Your Email Address"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Thank you for signing up with Talk Studio Platform!"
+msgstr "استنساخ الصوت"
+
+msgid ""
+"To complete your registration and activate your account, please confirm your "
+"email address by clicking the button below:"
+msgstr ""
+
+msgid "Confirm Email Address"
+msgstr ""
+
+msgid "Welcome Bonus:"
+msgstr ""
+
+msgid "After confirmation, you'll receive:"
+msgstr ""
+
+msgid "1,000 free credits"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "1 free voice clone"
+msgstr "استنساخ الصوت"
+
+msgid "Full platform access"
+msgstr ""
+
+msgid "If the button doesn't work, copy and paste this link into your browser:"
+msgstr ""
+
+msgid "Important:"
+msgstr ""
+
+msgid "This verification link will expire in 24 hours for security reasons."
+msgstr ""
+
+msgid "If you didn't create an account with us, please ignore this email."
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Welcome to Talk Studio Platform!"
+msgstr "استنساخ الصوت"
+
+msgid "Thank you for joining us! We're excited to have you on board."
+msgstr ""
+
+msgid ""
+"To get started, please confirm your email address by clicking the button "
+"below:"
+msgstr ""
+
+msgid "Activate My Account"
+msgstr ""
+
+msgid "Your Welcome Bonus:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "to start creating"
+msgstr "التوليدات"
+
+msgid "to test the platform"
+msgstr ""
+
+msgid "Full access to all features"
+msgstr ""
+
+msgid "Priority email support"
+msgstr ""
+
+msgid "Quick Start Guide:"
+msgstr ""
+
+msgid "Confirm your email (click button above)"
+msgstr ""
+
+msgid "Complete your profile"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Create your first voice clone"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Start generating amazing audio!"
+msgstr "التوليدات"
+
+msgid ""
+"This verification link expires in 24 hours. Make sure to activate your "
+"account soon!"
+msgstr ""
+
+msgid "If you have any questions, our support team is ready to help you!"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "The Talk Studio Platform Team"
+msgstr "استنساخ الصوت"
+
+msgid "Password Reset Request"
+msgstr ""
+
+msgid ""
+"We received a request to reset the password for your Talk Studio Platform "
+"account."
+msgstr ""
+
+msgid "Email:"
+msgstr ""
+
+msgid "To reset your password, click the button below:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Reset My Password"
+msgstr "الخطة الحالية"
+
+msgid "This password reset link will expire in 24 hours."
+msgstr ""
+
+msgid "For your security, you can only use this link once."
+msgstr ""
+
+msgid "Didn't request this?"
+msgstr ""
+
+msgid ""
+"If you didn't request a password reset, you can safely ignore this email. "
+"Your password will remain unchanged."
+msgstr ""
+
+msgid "Confirm Your Email"
+msgstr ""
+
+msgid "One last step to activate your account"
+msgstr ""
+
+msgid "Confirm Your Email Address"
+msgstr ""
+
+msgid "Please confirm that"
+msgstr ""
+
+msgid "is an email address for user"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "What happens after confirmation?"
+msgstr "الحساب"
+
+msgid "Your email will be verified"
+msgstr ""
+
+msgid "You'll get 1,000 free credits"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "You'll get 1 free voice clone"
+msgstr "استنساخ الصوت"
+
+msgid "Full access to your account"
+msgstr ""
+
+msgid "Confirm My Email"
+msgstr ""
+
+msgid "Invalid Verification Link"
+msgstr ""
+
+msgid "This email confirmation link has expired or is invalid."
+msgstr ""
+
+msgid "Common reasons:"
+msgstr ""
+
+msgid "The link has expired (valid for 24 hours)"
+msgstr ""
+
+msgid "The link has already been used"
+msgstr ""
+
+msgid "The email has already been verified"
+msgstr ""
+
+msgid "Request New Verification Email"
+msgstr ""
+
+msgid "Go to Login"
+msgstr ""
+
+msgid "Need help?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Contact Support"
+msgstr "دعم العملاء"
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Forgot Password?"
+msgstr "الخطة الحالية"
+
+msgid "Don't worry, we'll help you recover your account"
+msgstr ""
+
+msgid ""
+"Enter the email address associated with your account and we'll send you a "
+"secure link to reset your password. The link will expire in 24 hours."
+msgstr ""
+
+msgid "your.email@example.com"
+msgstr ""
+
+msgid "Send Reset Link"
+msgstr ""
+
+msgid "Back to Sign In"
+msgstr ""
+
+msgid "Don't have an account?"
+msgstr ""
+
+msgid "Sign Up"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Sending..."
+msgstr "جاري التحميل..."
+
+msgid "Verify Your Email"
+msgstr ""
+
+msgid "Check Your Email!"
+msgstr ""
+
+msgid "We've sent you a verification link"
+msgstr ""
+
+msgid "Verification Email Sent!"
+msgstr ""
+
+msgid "We've sent a confirmation email to"
+msgstr ""
+
+msgid "What to do next:"
+msgstr ""
+
+msgid "Check your inbox"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Look for an email from STUDIO"
+msgstr "استنساخ الصوت"
+
+msgid "Click the verification link"
+msgstr ""
+
+msgid "This will confirm your email address"
+msgstr ""
+
+msgid "Start using your account"
+msgstr ""
+
+msgid "You'll be automatically logged in"
+msgstr ""
+
+msgid "Didn't receive the email?"
+msgstr ""
+
+msgid "Resend Email"
+msgstr ""
+
+msgid "Change Email"
+msgstr ""
+
+msgid "Tips:"
+msgstr ""
+
+msgid "Check your spam/junk folder if you don't see the email"
+msgstr ""
+
+msgid "Add noreply@studio.com to your contacts"
+msgstr ""
+
+msgid "The verification link expires in 24 hours"
+msgstr ""
+
+msgid "Wrong email?"
+msgstr ""
+
+msgid "Change it"
+msgstr ""
+
+msgid "Email Verification Required"
+msgstr ""
+
+msgid "Please verify your email to continue"
+msgstr ""
+
+msgid ""
+"To access your account, you need to verify your email address first. This "
+"helps us keep your account secure."
+msgstr ""
+
+msgid "Why verify your email?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Account Security"
+msgstr "الحساب"
+
+msgid "Protects your account from unauthorized access"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Password Recovery"
+msgstr "الخطة الحالية"
+
+msgid "Allows you to reset your password if needed"
+msgstr ""
+
+msgid "Important Notifications"
+msgstr ""
+
+msgid "Receive account updates and notifications"
+msgstr ""
+
+msgid "We've sent a verification email to your registered address."
+msgstr ""
+
+msgid "Resend Verification Email"
+msgstr ""
+
+msgid "Change Email Address"
+msgstr ""
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "Helpful Tips:"
+msgstr ""
+
+msgid "Check your spam/junk folder"
+msgstr ""
+
+msgid "Add our email to your contacts"
+msgstr ""
+
+msgid "Make sure the email address is correct"
+msgstr ""
+
+msgid "Wait a few minutes if you just signed up"
+msgstr ""
+
+msgid "Need assistance?"
+msgstr ""
+
+msgid "Get Help"
+msgstr ""
+
+msgid "Activity Logs - Admin"
+msgstr ""
+
+msgid "Activity Logs"
+msgstr ""
+
+msgid "Complete audit trail of all admin and user activities"
+msgstr ""
+
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Back to Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Search logs..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "All Actions"
+msgstr "إجراءات سريعة"
+
+#, fuzzy
+#| msgid "Users"
+msgid "User Created"
+msgstr "المستخدمون"
+
+#, fuzzy
+#| msgid "Users"
+msgid "User Updated"
+msgstr "المستخدمون"
+
+msgid "User Deleted"
+msgstr ""
+
+msgid "User Activated"
+msgstr ""
+
+msgid "User Deactivated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Added"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Subscription Changed"
+msgstr "اشتراك نشط"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voice Cloned"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "Total audio generated"
+msgid "Audio Generated"
+msgstr "إجمالي الصوت المُولّد"
+
+msgid "Payment Completed"
+msgstr ""
+
+msgid "All Severities"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Critical"
+msgstr ""
+
+msgid "10 per page"
+msgstr ""
+
+msgid "20 per page"
+msgstr ""
+
+msgid "50 per page"
+msgstr ""
+
+msgid "100 per page"
+msgstr ""
+
+msgid "Time"
+msgstr "الوقت"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Action"
+msgstr "إجراءات سريعة"
+
+msgid "Severity"
+msgstr ""
+
+msgid "Admin"
+msgstr "المشرف"
+
+msgid "Target"
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "Loading..."
+msgstr "جاري التحميل..."
+
+msgid "Showing 0 of 0"
+msgstr ""
+
+msgid "Failed to load activity logs"
+msgstr ""
+
+msgid "No activity logs found"
+msgstr ""
+
+msgid "Showing"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Admin Dashboard"
+msgstr "لوحة التحكم"
+
+#, fuzzy, python-format
+#| msgid "Welcome back, %(username)s! Here's your account overview."
+msgid "Welcome back, %(username)s!"
+msgstr "مرحباً بعودتك، %(username)s! هذا نظرة عامة على حسابك."
+
+#, fuzzy
+#| msgid "Admin"
+msgid "Super Admin"
+msgstr "المشرف"
+
+#, fuzzy
+#| msgid "Users"
+msgid "Total Users"
+msgstr "المستخدمون"
+
+msgid "Total Revenue"
+msgstr "إجمالي الإيرادات"
+
+msgid "Generations"
+msgstr "التوليدات"
+
+msgid "Registered Today"
+msgstr "مسجل اليوم"
+
+msgid "Online Now"
+msgstr "متصل الآن"
+
+#, fuzzy
+#| msgid "Overview"
+msgid "Revenue Overview"
+msgstr "نظرة عامة"
+
+msgid "Recent Activity"
+msgstr "النشاط الأخير"
+
+msgid "Quick Actions"
+msgstr "إجراءات سريعة"
+
+msgid "Add New User"
+msgstr ""
+
+msgid "Create a new user account"
+msgstr ""
+
+#, fuzzy
+#| msgid "Announcements"
+msgid "Create Announcement"
+msgstr "الإعلانات"
+
+msgid "Post message to all users"
+msgstr ""
+
+msgid "View system activity"
+msgstr ""
+
+#, fuzzy
+#| msgid "Profile Settings"
+msgid "Platform Settings"
+msgstr "إعدادات الملف الشخصي"
+
+msgid "Configure platform"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Language Management"
+msgstr "الحساب"
+
+msgid "Enable/disable languages"
+msgstr ""
+
+msgid "User Management"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Add User"
+msgstr "المستخدمون"
+
+msgid "Search users..."
+msgstr ""
+
+msgid "All Plans"
+msgstr ""
+
+msgid "Free"
+msgstr "مجاني"
+
+msgid "Basic"
+msgstr "أساسي"
+
+msgid "Pro"
+msgstr "احترافي"
+
+msgid "All Status"
+msgstr ""
+
+msgid "Inactive"
+msgstr "غير نشط"
+
+msgid "25 per page"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "User"
+msgstr "المستخدمون"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Plan"
+msgstr "الخطة"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits"
+msgstr "شراء رصيد"
+
+msgid "Status"
+msgstr ""
+
+msgid "Joined"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Actions"
+msgstr "إجراءات سريعة"
+
+msgid "Payment Transactions"
+msgstr ""
+
+msgid "Delete Selected"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Transaction ID"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Amount"
+msgstr "الحساب"
+
+msgid "Type"
+msgstr ""
+
+msgid "Date"
+msgstr "التاريخ"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "API Documentation"
+msgstr "إجراءات سريعة"
+
+msgid "Integrate voice cloning into your applications"
+msgstr ""
+
+msgid "API Access Enabled"
+msgstr ""
+
+msgid "Admin access - Full API access granted"
+msgstr ""
+
+msgid "Your"
+msgstr ""
+
+msgid "plan includes full API access"
+msgstr ""
+
+msgid "Your plan includes full API access"
+msgstr ""
+
+msgid "API Access Restricted"
+msgstr ""
+
+msgid "Upgrade to Pro or Yearly plan to access the API"
+msgstr ""
+
+#, fuzzy
+#| msgid "Upgrade now"
+msgid "Upgrade Now"
+msgstr "ترقية الآن"
+
+#, fuzzy
+#| msgid "Get API Keys"
+msgid "Your API Keys"
+msgstr "الحصول على مفاتيح API"
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate New Key"
+msgstr "2. توليد صوت"
+
+#, fuzzy
+#| msgid "From Name"
+msgid "Name"
+msgstr "من الاسم"
+
+#, fuzzy
+#| msgid "Get API Keys"
+msgid "API Key"
+msgstr "الحصول على مفاتيح API"
+
+#, fuzzy
+#| msgid "Users"
+msgid "Created"
+msgstr "المستخدمون"
+
+#, fuzzy
+#| msgid "Last Name"
+msgid "Last Used"
+msgstr "اسم العائلة"
+
+msgid "Never used"
+msgstr ""
+
+msgid "No API keys yet. Click 'Generate New Key' to create one."
+msgstr ""
+
+msgid ""
+"All API requests require authentication using your API key in the "
+"Authorization header:"
+msgstr ""
+
+msgid ""
+"Keep your API keys secure. Do not share them or expose them in client-side "
+"code."
+msgstr ""
+
+#, fuzzy
+#| msgid "Available Credits"
+msgid "Available Endpoints"
+msgstr "الرصيد المتاح"
+
+msgid "Generate speech from text using a specific voice"
+msgstr ""
+
+msgid "Request Body"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "cURL Example"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Get a list of all your saved voice clones"
+msgstr "استنساخ الصوت"
+
+msgid "Create a new voice clone from an audio file"
+msgstr ""
+
+msgid "Request (multipart/form-data)"
+msgstr ""
+
+msgid "Rate Limits"
+msgstr ""
+
+msgid "Requests per Minute"
+msgstr ""
+
+msgid "Requests per Day"
+msgstr ""
+
+msgid "Yearly"
+msgstr ""
+
+msgid "Error Codes"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Bad Request - Invalid parameters"
+msgstr ""
+
+msgid "Unauthorized - Invalid or missing API key"
+msgstr ""
+
+msgid "Forbidden - Insufficient credits or plan restrictions"
+msgstr ""
+
+msgid "Too Many Requests - Rate limit exceeded"
+msgstr ""
+
+msgid "Internal Server Error - Something went wrong"
+msgstr ""
+
+msgid "API key copied to clipboard!"
+msgstr ""
+
+msgid "Failed to copy API key"
+msgstr ""
+
+msgid "Enter a name for this API key:"
+msgstr ""
+
+msgid "API key generated successfully!"
+msgstr ""
+
+msgid "Failed to generate API key"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this API key? This action cannot be undone."
+msgstr ""
+
+msgid "API key deleted successfully"
+msgstr ""
+
+msgid "Failed to delete API key"
+msgstr ""
+
+msgid "Checkout"
+msgstr ""
+
+msgid "Complete Your Purchase"
+msgstr ""
+
+msgid "Secure checkout powered by Stripe"
+msgstr ""
+
+msgid "Order Summary"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Total"
+msgstr "المستخدمون"
+
+msgid "What you'll get:"
+msgstr ""
+
+msgid "Instant credit activation"
+msgstr ""
+
+msgid "Access to all voices"
+msgstr ""
+
+msgid "High-quality audio output"
+msgstr ""
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "24/7 customer support"
+msgstr "دعم العملاء"
+
+msgid "Select Payment Method"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr ""
+
+msgid "Visa, Mastercard, Amex"
+msgstr ""
+
+msgid "PayPal"
+msgstr "باي بال"
+
+msgid "Fast & secure"
+msgstr ""
+
+msgid "JazzCash"
+msgstr "جاز كاش"
+
+msgid "Mobile wallet"
+msgstr ""
+
+msgid "Easypaisa"
+msgstr "إيزي بيسا"
+
+msgid "Stripe Payment - Secure Card Processing"
+msgstr ""
+
+msgid "Cardholder Name"
+msgstr ""
+
+msgid "John Doe"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Card Information"
+msgstr "الحساب"
+
+msgid "Enter your card number, expiry date, and CVC"
+msgstr ""
+
+#, python-format
+msgid "Pay $%(amount)s"
+msgstr ""
+
+msgid "Your payment information is secure and encrypted"
+msgstr ""
+
+#, fuzzy
+#| msgid "Payments"
+msgid "PayPal Payment"
+msgstr "المدفوعات"
+
+msgid "You'll be redirected to PayPal to complete your payment"
+msgstr ""
+
+msgid "Continue to PayPal"
+msgstr ""
+
+msgid "Mobile Number"
+msgstr ""
+
+msgid "Enter your JazzCash mobile number"
+msgstr ""
+
+msgid "CNIC (Last 6 digits)"
+msgstr ""
+
+msgid "Last 6 digits of your CNIC"
+msgstr ""
+
+#, python-format
+msgid "Pay with JazzCash - $%(amount)s"
+msgstr ""
+
+msgid "Secure JazzCash payment gateway"
+msgstr ""
+
+msgid "Enter your Easypaisa mobile number"
+msgstr ""
+
+msgid "your@email.com"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "For payment confirmation"
+msgstr "الحساب"
+
+#, python-format
+msgid "Pay with Easypaisa - $%(amount)s"
+msgstr ""
+
+msgid "Secure Easypaisa payment gateway"
+msgstr ""
+
+msgid "Back to Pricing"
+msgstr ""
+
+msgid "Processing Payment..."
+msgstr ""
+
+msgid "Please don't close this window"
+msgstr ""
+
+#, fuzzy
+#| msgid "Payments"
+msgid "Payment failed"
+msgstr "المدفوعات"
+
+msgid "No approval URL received"
+msgstr ""
+
+msgid "PayPal payment error:"
+msgstr ""
+
+msgid "JazzCash integration in progress"
+msgstr ""
+
+msgid "JazzCash payment error:"
+msgstr ""
+
+msgid "Easypaisa integration in progress"
+msgstr ""
+
+msgid "Easypaisa payment error:"
+msgstr ""
+
+msgid ""
+"Stripe configuration error: Missing publishable key. Please contact support."
+msgstr ""
+
+msgid "Stripe initialization error:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Processing..."
+msgstr "جاري التحميل..."
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#, python-format
+msgid "Welcome back, %(username)s! Here's your account overview."
+msgstr "مرحباً بعودتك، %(username)s! هذا نظرة عامة على حسابك."
+
+msgid "Available Credits"
+msgstr "الرصيد المتاح"
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Cloned Voices"
+msgstr "أصواتي"
+
+msgid "Total voice models"
+msgstr "إجمالي نماذج الصوت"
+
+msgid "Total audio generated"
+msgstr "إجمالي الصوت المُولّد"
+
+msgid "Current Plan"
+msgstr "الخطة الحالية"
+
+msgid "Upgrade now"
+msgstr "ترقية الآن"
+
+msgid "Active subscription"
+msgstr "اشتراك نشط"
+
+msgid "Clone New Voice"
+msgstr "استنساخ صوت جديد"
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "My Voice Library"
+msgstr "أصواتي"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Buy More Credits"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Account"
+msgid "Account Info"
+msgstr "الحساب"
+
+msgid "EMAIL"
+msgstr "البريد الإلكتروني"
+
+msgid "USERNAME"
+msgstr "اسم المستخدم"
+
+msgid "PLAN TYPE"
+msgstr "نوع الخطة"
+
+msgid "MEMBER SINCE"
+msgstr "عضو منذ"
+
+msgid "Profile Settings"
+msgstr "إعدادات الملف الشخصي"
+
+msgid ""
+"No recent transactions. Start by cloning your first voice or generating "
+"audio!"
+msgstr ""
+
+msgid "Credits Usage (Last 7 Days)"
+msgstr "استخدام الرصيد (آخر 7 أيام)"
+
+msgid "Getting Started"
+msgstr "البدء"
+
+msgid "1. Clone a Voice"
+msgstr "1. استنساخ صوت"
+
+msgid "Upload a 5-15 second audio sample of any voice you want to clone."
+msgstr "قم بتحميل عينة صوتية مدتها 5-15 ثانية من أي صوت تريد استنساخه."
+
+msgid "2. Generate Audio"
+msgstr "2. توليد صوت"
+
+msgid "Enter up to 50,000 characters of text to convert into speech."
+msgstr "أدخل ما يصل إلى 50,000 حرف من النص لتحويله إلى كلام."
+
+msgid "3. Download & Use"
+msgstr "3. التحميل والاستخدام"
+
+msgid "Download your generated audio in high quality WAV format."
+msgstr "قم بتنزيل الصوت الذي تم إنشاؤه بتنسيق WAV عالي الجودة."
+
+msgid "4. Manage Credits"
+msgstr "4. إدارة الرصيد"
+
+msgid "Purchase more credits anytime from the pricing page."
+msgstr "اشترِ المزيد من الرصيد في أي وقت من صفحة التسعير."
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Used"
+msgstr "شراء رصيد"
+
+msgid "Main"
+msgstr "الرئيسية"
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Landing Page"
+msgstr "جاري التحميل..."
+
+msgid "Talk Studio"
+msgstr "استنساخ الصوت"
+
+msgid "My Voices"
+msgstr "أصواتي"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "API Docs"
+msgstr "إجراءات سريعة"
+
+msgid "Account"
+msgstr "الحساب"
+
+msgid "Buy Credits"
+msgstr "شراء رصيد"
+
+msgid "Hot"
+msgstr "مميز"
+
+msgid "Connected Accounts"
+msgstr ""
+
+msgid "Help Center"
+msgstr "مركز المساعدة"
+
+msgid "Overview"
+msgstr "نظرة عامة"
+
+msgid "Users"
+msgstr "المستخدمون"
+
+msgid "Payments"
+msgstr "المدفوعات"
+
+msgid "Model Training"
+msgstr ""
+
+msgid "Announcements"
+msgstr "الإعلانات"
+
+msgid "Email Marketing"
+msgstr "التسويق عبر البريد الإلكتروني"
+
+msgid "Database Manager"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Support Management"
+msgstr "الحساب"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Generate Voice - Index-TTS2"
+msgstr "استنساخ الصوت"
+
+msgid "Advanced emotion-controlled text-to-speech synthesis"
+msgstr ""
+
+msgid "Upload Voice Sample (3-10 seconds)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Upload a 5-15 second audio sample of any voice you want to clone."
+msgid "Upload a clean audio sample of the target voice"
+msgstr "قم بتحميل عينة صوتية مدتها 5-15 ثانية من أي صوت تريد استنساخه."
+
+msgid "Or Select from Library/My Voices"
+msgstr ""
+
+msgid "Select a voice..."
+msgstr ""
+
+msgid "50,000 characters"
+msgstr ""
+
+msgid "Emotion Control Method"
+msgstr ""
+
+msgid "Emotion Reference Audio"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Emotion Description"
+msgstr "اشتراك نشط"
+
+msgid "Leave empty to use target text as emotion description"
+msgstr ""
+
+msgid "Emotion Weight:"
+msgstr ""
+
+msgid "GPT2 Sampling Parameters"
+msgstr ""
+
+msgid "Temperature:"
+msgstr ""
+
+msgid "Top P:"
+msgstr ""
+
+msgid "Top K:"
+msgstr ""
+
+msgid "Num Beams:"
+msgstr ""
+
+msgid "Text Segmentation"
+msgstr ""
+
+msgid "Max Tokens Per Segment:"
+msgstr ""
+
+msgid "Recommended: 80-200. Affects audio quality and generation speed."
+msgstr ""
+
+msgid "Segment Preview"
+msgstr ""
+
+msgid "Enter text to see segments"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Used:"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "4. Manage Credits"
+msgid "Remaining Credits:"
+msgstr "4. إدارة الرصيد"
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Generating voice..."
+msgstr "التوليدات"
+
+msgid "This may take a minute depending on text length"
+msgstr ""
+
+msgid "You have"
+msgstr ""
+
+msgid "credits remaining."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Buy more credits"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Home - Talk Studio Platform"
+msgstr "استنساخ الصوت"
+
+msgid "AI-Powered Voice Technology"
+msgstr ""
+
+msgid "Transform Text into Natural, Human-Like Speech"
+msgstr ""
+
+msgid ""
+"Clone any voice and generate professional-quality speech with our advanced "
+"AI technology."
+msgstr ""
+
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Get Started"
+msgstr "البدء"
+
+msgid "No credit card required"
+msgstr ""
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Words Generated"
+msgstr "2. توليد صوت"
+
+#, fuzzy
+#| msgid "Users"
+msgid "Happy Users"
+msgstr "المستخدمون"
+
+msgid "Powerful Features"
+msgstr ""
+
+msgid "Everything you need to create professional voice content"
+msgstr ""
+
+msgid "Text-to-Speech"
+msgstr ""
+
+msgid "Convert text into natural-sounding speech."
+msgstr ""
+
+msgid "How It Works"
+msgstr "كيف يعمل"
+
+msgid "Get started in three simple steps"
+msgstr ""
+
+msgid "Sign Up Free"
+msgstr ""
+
+msgid ""
+"Create your account and get 1,000 free credits plus 1 free voice clone to "
+"start."
+msgstr ""
+
+msgid "Choose or Clone"
+msgstr ""
+
+msgid "Select from our voice library or clone your own voice in seconds."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Generate & Download"
+msgstr "التوليدات"
+
+msgid ""
+"Enter your text, customize settings, and download high-quality audio "
+"instantly."
+msgstr ""
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Try Demo Voices"
+msgstr "أصواتي"
+
+msgid "Listen to sample voices from our library"
+msgstr ""
+
+msgid "Sarah - Female (American)"
+msgstr ""
+
+msgid "Professional and friendly voice"
+msgstr ""
+
+msgid "Play"
+msgstr "تشغيل"
+
+msgid "John - Male (British)"
+msgstr ""
+
+msgid "Clear and authoritative voice"
+msgstr ""
+
+msgid "Emma - Female (Australian)"
+msgstr ""
+
+msgid "Warm and engaging voice"
+msgstr ""
+
+msgid "What Our Users Say"
+msgstr ""
+
+msgid "Join thousands of satisfied customers"
+msgstr ""
+
+msgid "This is the best Talk Studio platform I've used."
+msgstr ""
+
+msgid "Content Creator"
+msgstr ""
+
+msgid "Perfect For Every Use Case"
+msgstr ""
+
+msgid "Discover how professionals use our Talk Studio technology"
+msgstr ""
+
+msgid "Podcast Production"
+msgstr ""
+
+msgid ""
+"Create consistent voiceovers for your podcast episodes without recording "
+"every time. Perfect for intro/outro segments."
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Video Content"
+msgstr "استنساخ الصوت"
+
+msgid ""
+"Generate narration for YouTube videos, tutorials, and promotional content "
+"with natural-sounding voices."
+msgstr ""
+
+msgid "Audiobooks"
+msgstr ""
+
+msgid ""
+"Transform your written content into professional audiobooks with "
+"customizable voice characteristics."
+msgstr ""
+
+msgid "Advertisements"
+msgstr ""
+
+msgid ""
+"Create engaging voice ads for radio, social media, and digital marketing "
+"campaigns quickly and affordably."
+msgstr ""
+
+msgid "E-Learning"
+msgstr ""
+
+msgid ""
+"Develop educational content with clear, professional narration for online "
+"courses and training materials."
+msgstr ""
+
+msgid "Gaming"
+msgstr ""
+
+msgid ""
+"Add character voices and narration to your games without expensive voice "
+"actor sessions."
+msgstr ""
+
+msgid "See It In Action"
+msgstr ""
+
+msgid ""
+"Watch how easy it is to clone a voice and generate professional audio in "
+"minutes"
+msgstr ""
+
+msgid "Your browser does not support the video tag."
+msgstr ""
+
+msgid "Simple, Transparent Pricing"
+msgstr ""
+
+msgid "Choose the plan that fits your needs"
+msgstr ""
+
+msgid "Forever"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "1 voice clone"
+msgstr "استنساخ الصوت"
+
+msgid "Basic audio quality"
+msgstr ""
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Community support"
+msgstr "دعم العملاء"
+
+msgid "Most Popular"
+msgstr ""
+
+#, fuzzy
+#| msgid "Admin"
+msgid "per month"
+msgstr "المشرف"
+
+msgid "50,000 credits/month"
+msgstr ""
+
+#, fuzzy
+#| msgid "Total voice models"
+msgid "10 voice clones"
+msgstr "إجمالي نماذج الصوت"
+
+msgid "HD audio quality"
+msgstr ""
+
+msgid "Priority support"
+msgstr ""
+
+msgid "Commercial use"
+msgstr ""
+
+msgid "Enterprise"
+msgstr ""
+
+msgid "200,000 credits/month"
+msgstr ""
+
+msgid "Unlimited voice clones"
+msgstr ""
+
+msgid "Studio audio quality"
+msgstr ""
+
+msgid "Dedicated support"
+msgstr ""
+
+msgid "API access"
+msgstr ""
+
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgid "Everything you need to know about Talk Studio"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "What is Talk Studio?"
+msgstr "استنساخ الصوت"
+
+msgid "Talk Studio uses AI to create a digital replica of a voice."
+msgstr ""
+
+msgid "Trusted By Professionals Worldwide"
+msgstr ""
+
+msgid "Join thousands of content creators, developers, and businesses"
+msgstr ""
+
+#, python-format
+msgid "99.9%%"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "256-bit"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Encryption"
+msgstr "اشتراك نشط"
+
+msgid "SOC 2"
+msgstr ""
+
+msgid "Compliant"
+msgstr ""
+
+msgid "GDPR"
+msgstr ""
+
+msgid "Ready"
+msgstr ""
+
+msgid "24/7"
+msgstr ""
+
+msgid "ISO"
+msgstr ""
+
+msgid "Certified"
+msgstr ""
+
+msgid "Unmatched Voice Quality"
+msgstr ""
+
+msgid "Hear the difference our advanced AI makes"
+msgstr ""
+
+msgid "Traditional TTS"
+msgstr ""
+
+msgid "Robotic and unnatural tone"
+msgstr ""
+
+msgid "Monotone delivery"
+msgstr ""
+
+msgid "Poor pronunciation"
+msgstr ""
+
+msgid "Limited emotion control"
+msgstr ""
+
+#, fuzzy
+#| msgid "Voices"
+msgid "Generic voice options"
+msgstr "الأصوات"
+
+msgid "Index-TTS2 AI"
+msgstr ""
+
+msgid "Natural human-like speech"
+msgstr ""
+
+msgid "Dynamic emotion control"
+msgstr ""
+
+msgid "Perfect pronunciation"
+msgstr ""
+
+msgid "8-vector emotion system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Custom Talk Studio"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "Profile Settings"
+msgid "Platform Statistics"
+msgstr "إعدادات الملف الشخصي"
+
+msgid "Real-time metrics from our global platform"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Active Users"
+msgstr "المستخدمون"
+
+msgid "this month"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voices Cloned"
+msgstr "استنساخ الصوت"
+
+#, fuzzy
+#| msgid "Total audio generated"
+msgid "Audio Generated (hrs)"
+msgstr "إجمالي الصوت المُولّد"
+
+msgid "Countries"
+msgstr ""
+
+msgid "Powerful API for Developers"
+msgstr ""
+
+msgid ""
+"Integrate voice generation into your applications with our simple REST API"
+msgstr ""
+
+msgid "RESTful API"
+msgstr ""
+
+msgid "Simple HTTP endpoints with JSON responses"
+msgstr ""
+
+msgid "Complete Documentation"
+msgstr ""
+
+msgid "Detailed guides and code examples"
+msgstr ""
+
+msgid "Fast Response Times"
+msgstr ""
+
+msgid "Average API response under 200ms"
+msgstr ""
+
+msgid "Secure Authentication"
+msgstr ""
+
+msgid "API keys with rate limiting and HTTPS"
+msgstr ""
+
+msgid "API Example"
+msgstr ""
+
+msgid "Global Language Support"
+msgstr ""
+
+msgid "Use our platform in your native language"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "Full platform support"
+msgstr ""
+
+msgid "Arabic"
+msgstr ""
+
+msgid "RTL interface support"
+msgstr ""
+
+msgid "Urdu"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Complete translation"
+msgstr "التوليدات"
+
+msgid "Hindi"
+msgstr ""
+
+msgid "Native language support"
+msgstr ""
+
+msgid "Bengali"
+msgstr ""
+
+msgid "Fully localized"
+msgstr ""
+
+msgid "Chinese"
+msgstr ""
+
+msgid "Simplified Chinese"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Global Spanish"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Full interface"
+msgstr ""
+
+msgid "More Coming"
+msgstr ""
+
+msgid "Request your language"
+msgstr ""
+
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Ready to Get Started?"
+msgstr "البدء"
+
+msgid "Sign up now and get 1,000 free credits plus 1 free voice clone!"
+msgstr ""
+
+msgid "No credit card required."
+msgstr ""
+
+msgid "Start Free Trial"
+msgstr ""
+
+msgid "View Pricing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Start Generating"
+msgstr "التوليدات"
+
+#, fuzzy
+#| msgid "My Voices"
+msgid "Clone Voice"
+msgstr "أصواتي"
+
+msgid "Secure payment processing"
+msgstr ""
+
+msgid "Your data is encrypted"
+msgstr ""
+
+msgid "24/7 support"
+msgstr ""
+
+msgid "Landing Page Management"
+msgstr ""
+
+msgid "Manage all sections of your landing page from here"
+msgstr ""
+
+msgid "Quick Setup Required"
+msgstr ""
+
+msgid ""
+"Your landing page content needs to be initialized. Follow these simple steps:"
+msgstr ""
+
+msgid "Run migrations to create database tables"
+msgstr ""
+
+msgid "Click 'Populate Data' to add sample content"
+msgstr ""
+
+msgid "Edit sections and customize your content"
+msgstr ""
+
+msgid "Populate Sample Data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Total Sections"
+msgstr "المستخدمون"
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Active Sections"
+msgstr "اشتراك نشط"
+
+#, fuzzy
+#| msgid "Users"
+msgid "Total Items"
+msgstr "المستخدمون"
+
+msgid "Media Files"
+msgstr ""
+
+#, fuzzy
+#| msgid "4. Manage Credits"
+msgid "Manage Sections"
+msgstr "4. إدارة الرصيد"
+
+msgid "Main banner at the top of the page"
+msgstr ""
+
+msgid "items"
+msgstr ""
+
+msgid "4 statistics displayed below hero"
+msgstr ""
+
+msgid "6 feature cards with icons"
+msgstr ""
+
+msgid "3-step process explanation"
+msgstr ""
+
+msgid "Customer reviews and feedback"
+msgstr ""
+
+msgid "3 pricing tiers with features"
+msgstr ""
+
+msgid "Frequently asked questions"
+msgstr ""
+
+msgid "Carousel with use case cards"
+msgstr ""
+
+msgid "Video demo with features list"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "View All Sections"
+msgstr "إجراءات سريعة"
+
+msgid "Access all 17 content sections"
+msgstr ""
+
+msgid "Need Help?"
+msgstr ""
+
+msgid "Check these documentation files in your project root:"
+msgstr ""
+
+msgid "Step-by-step setup guide (Urdu/English)"
+msgstr ""
+
+msgid "Complete usage guide"
+msgstr ""
+
+msgid "Visual structure diagram"
+msgstr ""
+
+msgid "This will populate your landing page with sample data. Continue?"
+msgstr ""
+
+msgid "Sample data populated successfully!"
+msgstr ""
+
+msgid "Error: "
+msgstr ""
+
+msgid "Error populating data. Please run: python manage.py populate_homepage"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Add New"
+msgstr "المستخدمون"
+
+msgid "Edit"
+msgstr "تعديل"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "No items found. Click 'Add New' to create your first item."
+msgstr ""
+
+msgid "Add New Item"
+msgstr ""
+
+msgid "Lower numbers appear first"
+msgstr ""
+
+msgid "Active (visible on website)"
+msgstr ""
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Edit Item"
+msgstr ""
+
+msgid "Are you sure you want to delete this item?"
+msgstr ""
+
+msgid "Main carousel slide title"
+msgstr ""
+
+msgid "Slide subtitle/tagline"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Optional detailed description"
+msgstr "اشتراك نشط"
+
+msgid "CTA button text"
+msgstr ""
+
+msgid "Button link URL"
+msgstr ""
+
+msgid "Upload background image (optional)"
+msgstr ""
+
+msgid "Slide background color (if no image)"
+msgstr ""
+
+msgid "Text color on slide"
+msgstr ""
+
+msgid "Frequently asked question"
+msgstr ""
+
+msgid "Answer to the question"
+msgstr ""
+
+msgid "Icon"
+msgstr ""
+
+msgid "Font Awesome icon name (e.g., fa-magic, fa-microphone)"
+msgstr ""
+
+msgid "Feature title"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Feature description"
+msgstr "اشتراك نشط"
+
+msgid "Small badge above title (e.g., 'AI-Powered')"
+msgstr ""
+
+msgid "Main hero title - keep it catchy and clear"
+msgstr ""
+
+msgid "Subtitle/description below the title"
+msgstr ""
+
+msgid "Text for main CTA button"
+msgstr ""
+
+msgid "Link for primary button (e.g., #)"
+msgstr ""
+
+msgid "Text for secondary button (optional)"
+msgstr ""
+
+msgid "Link for secondary button (optional)"
+msgstr ""
+
+msgid "Plan name (e.g., Free, Pro, Enterprise)"
+msgstr ""
+
+msgid "Price (e.g., $0, $29, $99)"
+msgstr ""
+
+msgid "Billing period (e.g., /month, /year, forever)"
+msgstr ""
+
+msgid "Short description of the plan"
+msgstr ""
+
+msgid "CTA button text (e.g., Get Started, Contact Us)"
+msgstr ""
+
+msgid "URL for CTA button"
+msgstr ""
+
+msgid "Mark as Popular (recommended)"
+msgstr ""
+
+msgid "Font Awesome icon name (e.g., fa-users, fa-microphone)"
+msgstr ""
+
+#, python-format
+msgid "Statistic number (e.g., 10M+, 50K+, 99.9%%)"
+msgstr ""
+
+msgid "Description label (e.g., Active Users, Voices Generated)"
+msgstr ""
+
+msgid "Font Awesome icon name (e.g., fa-upload, fa-magic, fa-download)"
+msgstr ""
+
+msgid "Step title"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Step description"
+msgstr "اشتراك نشط"
+
+msgid "Customer testimonial quote"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Customer name"
+msgstr "المستخدمون"
+
+msgid "Job title or company (e.g., CEO at Company)"
+msgstr ""
+
+msgid "Two letters for avatar (e.g., JD for John Doe)"
+msgstr ""
+
+msgid "Font Awesome icon name (e.g., fa-headphones, fa-book)"
+msgstr ""
+
+msgid "Use case title"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Use case description"
+msgstr "اشتراك نشط"
+
+msgid "Carousel slide number (1 or 2)"
+msgstr ""
+
+msgid "Video section title"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Video section subtitle/description"
+msgstr "اشتراك نشط"
+
+msgid "Upload video file (MP4 recommended)"
+msgstr ""
+
+msgid "Upload thumbnail image (JPG/PNG)"
+msgstr ""
+
+msgid "AI Model Training"
+msgstr ""
+
+msgid "Train F5-TTS model for new languages or improve existing ones"
+msgstr ""
+
+msgid "Training Instructions"
+msgstr ""
+
+msgid ""
+"Model training requires significant computational resources (GPU "
+"recommended) and time."
+msgstr ""
+
+msgid "Step-by-Step Guide:"
+msgstr ""
+
+msgid "Prepare Training Data:"
+msgstr ""
+
+msgid ""
+"Collect high-quality audio samples (minimum 30 minutes, recommended 2-5 "
+"hours)"
+msgstr ""
+
+msgid "Audio should be 16kHz or 24kHz, mono, WAV format"
+msgstr ""
+
+msgid "Each audio file should have corresponding text transcription"
+msgstr ""
+
+msgid "Organize in pairs: audio.wav + audio.txt"
+msgstr ""
+
+msgid "Select Target Language:"
+msgstr ""
+
+msgid "Choose the language you want to train the model for"
+msgstr ""
+
+msgid "Default model supports English & Chinese"
+msgstr ""
+
+msgid "Configure Training Parameters:"
+msgstr ""
+
+msgid "Batch Size: Smaller = less memory, larger = faster training"
+msgstr ""
+
+msgid "Learning Rate: Start with 0.0001 for fine-tuning"
+msgstr ""
+
+msgid "Epochs: 50-100 for fine-tuning, 200+ for new language"
+msgstr ""
+
+msgid "Upload Training Data:"
+msgstr ""
+
+msgid "Upload ZIP file containing audio files and transcriptions"
+msgstr ""
+
+msgid "Maximum file size: 2GB"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Start Training:"
+msgstr "التوليدات"
+
+msgid "Training will run in background"
+msgstr ""
+
+msgid "Monitor progress in real-time"
+msgstr ""
+
+msgid "Receive notification when complete"
+msgstr ""
+
+msgid "Note:"
+msgstr ""
+
+msgid ""
+"Training can take several hours to days depending on data size and hardware. "
+"Do not close this page during training."
+msgstr ""
+
+#, fuzzy
+#| msgid "Credit Configuration"
+msgid "Training Configuration"
+msgstr "تكوين الرصيد"
+
+msgid "Target Language"
+msgstr ""
+
+msgid "Select Language"
+msgstr ""
+
+msgid "Select the language you want to train the model for"
+msgstr ""
+
+msgid "Training Mode"
+msgstr ""
+
+msgid "Fine-tune Existing Model (Recommended)"
+msgstr ""
+
+msgid "Train from Scratch (Requires More Data)"
+msgstr ""
+
+msgid "Fine-tuning is faster and requires less data"
+msgstr ""
+
+msgid "Training Data (ZIP)"
+msgstr ""
+
+msgid "Upload ZIP containing audio files (.wav) and text files (.txt)"
+msgstr ""
+
+msgid "Example structure:"
+msgstr ""
+
+msgid "Training Parameters"
+msgstr ""
+
+msgid "Batch Size"
+msgstr ""
+
+msgid "Default: 8"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Learning Rate"
+msgstr "جاري التحميل..."
+
+msgid "Default: 0.0001"
+msgstr ""
+
+msgid "Epochs"
+msgstr ""
+
+msgid "Default: 100"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Model Name"
+msgstr "استنساخ الصوت"
+
+msgid "Give your trained model a unique name"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Description (Optional)"
+msgstr "اشتراك نشط"
+
+msgid "Describe your model, training data, and intended use..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Start Training"
+msgstr "التوليدات"
+
+msgid "System Requirements"
+msgstr ""
+
+msgid "Pro Tips"
+msgstr ""
+
+msgid "Use high-quality, noise-free audio"
+msgstr ""
+
+msgid "Diverse speakers improve quality"
+msgstr ""
+
+msgid "Longer audio = better results"
+msgstr ""
+
+msgid "Accurate transcriptions crucial"
+msgstr ""
+
+msgid "Monitor loss curves regularly"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Training Progress"
+msgstr "جاري التحميل..."
+
+msgid "Initializing..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Current Epoch"
+msgstr "الخطة الحالية"
+
+msgid "Training Loss"
+msgstr ""
+
+msgid "Time Elapsed"
+msgstr ""
+
+msgid "Training Logs:"
+msgstr ""
+
+msgid "Logs will appear here..."
+msgstr ""
+
+msgid "Stop Training"
+msgstr ""
+
+msgid "Please select a target language"
+msgstr ""
+
+msgid "Please upload training data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Training Started..."
+msgstr "البدء"
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Failed to start training"
+msgstr "التوليدات"
+
+msgid "An error occurred while starting training"
+msgstr ""
+
+msgid "Training completed successfully!"
+msgstr ""
+
+msgid "Training failed. Check logs for details."
+msgstr ""
+
+msgid "Are you sure you want to stop training?"
+msgstr ""
+
+msgid "Training stopped"
+msgstr ""
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "My Generated Audios"
+msgstr "2. توليد صوت"
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate New Audio"
+msgstr "2. توليد صوت"
+
+#, fuzzy
+#| msgid "Users"
+msgid "Total Audios"
+msgstr "المستخدمون"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Characters Used"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Spent"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Remaining"
+msgstr "شراء رصيد"
+
+msgid "Search by text"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
+msgid "Sort by"
+msgstr ""
+
+msgid "Newest First"
+msgstr ""
+
+msgid "Oldest First"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Most Credits"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Least Credits"
+msgstr "شراء رصيد"
+
+msgid "Date Range"
+msgstr ""
+
+msgid "All Time"
+msgstr ""
+
+msgid "Today"
+msgstr "اليوم"
+
+msgid "This Week"
+msgstr ""
+
+msgid "This Month"
+msgstr "هذا الشهر"
+
+msgid "Apply"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading your audio files..."
+msgstr "جاري التحميل..."
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Delete Audio"
+msgstr "2. توليد صوت"
+
+msgid ""
+"Are you sure you want to delete this audio? This action cannot be undone."
+msgstr ""
+
+msgid "Failed to load audios. Please try again."
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "No audio files found. Generate your first audio!"
+msgstr ""
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generate Audio"
+msgstr "2. توليد صوت"
+
+msgid "Audio"
+msgstr "صوت"
+
+msgid "chars"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "credits"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "3. Download & Use"
+msgid "Download"
+msgstr "3. التحميل والاستخدام"
+
+msgid "Show more"
+msgstr ""
+
+msgid "Show less"
+msgstr ""
+
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+msgid "Audio deleted successfully"
+msgstr ""
+
+msgid "Failed to delete audio"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generated Audio"
+msgstr "2. توليد صوت"
+
+#, fuzzy
+#| msgid "Profile Settings"
+msgid "Platform Settings - Admin"
+msgstr "إعدادات الملف الشخصي"
+
+msgid "Configure credit system and payment gateways"
+msgstr "تكوين نظام الرصيد وبوابات الدفع"
+
+msgid "Credit Configuration"
+msgstr "تكوين الرصيد"
+
+msgid "How it works:"
+msgstr ""
+
+msgid "Configure how credits are calculated for text-to-speech generation."
+msgstr "تكوين كيفية حساب الرصيد لتوليد النص إلى كلام."
+
+msgid "Credit Calculation Method"
+msgstr "طريقة حساب الرصيد"
+
+msgid "Per Character"
+msgstr "لكل حرف"
+
+msgid "Per Word"
+msgstr "لكل كلمة"
+
+msgid "Per Letter"
+msgstr "لكل حرف"
+
+msgid "Choose how to calculate credits for voice generation"
+msgstr "اختر كيفية حساب الرصيد لتوليد الصوت"
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Per Unit"
+msgstr "شراء رصيد"
+
+msgid "How many credits per character/word/letter"
+msgstr "كم عدد الرصيد لكل حرف/كلمة/حرف"
+
+#, fuzzy
+#| msgid "Available Credits"
+msgid "Free Trial Credits"
+msgstr "الرصيد المتاح"
+
+msgid "Credits given to new free users"
+msgstr "الرصيد الممنوح للمستخدمين المجانيين الجدد"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Free Voice Clones"
+msgstr "استنساخ الصوت"
+
+msgid "Number of free voice clones for new users"
+msgstr "عدد استنساخات الصوت المجانية للمستخدمين الجدد"
+
+#, fuzzy
+#| msgid "Payments"
+msgid "Payment Gateways"
+msgstr "المدفوعات"
+
+msgid "Security Note:"
+msgstr ""
+
+msgid ""
+"All payment credentials are stored securely. Enable only the gateways you "
+"need."
+msgstr ""
+
+msgid "Stripe"
+msgstr "سترايب"
+
+msgid "Credit/Debit Cards, Digital Wallets"
+msgstr ""
+
+msgid "Enable"
+msgstr "تفعيل"
+
+msgid "Public Key"
+msgstr "المفتاح العام"
+
+msgid "Secret Key"
+msgstr "المفتاح السري"
+
+msgid "Webhook Secret"
+msgstr "سر Webhook"
+
+msgid "Test Connection"
+msgstr "اختبار الاتصال"
+
+msgid "Get API Keys"
+msgstr "الحصول على مفاتيح API"
+
+msgid "PayPal Accounts, Credit/Debit Cards"
+msgstr ""
+
+msgid "Client ID"
+msgstr "معرف العميل"
+
+msgid "Client Secret"
+msgstr "سر العميل"
+
+msgid "Mode"
+msgstr "الوضع"
+
+msgid "Sandbox (Testing)"
+msgstr ""
+
+msgid "Live (Production)"
+msgstr ""
+
+msgid "Pakistan - Mobile Wallet"
+msgstr ""
+
+msgid "Merchant ID"
+msgstr "معرف التاجر"
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Password"
+msgstr "الخطة الحالية"
+
+msgid "Integrity Salt"
+msgstr "ملح التكامل"
+
+msgid "Store ID"
+msgstr "معرف المتجر"
+
+msgid "Google OAuth & Social Login"
+msgstr ""
+
+msgid "Setup Instructions:"
+msgstr ""
+
+msgid "Get your Google OAuth credentials from"
+msgstr ""
+
+msgid "Google Login"
+msgstr ""
+
+msgid "Allow users to sign in with Google"
+msgstr ""
+
+msgid "Your Google OAuth 2.0 Client ID"
+msgstr ""
+
+msgid "Your Google OAuth 2.0 Client Secret"
+msgstr ""
+
+msgid "Authorized Redirect URI"
+msgstr ""
+
+msgid "Add this URL to your Google OAuth app's Authorized Redirect URIs"
+msgstr ""
+
+msgid "Google Cloud Console"
+msgstr ""
+
+msgid "Email Configuration (SMTP)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Email Marketing"
+msgid "Email Settings:"
+msgstr "التسويق عبر البريد الإلكتروني"
+
+msgid "Configure SMTP settings to send emails from your platform"
+msgstr ""
+
+msgid "SMTP Server"
+msgstr ""
+
+msgid "Send emails via SMTP (Gmail, SendGrid, Mailgun, etc.)"
+msgstr ""
+
+msgid "SMTP Host"
+msgstr "مضيف SMTP"
+
+msgid "Examples:"
+msgstr ""
+
+msgid "SMTP Port"
+msgstr "منفذ SMTP"
+
+#, fuzzy
+#| msgid "Users"
+msgid "SMTP Username"
+msgstr "المستخدمون"
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "SMTP Password"
+msgstr "الخطة الحالية"
+
+msgid "App Password or SMTP Password"
+msgstr ""
+
+msgid "For Gmail, use"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "App Password"
+msgstr "الخطة الحالية"
+
+msgid "From Email Address"
+msgstr ""
+
+msgid "Email address that will appear as sender"
+msgstr ""
+
+msgid "From Name"
+msgstr "من الاسم"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Talk Studio Platform"
+msgstr "استنساخ الصوت"
+
+msgid "Name that will appear as sender"
+msgstr ""
+
+msgid "Use TLS Encryption"
+msgstr ""
+
+msgid "Recommended"
+msgstr ""
+
+msgid "Send Test Email"
+msgstr ""
+
+msgid "Popular SMTP Services:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Database Information"
+msgstr "الحساب"
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Current Database:"
+msgstr "الخطة الحالية"
+
+msgid ""
+"This platform uses SQLite database. Use the Database Manager to view and "
+"modify data."
+msgstr ""
+
+msgid "SQLite Database"
+msgstr ""
+
+msgid "Active and Connected"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Database Management:"
+msgstr "الحساب"
+
+msgid "To view, edit, or query the database directly, visit the"
+msgstr ""
+
+#, fuzzy
+#| msgid "Settings"
+msgid "Save All Settings"
+msgstr "الإعدادات"
+
+msgid "Pricing"
+msgstr "التسعير"
+
+msgid "Choose Your Plan"
+msgstr "اختر خطتك"
+
+msgid "Select the perfect plan for your voice generation needs"
+msgstr ""
+
+msgid "Perfect for trying out our platform"
+msgstr ""
+
+msgid "/forever"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "1,000 Credits"
+msgstr "شراء رصيد"
+
+msgid "Personal use only"
+msgstr ""
+
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Starter"
+msgstr "البدء"
+
+msgid "Great for individuals and small projects"
+msgstr ""
+
+#, fuzzy
+#| msgid "Admin"
+msgid "/month"
+msgstr "المشرف"
+
+#, fuzzy
+#| msgid "Per Character"
+msgid "5 Million Characters"
+msgstr "لكل حرف"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Unlimited voice cloning"
+msgstr "استنساخ الصوت"
+
+msgid "Commercial use rights"
+msgstr ""
+
+msgid "Download in multiple formats"
+msgstr ""
+
+msgid "Team collaboration"
+msgstr ""
+
+msgid "Most popular choice for creators"
+msgstr ""
+
+msgid "12 Million Characters"
+msgstr ""
+
+msgid "Studio-grade audio quality"
+msgstr ""
+
+msgid "Priority & email support"
+msgstr ""
+
+msgid "Commercial & team use"
+msgstr ""
+
+msgid "Advanced voice customization"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Custom integrations"
+msgstr "التوليدات"
+
+msgid "Best value for power users"
+msgstr ""
+
+msgid "/year"
+msgstr ""
+
+msgid "50 Million Characters"
+msgstr ""
+
+msgid "Dedicated premium support"
+msgstr ""
+
+msgid "API access included"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Priority processing"
+msgstr "جاري التحميل..."
+
+msgid "Detailed Plan Comparison"
+msgstr ""
+
+msgid ""
+"Compare features across all plans to find the perfect fit for your voice "
+"generation needs"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Characters/Credits"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "Voice clones"
+msgstr "استنساخ الصوت"
+
+msgid "Unlimited"
+msgstr ""
+
+msgid "Audio quality"
+msgstr ""
+
+msgid "Studio-grade"
+msgstr ""
+
+msgid "Can I change my plan anytime?"
+msgstr ""
+
+msgid ""
+"Yes, you can upgrade or downgrade your plan at any time. Changes will be "
+"reflected in your next billing cycle, and we'll prorate any differences."
+msgstr ""
+
+msgid "What happens if I exceed my character limit?"
+msgstr ""
+
+msgid ""
+"You can purchase additional character packs or upgrade to a higher plan. "
+"We'll notify you before you reach your limit so you never run out "
+"unexpectedly."
+msgstr ""
+
+msgid "Do you offer refunds?"
+msgstr ""
+
+msgid ""
+"We offer a 30-day money-back guarantee for all paid plans. If you're not "
+"satisfied, contact our support team for a full refund."
+msgstr ""
+
+msgid "What payment methods do you accept?"
+msgstr ""
+
+msgid ""
+"We accept all major credit cards (Visa, Mastercard, American Express), "
+"PayPal, Stripe, and local payment methods like JazzCash and Easypaisa."
+msgstr ""
+
+msgid "Accepted Payment Methods"
+msgstr ""
+
+#, fuzzy
+#| msgid "Choose Your Plan"
+msgid "Upgrade Your Plan"
+msgstr "اختر خطتك"
+
+#, fuzzy
+#| msgid "3. Download & Use"
+msgid "Downgrade"
+msgstr "3. التحميل والاستخدام"
+
+msgid "Premium support"
+msgstr ""
+
+msgid "My Profile"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buy Credits"
+msgid "Credits Available"
+msgstr "شراء رصيد"
+
+#, fuzzy
+#| msgid "2. Generate Audio"
+msgid "Generated Audios"
+msgstr "2. توليد صوت"
+
+msgid "Personal Information"
+msgstr ""
+
+msgid "First Name"
+msgstr "الاسم الأول"
+
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+msgid "Email cannot be changed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Users"
+msgid "Username"
+msgstr "المستخدمون"
+
+msgid "Save Changes"
+msgstr ""
+
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Current Password"
+msgstr "الخطة الحالية"
+
+msgid "New Password"
+msgstr ""
+
+msgid "Must be at least 8 characters long"
+msgstr ""
+
+msgid "Confirm New Password"
+msgstr ""
+
+msgid "Update Password"
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Account Information"
+msgstr "الحساب"
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Subscription Type"
+msgstr "اشتراك نشط"
+
+msgid "Member Since"
+msgstr ""
+
+msgid "Profile updated successfully!"
+msgstr ""
+
+msgid "Failed to update profile"
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Password updated successfully!"
+msgstr ""
+
+msgid "Failed to update password"
+msgstr ""
+
+msgid "Authentication Error"
+msgstr ""
+
+msgid "Oops! Something Went Wrong"
+msgstr ""
+
+msgid "We couldn't complete the authentication process"
+msgstr ""
+
+msgid "Authentication Failed"
+msgstr ""
+
+msgid ""
+"An error occurred while trying to authenticate you with Google. This could "
+"happen for several reasons:"
+msgstr ""
+
+msgid "You may have cancelled the authentication process"
+msgstr ""
+
+msgid "The authentication request may have expired"
+msgstr ""
+
+msgid "There might be a temporary issue with Google's servers"
+msgstr ""
+
+msgid "Your browser may be blocking third-party cookies"
+msgstr ""
+
+msgid "Try Again"
+msgstr ""
+
+msgid "Sign Up with Email"
+msgstr ""
+
+msgid "Tip:"
+msgstr ""
+
+msgid ""
+"Make sure you allow pop-ups and third-party cookies for this site in your "
+"browser settings."
+msgstr ""
+
+msgid "Manage your social login connections"
+msgstr ""
+
+msgid "Your Connected Accounts"
+msgstr ""
+
+msgid ""
+"You can sign in to your account using any of the following third party "
+"accounts:"
+msgstr ""
+
+msgid "Remove Selected Account"
+msgstr ""
+
+msgid ""
+"You cannot remove your only login method. Please add another login method "
+"first."
+msgstr ""
+
+msgid ""
+"You currently have no social network accounts connected to this account."
+msgstr ""
+
+msgid "Add a New Connection"
+msgstr ""
+
+msgid "Connect Google Account"
+msgstr ""
+
+msgid "Google Sign-In is not currently configured by the administrator."
+msgstr ""
+
+msgid "Sign In Via Google"
+msgstr ""
+
+msgid "Connect with Google"
+msgstr ""
+
+msgid "Secure authentication powered by Google"
+msgstr ""
+
+msgid ""
+"You are about to sign in using a third-party account from Google. This is a "
+"secure and convenient way to access your account."
+msgstr ""
+
+msgid "Why use Google Sign-In?"
+msgstr ""
+
+msgid "Fast & Secure"
+msgstr ""
+
+msgid "No need to remember another password"
+msgstr ""
+
+msgid "Privacy Protected"
+msgstr ""
+
+msgid "We never store your Google password"
+msgstr ""
+
+msgid "Trusted Platform"
+msgstr ""
+
+msgid "Used by millions worldwide"
+msgstr ""
+
+msgid "Continue with Google"
+msgstr ""
+
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Back to Login"
+msgstr "لوحة التحكم"
+
+msgid ""
+"By continuing, you'll be redirected to Google's secure login page. After "
+"authentication, you'll be brought back here automatically."
+msgstr ""
+
+msgid "Login Cancelled"
+msgstr ""
+
+msgid "You cancelled the Google sign-in process"
+msgstr ""
+
+msgid "Authentication Cancelled"
+msgstr ""
+
+msgid ""
+"It looks like you cancelled the Google sign-in process. No worries, you can "
+"try again or use a different method to sign in."
+msgstr ""
+
+msgid "Try Google Sign-In Again"
+msgstr ""
+
+msgid "Sign In with Email"
+msgstr ""
+
+msgid ""
+"Google Sign-In is fast, secure, and you don't need to remember another "
+"password!"
+msgstr ""
+
+msgid "Redirecting to Google..."
+msgstr ""
+
+msgid "Connecting to Google"
+msgstr ""
+
+msgid "Please wait while we redirect you..."
+msgstr ""
+
+msgid ""
+"Please wait while we securely connect to your Google account. You'll be "
+"redirected to Google in a moment..."
+msgstr ""
+
+msgid "Establishing secure connection..."
+msgstr ""
+
+msgid "Your data is encrypted and secure. We never store your Google password."
+msgstr ""
+
+msgid "Complete Your Registration"
+msgstr ""
+
+msgid "Almost There!"
+msgstr ""
+
+msgid "Complete your account setup with Google"
+msgstr ""
+
+msgid "Connected with Google"
+msgstr ""
+
+msgid "Choose a username"
+msgstr ""
+
+msgid "This will be your unique identifier on the platform"
+msgstr ""
+
+msgid "Email verified by Google"
+msgstr ""
+
+msgid "Complete Registration"
+msgstr ""
+
+msgid "Welcome Bonus"
+msgstr ""
+
+msgid "1,000 free credits to get started"
+msgstr ""
+
+#, fuzzy
+#| msgid "Talk Studio"
+msgid "1 free voice clone included"
+msgstr "استنساخ الصوت"
+
+msgid "Already have an account?"
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+#, fuzzy
+#| msgid "Admin"
+msgid "Support Administration"
+msgstr "المشرف"
+
+msgid "Customer Support"
+msgstr "دعم العملاء"
+
+msgid "Support is Live"
+msgstr ""
+
+msgid "Go Offline"
+msgstr ""
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Customer Support Administration"
+msgstr "دعم العملاء"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "All Tickets"
+msgstr "إجراءات سريعة"
+
+msgid "All"
+msgstr "الكل"
+
+msgid "Open"
+msgstr ""
+
+msgid "In Progress"
+msgstr ""
+
+msgid "Waiting"
+msgstr ""
+
+msgid "Resolved"
+msgstr ""
+
+msgid "Urgent"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading tickets..."
+msgstr "جاري التحميل..."
+
+msgid "Select a ticket to view details"
+msgstr ""
+
+msgid "Get help with your account, ask questions, or report issues."
+msgstr ""
+
+msgid "Checking..."
+msgstr ""
+
+msgid "My Tickets"
+msgstr ""
+
+msgid "New Ticket"
+msgstr ""
+
+msgid "Your Support Tickets"
+msgstr ""
+
+msgid "Create New Support Ticket"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "General Inquiry"
+msgstr "التوليدات"
+
+msgid "Technical Issue"
+msgstr ""
+
+#, fuzzy
+#| msgid "Payments"
+msgid "Billing & Payments"
+msgstr "المدفوعات"
+
+#, fuzzy
+#| msgid "Account"
+msgid "Account Management"
+msgstr "الحساب"
+
+msgid "Priority"
+msgstr ""
+
+msgid "Submit Ticket"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Loading FAQs..."
+msgstr "جاري التحميل..."
+
+msgid "Ticket Details"
+msgstr ""
+
+msgid "Support is Offline"
+msgstr ""
+
+msgid "Go Online"
+msgstr ""
+
+msgid "Error updating support status"
+msgstr ""
+
+msgid "No tickets found."
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "No tickets yet."
+msgstr "جاري التحميل..."
+
+#, fuzzy
+#| msgid "Account"
+msgid "Ticket Information"
+msgstr "الحساب"
+
+#, fuzzy
+#| msgid "Customer Support"
+msgid "Customer"
+msgstr "دعم العملاء"
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Conversation"
+msgstr "التوليدات"
+
+msgid "Update Status"
+msgstr ""
+
+msgid "Waiting for Customer"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Send Reply"
+msgstr ""
+
+msgid "Type your response..."
+msgstr ""
+
+msgid "Send Message"
+msgstr ""
+
+msgid "Status updated!"
+msgstr ""
+
+msgid "Reply sent!"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active subscription"
+msgid "Description:"
+msgstr "اشتراك نشط"
+
+msgid "Messages:"
+msgstr ""
+
+msgid "Support Team"
+msgstr ""
+
+msgid "You"
+msgstr ""
+
+msgid "Add a reply:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Error loading ticket details"
+msgstr "جاري التحميل..."
+
+msgid "Please enter a message"
+msgstr ""
+
+msgid "Reply sent successfully!"
+msgstr ""
+
+msgid "Error sending reply"
+msgstr ""
+
+msgid "Please fill in all required fields"
+msgstr ""
+
+msgid "Ticket created successfully!"
+msgstr ""
+
+msgid "Error creating ticket: "
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading..."
+msgid "Error creating ticket"
+msgstr "جاري التحميل..."
+
+#, fuzzy
+#| msgid "Available Credits"
+msgid "No FAQs available yet."
+msgstr "الرصيد المتاح"
+
+msgid "Support is Online"
+msgstr ""
+
+#, python-brace-format
+msgid "{editor}: Editing failed"
+msgstr ""
+
+#, python-brace-format
+msgid "{editor}: Editing failed: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "{text} {deprecated_message}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Options"
+msgstr "إجراءات سريعة"
+
+#, python-brace-format
+msgid "Got unexpected extra argument ({args})"
+msgid_plural "Got unexpected extra arguments ({args})"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "DeprecationWarning: The command {name!r} is deprecated.{extra_message}"
+msgstr ""
+
+msgid "Aborted!"
+msgstr ""
+
+msgid "Commands"
+msgstr ""
+
+msgid "Missing command."
+msgstr ""
+
+msgid "No such command {name!r}."
+msgstr ""
+
+msgid "Value must be an iterable."
+msgstr ""
+
+#, python-brace-format
+msgid "Takes {nargs} values but 1 was given."
+msgid_plural "Takes {nargs} values but {len} were given."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid ""
+"DeprecationWarning: The {param_type} {name!r} is deprecated.{extra_message}"
+msgstr ""
+
+#, python-brace-format
+msgid "env var: {var}"
+msgstr ""
+
+#, python-brace-format
+msgid "default: {default}"
+msgstr ""
+
+msgid "(dynamic)"
+msgstr ""
+
+#, python-format
+msgid "%(prog)s, version %(version)s"
+msgstr ""
+
+msgid "Show the version and exit."
+msgstr ""
+
+msgid "Show this message and exit."
+msgstr ""
+
+#, python-brace-format
+msgid "Error: {message}"
+msgstr ""
+
+#, python-brace-format
+msgid "Try '{command} {option}' for help."
+msgstr ""
+
+#, python-brace-format
+msgid "Invalid value: {message}"
+msgstr ""
+
+#, python-brace-format
+msgid "Invalid value for {param_hint}: {message}"
+msgstr ""
+
+msgid "Missing argument"
+msgstr ""
+
+msgid "Missing option"
+msgstr ""
+
+msgid "Missing parameter"
+msgstr ""
+
+#, python-brace-format
+msgid "Missing {param_type}"
+msgstr ""
+
+#, python-brace-format
+msgid "Missing parameter: {param_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "No such option: {name}"
+msgstr ""
+
+#, python-brace-format
+msgid "Did you mean {possibility}?"
+msgid_plural "(Possible options: {possibilities})"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "unknown error"
+msgstr ""
+
+msgid "Could not open file {filename!r}: {message}"
+msgstr ""
+
+msgid "Argument {name!r} takes {nargs} values."
+msgstr ""
+
+msgid "Option {name!r} does not take a value."
+msgstr ""
+
+msgid "Option {name!r} requires an argument."
+msgid_plural "Option {name!r} requires {nargs} arguments."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "Shell completion is not supported for Bash versions older than 4.4."
+msgstr ""
+
+msgid "Couldn't detect Bash version, shell completion is not supported."
+msgstr ""
+
+#, fuzzy
+#| msgid "Account"
+msgid "Repeat for confirmation"
+msgstr "الحساب"
+
+msgid "Error: The value you entered was invalid."
+msgstr ""
+
+#, python-brace-format
+msgid "Error: {e.message}"
+msgstr ""
+
+msgid "Error: The two entered values do not match."
+msgstr ""
+
+msgid "Error: invalid input"
+msgstr ""
+
+msgid "Press any key to continue..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Choose from:\n"
+"\t{choices}"
+msgstr ""
+
+msgid "{value!r} is not {choice}."
+msgid_plural "{value!r} is not one of {choices}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "{value!r} does not match the format {format}."
+msgid_plural "{value!r} does not match the formats {formats}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "{value!r} is not a valid {number_type}."
+msgstr ""
+
+#, python-brace-format
+msgid "{value} is not in the range {range}."
+msgstr ""
+
+msgid "{value!r} is not a valid boolean. Recognized values: {states}"
+msgstr ""
+
+msgid "{value!r} is not a valid UUID."
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "directory"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "{name} {filename!r} does not exist."
+msgstr ""
+
+msgid "{name} {filename!r} is a file."
+msgstr ""
+
+msgid "{name} {filename!r} is a directory."
+msgstr ""
+
+msgid "{name} {filename!r} is not readable."
+msgstr ""
+
+msgid "{name} {filename!r} is not writable."
+msgstr ""
+
+msgid "{name} {filename!r} is not executable."
+msgstr ""
+
+#, python-brace-format
+msgid "{len_type} values are required, but {len_value} was given."
+msgid_plural "{len_type} values are required, but {len_value} were given."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Site Maps"
+msgstr ""
+
+msgid "Static Files"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Syndication"
+msgstr "إجراءات سريعة"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+msgid "…"
+msgstr ""
+
+msgid "That page number is not an integer"
+msgstr ""
+
+msgid "That page number is less than 1"
+msgstr ""
+
+msgid "That page contains no results"
+msgstr ""
+
+msgid "Enter a valid value."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "Enter a number."
+msgstr ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+msgid "Null characters are not allowed."
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+msgid "This field cannot be null."
+msgstr ""
+
+msgid "This field cannot be blank."
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+msgid "String (unlimited)"
+msgstr ""
+
+msgid "Comma-separated integers"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+msgid "Date (without time)"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+msgid "Date (with time)"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+msgid "Decimal number"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generations"
+msgid "Duration"
+msgstr "التوليدات"
+
+#, fuzzy
+#| msgid "Email Marketing"
+msgid "Email address"
+msgstr "التسويق عبر البريد الإلكتروني"
+
+msgid "File path"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+msgid "Floating point number"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+msgid "Integer"
+msgstr ""
+
+msgid "Big (8 byte) integer"
+msgstr ""
+
+msgid "Small integer"
+msgstr ""
+
+msgid "IPv4 address"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+msgid "Positive big integer"
+msgstr ""
+
+msgid "Positive integer"
+msgstr ""
+
+msgid "Positive small integer"
+msgstr ""
+
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Raw binary data"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+msgid "Universally unique identifier"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "A JSON object"
+msgstr ""
+
+msgid "Value must be valid JSON."
+msgstr ""
+
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+msgid "One-to-one relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+msgid ":?.!"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Enter a whole number."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid time."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid duration."
+msgstr ""
+
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+msgid "No file was submitted."
+msgstr ""
+
+msgid "The submitted file is empty."
+msgstr ""
+
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+msgid "Enter a list of values."
+msgstr ""
+
+msgid "Enter a complete value."
+msgstr ""
+
+msgid "Enter a valid UUID."
+msgstr ""
+
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+msgid ":"
+msgstr ""
+
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current Plan"
+msgid "Currently"
+msgstr "الخطة الحالية"
+
+msgid "Change"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+msgid "yes,no,maybe"
+msgstr ""
+
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+msgid "p.m."
+msgstr ""
+
+msgid "a.m."
+msgstr ""
+
+msgid "PM"
+msgstr ""
+
+msgid "AM"
+msgstr ""
+
+msgid "midnight"
+msgstr ""
+
+msgid "noon"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "jan"
+msgstr ""
+
+msgid "feb"
+msgstr ""
+
+msgid "mar"
+msgstr ""
+
+msgid "apr"
+msgstr ""
+
+msgid "may"
+msgstr ""
+
+msgid "jun"
+msgstr ""
+
+msgid "jul"
+msgstr ""
+
+msgid "aug"
+msgstr ""
+
+msgid "sep"
+msgstr ""
+
+#, fuzzy
+#| msgid "Hot"
+msgid "oct"
+msgstr "مميز"
+
+msgid "nov"
+msgstr ""
+
+msgid "dec"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+msgid ", "
+msgstr ""
+
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" …> for links to third-party sites."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+msgid "No year specified"
+msgstr ""
+
+msgid "Date out of range"
+msgstr ""
+
+msgid "No month specified"
+msgstr ""
+
+msgid "No day specified"
+msgstr ""
+
+msgid "No week specified"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
+msgstr ""
+
+msgid "Django Documentation"
+msgstr ""
+
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+msgid "Get started with Django"
+msgstr ""
+
+msgid "Django Community"
+msgstr ""
+
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#, python-format
+msgid "Attempting to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#, python-format
+msgid "Connected to qpid with SASL mechanism %s"
+msgstr ""
+
+#, python-format
+msgid "Unable to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+msgid "Enter a valid version number in X.Y.Z format."
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Enter a valid version number spec list in ==X.Y.Z,>=A.B.C format."
+msgstr ""
+
+msgid "Version specification list"
+msgstr ""
+
+msgid "x"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
+msgid "required"
+msgstr ""
+
+#, fuzzy
+#| msgid "Announcements"
+msgid "Arguments"
+msgstr "الإعلانات"
+
+#, fuzzy
+#| msgid "Users"
+msgid "(deprecated) "
+msgstr "المستخدمون"
+
+msgid "[default: {}]"
+msgstr ""
+
+msgid "[env var: {}]"
+msgstr ""
+
+msgid "[required]"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Aborted."
+msgstr ""
+
+#, python-brace-format
+msgid "Try [blue]'{command_path} {help_option}'[/] for help."
+msgstr ""
+
+#, fuzzy
+#~| msgid "My Voices"
+#~ msgid "All Cloned Voices"
+#~ msgstr "أصواتي"
+
+#, fuzzy
+#~| msgid "Talk Studio"
+#~ msgid "Talk Studio - IndexTTS2"
+#~ msgstr "استنساخ الصوت"
+
+#~ msgid "Voices"
+#~ msgstr "الأصوات"
+
+#~ msgid "Packages"
+#~ msgstr "الباقات"
+
+#~ msgid "Hero Carousel"
+#~ msgstr "معرض الأبطال"
+
+#, fuzzy
+#~| msgid "Admin"
+#~ msgid "Go to Admin"
+#~ msgstr "المشرف"
+
+#, fuzzy
+#~| msgid "Generations"
+#~ msgid "Generation History"
+#~ msgstr "التوليدات"
+
+#, fuzzy
+#~| msgid "Buy Credits"
+#~ msgid "Or Buy Credits"
+#~ msgstr "شراء رصيد"
+
+#, fuzzy
+#~| msgid "Loading..."
+#~ msgid "Loading packages..."
+#~ msgstr "جاري التحميل..."
+
+#~ msgid "Close"
+#~ msgstr "إغلاق"
+
+#, fuzzy
+#~| msgid "Getting Started"
+#~ msgid "Get Started Free"
+#~ msgstr "البدء"
+
+#, fuzzy
+#~| msgid "2. Generate Audio"
+#~ msgid "Generate Voice"
+#~ msgstr "2. توليد صوت"
+
+#, fuzzy
+#~| msgid "My Voices"
+#~ msgid "Voice Library"
+#~ msgstr "أصواتي"
+
+#, fuzzy
+#~| msgid "3. Download & Use"
+#~ msgid "Easy Downloads"
+#~ msgstr "3. التحميل والاستخدام"

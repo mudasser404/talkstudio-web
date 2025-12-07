@@ -1,0 +1,740 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Checkout" %} - TalkStudio{% endblock %}
+
+{% block extra_css %}
+<style>
+    .checkout-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 60px 20px;
+    }
+
+    .checkout-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-xl);
+        margin-bottom: var(--space-lg);
+        box-shadow: var(--shadow-md);
+    }
+
+    .order-summary {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+    }
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--space-md) 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+        font-weight: 600;
+        font-size: 18px;
+        margin-top: var(--space-md);
+    }
+
+    .payment-form-container {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-xl);
+    }
+
+    #card-element {
+        background: white;
+        border: 1.5px solid #ccc;
+        border-radius: 4px;
+        padding: 12px;
+        margin: 10px 0;
+        transition: border-color 0.2s ease;
+        min-height: 40px;
+    }
+
+    #card-element.StripeElement--focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    #card-element.StripeElement--invalid {
+        border-color: var(--danger);
+    }
+
+    #card-errors {
+        color: var(--danger);
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .processing-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .processing-overlay.show {
+        display: flex;
+    }
+
+    .processing-content {
+        background: var(--bg-secondary);
+        padding: 40px;
+        border-radius: var(--radius-lg);
+        text-align: center;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--border-color);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .security-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        margin-top: var(--space-md);
+    }
+
+    .payment-methods-icons {
+        display: flex;
+        gap: 12px;
+        margin-top: var(--space-md);
+        opacity: 0.7;
+    }
+
+    .payment-methods-selection {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .payment-method-option {
+        background: var(--bg-tertiary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .payment-method-option:hover {
+        border-color: var(--primary);
+        background: var(--bg-secondary);
+    }
+
+    .payment-method-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .payment-method-option input[type="radio"]:checked ~ label {
+        color: var(--primary);
+    }
+
+    .payment-method-option.selected {
+        border-color: var(--primary);
+        background: var(--bg-secondary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .payment-method-option input[type="radio"]:checked {
+        border-color: var(--primary);
+    }
+
+    .payment-method-option label {
+        cursor: pointer;
+        margin: 0;
+        display: block;
+    }
+
+    .payment-form-content {
+        margin-top: 20px;
+    }
+
+    .stripe-section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .stripe-section-header i {
+        color: var(--primary);
+        font-size: 24px;
+    }
+
+    .stripe-section-header h5 {
+        margin: 0;
+        color: var(--text-primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="text-center mb-5">
+        <h1>{% trans "Complete Your Purchase" %}</h1>
+        <p class="text-muted">{% trans "Secure checkout powered by Stripe" %}</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Order Summary -->
+        <div class="col-lg-5">
+            <div class="checkout-card">
+                <h4 class="mb-4">{% trans "Order Summary" %}</h4>
+                <div class="order-summary">
+                    <div class="order-item">
+                        <span style="color: var(--text-secondary);">{% trans "Item" %}</span>
+                        <strong id="item-name" style="color: var(--text-primary);">{{ item_name }}</strong>
+                    </div>
+                    <div class="order-item">
+                        <span style="color: var(--text-secondary);">{% trans "Credits" %}</span>
+                        <strong id="item-credits" style="color: var(--text-primary);">{{ credits|default:"N/A" }}</strong>
+                    </div>
+                    <div class="order-item">
+                        <span style="color: var(--text-primary);">{% trans "Total" %}</span>
+                        <strong id="item-amount" style="color: var(--primary);">${{ amount }}</strong>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="mt-4">
+                    <h6 class="mb-3">{% trans "What you'll get:" %}</h6>
+                    <ul class="list-unstyled" style="color: var(--text-secondary); font-size: 14px;">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>{% trans "Instant credit activation" %}</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>{% trans "Access to all voices" %}</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>{% trans "High-quality audio output" %}</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>{% trans "24/7 customer support" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="col-lg-7">
+            <div class="payment-form-container">
+                <h4 class="mb-4">{% trans "Select Payment Method" %}</h4>
+
+                <!-- Payment Method Selection -->
+                <div class="payment-methods-selection mb-4">
+                    {% if 'stripe' in enabled_gateways %}
+                    <div class="payment-method-option {% if forloop.first %}selected{% endif %}" onclick="selectPaymentMethod('stripe')">
+                        <input type="radio" name="payment_method" id="stripe-radio" value="stripe" {% if 'stripe' == enabled_gateways.0 %}checked{% endif %}>
+                        <label for="stripe-radio" class="w-100">
+                            <div class="d-flex align-items-center">
+                                <img src="{% static 'logos/strip.png' %}" alt="Stripe" style="height: 30px; max-width: 80px;" class="me-3">
+                                <div>
+                                    <strong>{% trans "Credit/Debit Card" %}</strong>
+                                    <div class="text-muted" style="font-size: 13px;">{% trans "Visa, Mastercard, Amex" %}</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    {% if 'paypal' in enabled_gateways %}
+                    <div class="payment-method-option {% if 'paypal' == enabled_gateways.0 %}selected{% endif %}" onclick="selectPaymentMethod('paypal')">
+                        <input type="radio" name="payment_method" id="paypal-radio" value="paypal" {% if 'paypal' == enabled_gateways.0 %}checked{% endif %}>
+                        <label for="paypal-radio" class="w-100">
+                            <div class="d-flex align-items-center">
+                                <i class="fab fa-paypal fa-2x me-3" style="color: #0070BA;"></i>
+                                <div>
+                                    <strong>{% trans "PayPal" %}</strong>
+                                    <div class="text-muted" style="font-size: 13px;">{% trans "Fast & secure" %}</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    {% if 'jazzcash' in enabled_gateways %}
+                    <div class="payment-method-option {% if 'jazzcash' == enabled_gateways.0 %}selected{% endif %}" onclick="selectPaymentMethod('jazzcash')">
+                        <input type="radio" name="payment_method" id="jazzcash-radio" value="jazzcash" {% if 'jazzcash' == enabled_gateways.0 %}checked{% endif %}>
+                        <label for="jazzcash-radio" class="w-100">
+                            <div class="d-flex align-items-center">
+                                <img src="{% static 'logos/jazzcash.png' %}" alt="JazzCash" style="width: 50px; height: 50px; object-fit: contain; margin-right: 15px;">
+                                <div>
+                                    <strong>{% trans "JazzCash" %}</strong>
+                                    <div class="text-muted" style="font-size: 13px;">{% trans "Mobile wallet" %}</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    {% if 'easypaisa' in enabled_gateways %}
+                    <div class="payment-method-option {% if 'easypaisa' == enabled_gateways.0 %}selected{% endif %}" onclick="selectPaymentMethod('easypaisa')">
+                        <input type="radio" name="payment_method" id="easypaisa-radio" value="easypaisa" {% if 'easypaisa' == enabled_gateways.0 %}checked{% endif %}>
+                        <label for="easypaisa-radio" class="w-100">
+                            <div class="d-flex align-items-center">
+                                <img src="{% static 'logos/easypaisa.png' %}" alt="Easypaisa" style="width: 50px; height: 50px; object-fit: contain; margin-right: 15px;">
+                                <div>
+                                    <strong>{% trans "Easypaisa" %}</strong>
+                                    <div class="text-muted" style="font-size: 13px;">{% trans "Mobile wallet" %}</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Stripe Card Form -->
+                <div id="stripe-form" class="payment-form-content" {% if 'stripe' != enabled_gateways.0 %}style="display: none;"{% endif %}>
+                    <!-- Stripe Section Header -->
+                    <div class="stripe-section-header text-center mb-3">
+                        <img src="{% static 'logos/strip.png' %}" alt="Stripe" style="height: 40px; max-width: 120px;">
+                        <h5 class="mt-2">{% trans "Stripe Payment - Secure Card Processing" %}</h5>
+                    </div>
+
+                    <form id="payment-form">
+                        <div class="mb-4">
+                            <label class="form-label" style="font-weight: 600; color: var(--text-primary);">
+                                <i class="fas fa-user me-2"></i>{% trans "Cardholder Name" %}
+                            </label>
+                            <input type="text" id="cardholder-name" class="form-control" placeholder="{% trans "John Doe" %}" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" style="font-weight: 600; color: var(--text-primary);">
+                                <i class="fas fa-credit-card me-2"></i>{% trans "Card Information" %}
+                            </label>
+                            <!-- Stripe Card Element will be mounted here -->
+                            <div id="card-element"></div>
+                            <div id="card-errors" role="alert"></div>
+                            <small class="text-muted">{% trans "Enter your card number, expiry date, and CVC" %}</small>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="submit-button" class="btn btn-primary w-100 btn-lg">
+                            <i class="fas fa-lock me-2"></i>
+                            {% blocktrans with amount=amount %}Pay ${{ amount }}{% endblocktrans %}
+                        </button>
+
+                        <!-- Security Badge -->
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>{% trans "Your payment information is secure and encrypted" %}</span>
+                        </div>
+
+                        <!-- Payment Method Icons -->
+                        <div class="payment-methods-icons">
+                            <i class="fab fa-cc-visa fa-2x"></i>
+                            <i class="fab fa-cc-mastercard fa-2x"></i>
+                            <i class="fab fa-cc-amex fa-2x"></i>
+                            <i class="fab fa-cc-discover fa-2x"></i>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- PayPal Form -->
+                <div id="paypal-form" class="payment-form-content" {% if 'paypal' == enabled_gateways.0 %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                    <div class="text-center py-5">
+                        <i class="fab fa-paypal fa-5x mb-4" style="color: #0070BA;"></i>
+                        <h5>{% trans "PayPal Payment" %}</h5>
+                        <p class="text-muted mb-4">{% trans "You'll be redirected to PayPal to complete your payment" %}</p>
+                        <button onclick="processPayPalPayment()" class="btn btn-primary btn-lg">
+                            <i class="fab fa-paypal me-2"></i>
+                            {% trans "Continue to PayPal" %}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- JazzCash Form -->
+                <div id="jazzcash-form" class="payment-form-content" {% if 'jazzcash' == enabled_gateways.0 %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% trans "Click the button below to proceed to manual payment submission page" %}
+                    </div>
+
+                    <form id="jazzcash-payment-form" onsubmit="processJazzCashPayment(event)">
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="fas fa-mobile-alt me-2"></i>
+                            {% blocktrans with amount=amount %}Continue to JazzCash Payment - ${{ amount }}{% endblocktrans %}
+                        </button>
+
+                        <div class="security-badge mt-3">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>{% trans "Secure manual payment verification" %}</span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Easypaisa Form -->
+                <div id="easypaisa-form" class="payment-form-content" {% if 'easypaisa' == enabled_gateways.0 %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% trans "Click the button below to proceed to manual payment submission page" %}
+                    </div>
+
+                    <form id="easypaisa-payment-form" onsubmit="processEasypaisaPayment(event)">
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="fas fa-wallet me-2"></i>
+                            {% blocktrans with amount=amount %}Continue to Easypaisa Payment - ${{ amount }}{% endblocktrans %}
+                        </button>
+
+                        <div class="security-badge mt-3">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>{% trans "Secure manual payment verification" %}</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{% url 'pricing' %}" class="text-muted" style="font-size: 14px;">
+                    <i class="fas fa-arrow-left me-2"></i>{% trans "Back to Pricing" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Processing Overlay -->
+<div class="processing-overlay" id="processing-overlay">
+    <div class="processing-content">
+        <div class="spinner"></div>
+        <h5 style="color: var(--text-primary);">{% trans "Processing Payment..." %}</h5>
+        <p style="color: var(--text-secondary);">{% trans "Please don't close this window" %}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    // Global variables for Stripe
+    let stripe, elements, cardElement;
+
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Payment method selection
+    function selectPaymentMethod(method) {
+        // Update radio buttons
+        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+            radio.checked = (radio.value === method);
+        });
+
+        // Update selected class on payment method options
+        document.querySelectorAll('.payment-method-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        event.currentTarget.classList.add('selected');
+
+        // Hide all payment forms
+        document.getElementById('stripe-form').style.display = 'none';
+        document.getElementById('paypal-form').style.display = 'none';
+        document.getElementById('jazzcash-form').style.display = 'none';
+        document.getElementById('easypaisa-form').style.display = 'none';
+
+        // Show selected payment form
+        document.getElementById(method + '-form').style.display = 'block';
+    }
+
+    // PayPal Payment
+    async function processPayPalPayment() {
+        const processingOverlay = document.getElementById('processing-overlay');
+        processingOverlay.classList.add('show');
+
+        try {
+            const response = await fetch('/api/payments/payments/create_payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify((() => {
+                    const payload = {
+                        payment_method: 'paypal',
+                        payment_type: '{{ payment_type }}'
+                    };
+                    {% if package_id %}payload.package_id = {{ package_id }};{% endif %}
+                    {% if plan_id %}payload.plan_id = {{ plan_id }};{% endif %}
+                    return payload;
+                })())
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || '{% trans "Payment failed" %}');
+            }
+
+            // Redirect to PayPal
+            if (data.approval_url) {
+                window.location.href = data.approval_url;
+            } else {
+                throw new Error('{% trans "No approval URL received" %}');
+            }
+        } catch (error) {
+            alert('{% trans "PayPal payment error:" %} ' + error.message);
+            processingOverlay.classList.remove('show');
+        }
+    }
+
+    // JazzCash Payment
+    async function processJazzCashPayment(event) {
+        event.preventDefault();
+
+        // Redirect to manual payment page
+        let url = '/payments/manual-payment/?method=jazzcash&type={{ payment_type }}';
+        {% if package_id %}url += '&package_id={{ package_id }}';{% endif %}
+        {% if plan_id %}url += '&plan_id={{ plan_id }}';{% endif %}
+        window.location.href = url;
+    }
+
+
+    // Easypaisa Payment
+    async function processEasypaisaPayment(event) {
+        event.preventDefault();
+
+        // Redirect to manual payment page
+        let url = '/payments/manual-payment/?method=easypaisa&type={{ payment_type }}';
+        {% if package_id %}url += '&package_id={{ package_id }}';{% endif %}
+        {% if plan_id %}url += '&plan_id={{ plan_id }}';{% endif %}
+        window.location.href = url;
+    }
+
+    // Initialize Stripe when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only initialize Stripe if it's enabled
+        {% if 'stripe' in enabled_gateways %}
+        // Check if Stripe key exists
+        if (!'{{ stripe_publishable_key }}' || '{{ stripe_publishable_key }}' === '') {
+            alert('{% trans "Stripe configuration error: Missing publishable key. Please contact support." %}');
+            return;
+        }
+
+        // Initialize Stripe
+        try {
+            stripe = Stripe('{{ stripe_publishable_key }}');
+        } catch (error) {
+            alert('{% trans "Stripe initialization error:" %} ' + error.message);
+            return;
+        }
+
+        elements = stripe.elements();
+
+        // Create card element with proper styling
+        cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    '::placeholder': {
+                        color: '#aab7c4',
+                    },
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                },
+            },
+        });
+
+        // Mount card element
+        const cardElementContainer = document.getElementById('card-element');
+        if (cardElementContainer) {
+            cardElement.mount('#card-element');
+        }
+
+        // Handle card errors
+        cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Handle form submission
+        const form = document.getElementById('payment-form');
+        const submitButton = document.getElementById('submit-button');
+        const processingOverlay = document.getElementById('processing-overlay');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{% trans "Processing..." %}';
+            processingOverlay.classList.add('show');
+
+            const cardholderName = document.getElementById('cardholder-name').value;
+
+            try {
+                // Create payment intent
+                const response = await fetch('/api/payments/payments/create_payment/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        payment_method: 'stripe',
+                        payment_type: '{{ payment_type }}',
+                        {% if package_id %}package_id: {{ package_id }},{% endif %}
+                        {% if plan_id %}plan_id: {{ plan_id }}{% endif %}
+                    })
+                });
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    // Response is not JSON - likely HTML (login page or error)
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error('{% trans "Please login to continue. Redirecting..." %}');
+                    }
+                    throw new Error('{% trans "Server error. Please try again or contact support." %}');
+                }
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || '{% trans "Payment failed" %}');
+                }
+
+                // Confirm card payment
+                const {error, paymentIntent} = await stripe.confirmCardPayment(data.client_secret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: cardholderName,
+                        }
+                    }
+                });
+
+                if (error) {
+                    // Record failed payment in database
+                    try {
+                        await fetch('/api/payments/payments/record_failed_payment/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({
+                                payment_intent_id: data.payment_intent_id,
+                                error_type: error.type || '',
+                                error_code: error.code || '',
+                                error_message: error.message || '',
+                                decline_code: error.decline_code || '',
+                                payment_type: data.payment_type,
+                                amount: data.amount,
+                                credits: data.credits,
+                                package_id: data.package_id,
+                                plan_id: data.plan_id
+                            })
+                        });
+                    } catch (recordError) {
+                        // Silently fail - don't block user
+                    }
+
+                    // Show error to user
+                    document.getElementById('card-errors').textContent = error.message;
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-lock me-2"></i>{% blocktrans with amount=amount %}Pay ${{ amount }}{% endblocktrans %}';
+                    processingOverlay.classList.remove('show');
+                } else if (paymentIntent.status === 'succeeded') {
+                    // Payment successful - confirm and award credits
+                    // Now we send only payment_intent_id (no payment_id since record wasn't created yet)
+                    try {
+                        const confirmResponse = await fetch('/api/payments/payments/confirm_stripe_payment/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({
+                                payment_intent_id: paymentIntent.id  // Only send payment_intent_id
+                            })
+                        });
+
+                        // Check if response is JSON
+                        const confirmContentType = confirmResponse.headers.get('content-type');
+                        if (!confirmContentType || !confirmContentType.includes('application/json')) {
+                            throw new Error('{% trans "Unable to confirm payment. Please contact support with Payment Intent ID: " %}' + paymentIntent.id);
+                        }
+
+                        const confirmData = await confirmResponse.json();
+
+                        if (confirmData.success) {
+                            // Redirect to success page with actual payment_id
+                            window.location.href = '/api/payments/success/?payment_id=' + confirmData.payment_id;
+                            return;
+                        } else {
+                            // Payment failed on our server - show error on checkout page
+                            document.getElementById('card-errors').textContent = confirmData.error || '{% trans "Payment confirmation failed. Please try again." %}';
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = '<i class="fas fa-lock me-2"></i>{% blocktrans with amount=amount %}Pay ${{ amount }}{% endblocktrans %}';
+                            processingOverlay.classList.remove('show');
+                        }
+                    } catch (confirmError) {
+                        document.getElementById('card-errors').textContent = '{% trans "Error confirming payment. Please contact support with Payment Intent ID: " %}' + paymentIntent.id;
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = '<i class="fas fa-lock me-2"></i>{% blocktrans with amount=amount %}Pay ${{ amount }}{% endblocktrans %}';
+                        processingOverlay.classList.remove('show');
+                    }
+                }
+            } catch (error) {
+                document.getElementById('card-errors').textContent = error.message;
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-lock me-2"></i>{% blocktrans with amount=amount %}Pay ${{ amount }}{% endblocktrans %}';
+                processingOverlay.classList.remove('show');
+            }
+        });
+        {% endif %}
+    });
+</script>
+{% endblock %}

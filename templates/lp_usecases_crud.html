@@ -1,0 +1,44 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td><i class="fas {{ item.icon }}"></i> {{ item.icon }}</td>
+<td>{{ item.title|truncatechars:40 }}</td>
+<td>{{ item.description|truncatechars:50 }}</td>
+<td>Slide {{ item.slide_number }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Icon" %}</label>
+    <input type="text" class="form-control" name="icon" id="icon" required>
+    <div class="form-help">{% trans "Font Awesome icon name (e.g., fa-headphones, fa-book)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Title" %}</label>
+    <input type="text" class="form-control" name="title" id="title" required>
+    <div class="form-help">{% trans "Use case title" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Description" %}</label>
+    <textarea class="form-control" name="description" id="description" required></textarea>
+    <div class="form-help">{% trans "Use case description" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Slide Number" %}</label>
+    <input type="number" class="form-control" name="slide_number" id="slide_number" value="1" min="1" max="2" required>
+    <div class="form-help">{% trans "Carousel slide number (1 or 2)" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('icon').value = data.icon || '';
+document.getElementById('title').value = data.title || '';
+document.getElementById('description').value = data.description || '';
+document.getElementById('slide_number').value = data.slide_number || 1;
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

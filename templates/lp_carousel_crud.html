@@ -1,0 +1,71 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.title|truncatechars:40 }}</td>
+<td>{{ item.subtitle|truncatechars:50 }}</td>
+<td>{{ item.button_text }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Title" %}</label>
+    <input type="text" class="form-control" name="title" id="title" required>
+    <div class="form-help">{% trans "Main carousel slide title" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Subtitle" %}</label>
+    <textarea class="form-control" name="subtitle" id="subtitle" required></textarea>
+    <div class="form-help">{% trans "Slide subtitle/tagline" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Description" %}</label>
+    <textarea class="form-control" name="description" id="description"></textarea>
+    <div class="form-help">{% trans "Optional detailed description" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Button Text" %}</label>
+    <input type="text" class="form-control" name="button_text" id="button_text" value="Get Started">
+    <div class="form-help">{% trans "CTA button text" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Button URL" %}</label>
+    <input type="text" class="form-control" name="button_url" id="button_url" value="#">
+    <div class="form-help">{% trans "Button link URL" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Background Image" %}</label>
+    <input type="file" class="form-control" name="background_image" id="background_image" accept="image/*">
+    <div class="form-help">{% trans "Upload background image (optional)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Background Color" %}</label>
+    <input type="color" class="form-control" name="background_color" id="background_color" value="#000000">
+    <div class="form-help">{% trans "Slide background color (if no image)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Text Color" %}</label>
+    <input type="color" class="form-control" name="text_color" id="text_color" value="#ffffff">
+    <div class="form-help">{% trans "Text color on slide" %}</div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('title').value = data.title || '';
+document.getElementById('subtitle').value = data.subtitle || '';
+document.getElementById('description').value = data.description || '';
+document.getElementById('button_text').value = data.button_text || 'Get Started';
+document.getElementById('button_url').value = data.button_url || '#';
+document.getElementById('background_color').value = data.background_color || '#000000';
+document.getElementById('text_color').value = data.text_color || '#ffffff';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+// Note: File inputs cannot be prepopulated
+{% endblock %}

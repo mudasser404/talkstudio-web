@@ -1,0 +1,65 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.name }}</td>
+<td>{{ item.price }}</td>
+<td>{{ item.period }}</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Plan Name" %}</label>
+    <input type="text" class="form-control" name="name" id="name" required>
+    <div class="form-help">{% trans "Plan name (e.g., Free, Pro, Enterprise)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Price" %}</label>
+    <input type="text" class="form-control" name="price" id="price" required>
+    <div class="form-help">{% trans "Price (e.g., $0, $29, $99)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Period" %}</label>
+    <input type="text" class="form-control" name="period" id="period" required>
+    <div class="form-help">{% trans "Billing period (e.g., /month, /year, forever)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Description" %}</label>
+    <textarea class="form-control" name="description" id="description"></textarea>
+    <div class="form-help">{% trans "Short description of the plan" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Button Text" %}</label>
+    <input type="text" class="form-control" name="button_text" id="button_text" required>
+    <div class="form-help">{% trans "CTA button text (e.g., Get Started, Contact Us)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Button URL" %}</label>
+    <input type="text" class="form-control" name="button_url" id="button_url" required>
+    <div class="form-help">{% trans "URL for CTA button" %}</div>
+</div>
+
+<div class="form-group">
+    <div class="form-check">
+        <input type="checkbox" name="is_popular" id="is_popular">
+        <label class="form-label mb-0" for="is_popular">{% trans "Mark as Popular (recommended)" %}</label>
+    </div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('name').value = data.name || '';
+document.getElementById('price').value = data.price || '';
+document.getElementById('period').value = data.period || '';
+document.getElementById('description').value = data.description || '';
+document.getElementById('button_text').value = data.button_text || '';
+document.getElementById('button_url').value = data.button_url || '';
+document.getElementById('is_popular').checked = data.is_popular;
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+{% endblock %}

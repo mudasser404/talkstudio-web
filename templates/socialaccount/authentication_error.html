@@ -1,0 +1,74 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Authentication Error" %}{% endblock %}
+
+{% block header_title %}{% trans "Oops! Something Went Wrong" %}{% endblock %}
+{% block header_subtitle %}{% trans "We couldn't complete the authentication process" %}{% endblock %}
+
+{% block content %}
+<div class="error-container" style="text-align: center; padding: 40px 20px;">
+    <div style="width: 100px; height: 100px; margin: 0 auto 24px; background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #dc2626;"></i>
+    </div>
+
+    <h3 style="color: #1f2937; margin-bottom: 12px;">{% trans "Authentication Failed" %}</h3>
+
+    <p style="color: #6b7280; font-size: 16px; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto;">
+        {% trans "An error occurred while trying to authenticate you with Google. This could happen for several reasons:" %}
+    </p>
+
+    <div style="background: #f9fafb; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: left; max-width: 520px; margin-left: auto; margin-right: auto;">
+        <ul style="margin: 0; padding-left: 20px; color: #4b5563; line-height: 1.8;">
+            <li>{% trans "You may have cancelled the authentication process" %}</li>
+            <li>{% trans "The authentication request may have expired" %}</li>
+            <li>{% trans "There might be a temporary issue with Google's servers" %}</li>
+            <li>{% trans "Your browser may be blocking third-party cookies" %}</li>
+        </ul>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'account_login' %}" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt me-2"></i>{% trans "Try Again" %}
+        </a>
+        <a href="{% url 'account_signup' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-user-plus me-2"></i>{% trans "Sign Up with Email" %}
+        </a>
+    </div>
+
+    <div style="margin-top: 32px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; text-align: left;">
+        <p style="margin: 0; color: #92400e;">
+            <i class="fas fa-lightbulb me-2"></i>
+            <strong>{% trans "Tip:" %}</strong> {% trans "Make sure you allow pop-ups and third-party cookies for this site in your browser settings." %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% trans "Need help?" %} <a href="{% url 'support' %}">{% trans "Contact Support" %}</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-outline-secondary {
+        background: white;
+        border: 1px solid #e5e7eb;
+        color: #374151;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}

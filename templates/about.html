@@ -1,0 +1,1079 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}About Us - TalkStudio.ai{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-dark: #0f172a;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --accent-primary: #6366f1;
+        --accent-secondary: #8b5cf6;
+        --accent-tertiary: #06b6d4;
+        --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+        --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-dark: #020617;
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .about-hero {
+        position: relative;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gradient-2);
+        overflow: hidden;
+        padding: 100px 20px;
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+
+    /* Animated Background Orbs */
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent-primary);
+        top: -200px;
+        right: -200px;
+        animation-delay: 0s;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--accent-secondary);
+        bottom: -100px;
+        left: -100px;
+        animation-delay: -5s;
+    }
+
+    .orb-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--accent-tertiary);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation-delay: -10s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(30px, -30px) scale(1.05); }
+        50% { transform: translate(-20px, 20px) scale(0.95); }
+        75% { transform: translate(20px, 10px) scale(1.02); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        max-width: 900px;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(99, 102, 241, 0.2);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        color: #a5b4fc;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-badge i {
+        color: #818cf8;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.1;
+        margin-bottom: 25px;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-title .gradient-text {
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        color: #94a3b8;
+        line-height: 1.7;
+        max-width: 700px;
+        margin: 0 auto 40px;
+    }
+
+    .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        flex-wrap: wrap;
+        margin-top: 50px;
+    }
+
+    .hero-stat {
+        text-align: center;
+    }
+
+    .hero-stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block;
+    }
+
+    .hero-stat-label {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+
+    /* Section Styles */
+    .section {
+        padding: 100px 20px;
+    }
+
+    .section-dark {
+        background: var(--bg-secondary);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        color: var(--accent-primary);
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    /* Mission Section */
+    .mission-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
+    .mission-content h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+    }
+
+    .mission-content p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 25px;
+    }
+
+    .mission-visual {
+        position: relative;
+        height: 400px;
+        background: var(--gradient-1);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .mission-visual::before {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        background: var(--bg-primary);
+        border-radius: 22px;
+    }
+
+    .mission-visual i {
+        position: relative;
+        font-size: 8rem;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Features Grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .feature-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 35px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-1);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: var(--gradient-1);
+    }
+
+    .feature-icon i {
+        font-size: 1.8rem;
+        color: var(--accent-primary);
+        transition: color 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon i {
+        color: white;
+    }
+
+    .feature-card h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+    }
+
+    .feature-card p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+
+    /* Why Choose Us */
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .why-item {
+        display: flex;
+        gap: 20px;
+        padding: 25px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .why-item:hover {
+        border-color: var(--accent-primary);
+        box-shadow: var(--card-shadow);
+    }
+
+    .why-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        background: var(--gradient-1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .why-icon i {
+        color: white;
+        font-size: 1.3rem;
+    }
+
+    .why-content h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 6px;
+    }
+
+    .why-content p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* Team / Company Values */
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .value-card {
+        text-align: center;
+        padding: 40px 30px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .value-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--card-shadow-hover);
+    }
+
+    .value-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 25px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .value-icon i {
+        font-size: 2rem;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .value-card h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+    }
+
+    .value-card p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: var(--gradient-2);
+        padding: 100px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .cta-content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .cta-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .cta-subtitle {
+        font-size: 1.2rem;
+        color: #94a3b8;
+        margin-bottom: 40px;
+        line-height: 1.7;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary-gradient {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--gradient-1);
+        color: white;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        color: white;
+    }
+
+    .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: transparent;
+        color: #ffffff;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
+    }
+
+    /* Contact Info */
+    .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 50px;
+        flex-wrap: wrap;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #94a3b8;
+    }
+
+    .contact-item i {
+        width: 40px;
+        height: 40px;
+        background: rgba(99, 102, 241, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #818cf8;
+    }
+
+    .contact-item a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .contact-item a:hover {
+        color: #ffffff;
+    }
+
+    /* Social Links */
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    .social-link {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 1.3rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-link:hover {
+        background: var(--gradient-1);
+        transform: translateY(-3px);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* Address Box */
+    .address-box {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 25px 35px;
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    .address-box i {
+        font-size: 1.5rem;
+        color: #818cf8;
+    }
+
+    .address-box span {
+        color: #cbd5e1;
+        font-size: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .mission-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .mission-visual {
+            height: 300px;
+        }
+
+        .values-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .why-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .about-hero {
+            min-height: 60vh;
+            padding: 80px 20px;
+        }
+
+        .hero-stats {
+            gap: 30px;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+        }
+
+        .section {
+            padding: 70px 20px;
+        }
+
+        .values-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-info {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .address-box {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-sparkles"></i>
+            <span>Powered by Advanced AI</span>
+        </div>
+
+        <h1 class="hero-title">
+            Building the Future of<br>
+            <span class="gradient-text">AI Voice Technology</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            TalkStudio.ai is a fast, affordable, and powerful AI voice platform designed to bring the magic of voice cloning and text-to-speech to everyone, from solo creators to enterprise teams.
+        </p>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-number">10K+</span>
+                <span class="hero-stat-label">Active Users</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-number">1M+</span>
+                <span class="hero-stat-label">Audio Generated</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-number">50+</span>
+                <span class="hero-stat-label">Languages</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-number">99.9%</span>
+                <span class="hero-stat-label">Uptime</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="section">
+    <div class="container">
+        <div class="mission-grid">
+            <div class="mission-content">
+                <h3>Our Mission</h3>
+                <p>
+                    We're on a mission to democratize AI voice technology. We believe everyone deserves access to powerful voice cloning and text-to-speech tools without the complexity or high costs of traditional solutions.
+                </p>
+                <p>
+                    Whether you're a content creator, developer, marketer, educator, or business owner, TalkStudio.ai provides the tools you need to create natural, human-like voices at scale.
+                </p>
+                <p>
+                    Our platform combines cutting-edge AI models with an intuitive interface, making professional voice generation accessible to everyone, regardless of technical expertise.
+                </p>
+            </div>
+            <div class="mission-visual">
+                <i class="fas fa-microphone-lines"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-rocket"></i>
+                What We Offer
+            </div>
+            <h2 class="section-title">Powerful Features for Everyone</h2>
+            <p class="section-subtitle">
+                Everything you need to create stunning voice content, all in one platform.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <h3>Text-to-Speech</h3>
+                <p>Convert any text into natural, human-like speech in seconds with our advanced AI models. Support for multiple languages and accents.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <h3>Voice Cloning</h3>
+                <p>Clone any voice with just a few seconds of audio. Create custom voices for your brand, characters, or personal use.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>API Integration</h3>
+                <p>Easy-to-use REST API for seamless integration into your applications, workflows, and products.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Multi-Language</h3>
+                <p>Support for 50+ languages and regional accents. Create content that resonates with global audiences.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Lightning Fast</h3>
+                <p>Generate high-quality audio in seconds, not minutes. Our infrastructure is optimized for speed and reliability.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Enterprise Security</h3>
+                <p>Your data is encrypted and securely processed. We never share your content or voice samples.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-star"></i>
+                Why TalkStudio.ai
+            </div>
+            <h2 class="section-title">Why Thousands Choose Us</h2>
+            <p class="section-subtitle">
+                We've built our platform with creators and businesses in mind.
+            </p>
+        </div>
+
+        <div class="why-grid">
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-zap"></i>
+                </div>
+                <div class="why-content">
+                    <h4>Lightning Fast Generation</h4>
+                    <p>Get your audio in seconds, not minutes. Our optimized pipeline delivers instant results.</p>
+                </div>
+            </div>
+
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="why-content">
+                    <h4>Pay As You Go</h4>
+                    <p>No subscriptions required. Buy credits when you need them, use them anytime.</p>
+                </div>
+            </div>
+
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="why-content">
+                    <h4>24/7 Support</h4>
+                    <p>Our dedicated support team is always here to help you succeed.</p>
+                </div>
+            </div>
+
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="why-content">
+                    <h4>Privacy First</h4>
+                    <p>Your voice data and content are securely processed and never shared.</p>
+                </div>
+            </div>
+
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="why-content">
+                    <h4>Scalable Infrastructure</h4>
+                    <p>From single requests to millions of API calls, we scale with your needs.</p>
+                </div>
+            </div>
+
+            <div class="why-item">
+                <div class="why-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <div class="why-content">
+                    <h4>Studio Quality Output</h4>
+                    <p>Professional-grade audio quality that rivals human voice recordings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-heart"></i>
+                Our Values
+            </div>
+            <h2 class="section-title">What Drives Us</h2>
+            <p class="section-subtitle">
+                Our core values guide everything we do at TalkStudio.ai
+            </p>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Innovation</h3>
+                <p>We constantly push the boundaries of what's possible with AI voice technology.</p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Accessibility</h3>
+                <p>Making advanced technology available to everyone, regardless of budget or expertise.</p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Trust</h3>
+                <p>Building lasting relationships through transparency, security, and reliability.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-subtitle">
+            Join thousands of creators and businesses who trust TalkStudio.ai for their voice generation needs.
+        </p>
+
+        <div class="cta-buttons">
+            <a href="{% url 'account_signup' %}" class="btn-primary-gradient">
+                <i class="fas fa-rocket"></i>
+                Start Free Today
+            </a>
+            <a href="{% url 'pricing' %}" class="btn-outline">
+                <i class="fas fa-tags"></i>
+                View Pricing
+            </a>
+        </div>
+
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:support@talkstudio.ai">support@talkstudio.ai</a>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:billing@talkstudio.ai">billing@talkstudio.ai</a>
+            </div>
+        </div>
+
+        <div class="address-box">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>425-D, Satellite Town, Rahim Yar Khan, Punjab 64200 Pakistan</span>
+        </div>
+
+        <div class="social-links">
+            <a href="https://x.com/TalkStudioAi" target="_blank" rel="noopener" class="social-link" title="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.facebook.com/TalkStudioAi" target="_blank" rel="noopener" class="social-link" title="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/talkstudio.ai" target="_blank" rel="noopener" class="social-link" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Theme sync
+    const syncTheme = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.body.style.background = isDark ? '#0f172a' : '#ffffff';
+    };
+    syncTheme();
+    new MutationObserver(syncTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+
+    // Animate stats on scroll
+    const animateStats = () => {
+        const stats = document.querySelectorAll('.hero-stat-number');
+        stats.forEach(stat => {
+            const text = stat.textContent;
+            if (text.includes('K')) {
+                const num = parseFloat(text) * 1000;
+                animateNumber(stat, 0, num, 2000, 'K+');
+            } else if (text.includes('M')) {
+                const num = parseFloat(text) * 1000000;
+                animateNumber(stat, 0, num, 2000, 'M+');
+            } else if (text.includes('%')) {
+                const num = parseFloat(text);
+                animateNumber(stat, 0, num, 2000, '%');
+            } else if (text.includes('+')) {
+                const num = parseInt(text);
+                animateNumber(stat, 0, num, 2000, '+');
+            }
+        });
+    };
+
+    const animateNumber = (el, start, end, duration, suffix) => {
+        const startTime = performance.now();
+        const update = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = start + (end - start) * easeOut;
+
+            if (suffix === 'K+') {
+                el.textContent = (current / 1000).toFixed(0) + 'K+';
+            } else if (suffix === 'M+') {
+                el.textContent = (current / 1000000).toFixed(0) + 'M+';
+            } else if (suffix === '%') {
+                el.textContent = current.toFixed(1) + '%';
+            } else {
+                el.textContent = Math.floor(current) + suffix;
+            }
+
+            if (progress < 1) requestAnimationFrame(update);
+        };
+        requestAnimationFrame(update);
+    };
+
+    // Run animation when page loads
+    setTimeout(animateStats, 500);
+</script>
+{% endblock %}

@@ -1,0 +1,2785 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "TalkStudio: #1 Free AI Voice Generator & Voice Cloning Platform" %}{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        /* Pure Black Shopify Professional Theme */
+        --gradient-primary: linear-gradient(135deg, #000000 0%, #2d2d2d 100%);
+        --gradient-secondary: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+        --gradient-accent: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        --black-primary: #000000;
+        --black-light: #2d2d2d;
+        --black-dark: #000000;
+        --gray-accent: #1a1a1a;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        letter-spacing: -0.01em;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Modern Hero Section */
+    .hero-modern {
+        background: var(--bg-primary);
+        position: relative;
+        overflow: hidden;
+        padding: 120px 0 100px;
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .hero-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(0, 0, 0, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(45, 45, 45, 0.05) 0%, transparent 50%);
+    }
+
+    /* Dark mode hero gradients */
+    [data-theme="dark"] .hero-modern::before {
+        background: radial-gradient(circle at 30% 20%, rgba(45, 45, 45, 0.2) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(26, 26, 26, 0.2) 0%, transparent 50%);
+    }
+
+    .hero-modern::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.4;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000000;
+        border: 1px solid #d1d1d1;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .hero-badge {
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.3) 0%, rgba(26, 26, 26, 0.3) 100%);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-badge i {
+        color: #000000;
+    }
+
+    [data-theme="dark"] .hero-badge i {
+        color: #ffffff;
+    }
+
+    .hero-title {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        background: linear-gradient(180deg, #000000 0%, #2d2d2d 50%, #1a1a1a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+        font-size: 20px;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+        max-width: 580px;
+        transition: color 0.3s ease;
+    }
+
+    /* Pure Black Shopify Buttons */
+    .btn-gradient-primary {
+        background: #000000;
+        color: white;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 16px;
+        border: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-gradient-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #1a1a1a;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-gradient-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        color: white;
+    }
+
+    .btn-gradient-primary:hover::before {
+        opacity: 1;
+    }
+
+    .btn-gradient-primary span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-outline-glass {
+        background: var(--bg-primary);
+        border: 2px solid #000000;
+        color: #000000;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .btn-outline-glass {
+        border-color: #ffffff;
+        color: #ffffff;
+    }
+
+    .btn-outline-glass::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #000000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+    }
+
+    .btn-outline-glass:hover {
+        border-color: #1a1a1a;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-outline-glass:hover::before {
+        opacity: 1;
+    }
+
+    .btn-outline-glass span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-features {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+
+    .hero-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #000000;
+        border: 1px solid #d1d1d1;
+        transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .hero-feature-item {
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.3) 0%, rgba(26, 26, 26, 0.2) 100%);
+        color: var(--text-primary);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-feature-item i {
+        color: #000000;
+        font-size: 16px;
+    }
+
+    [data-theme="dark"] .hero-feature-item i {
+        color: #ffffff;
+    }
+
+    /* Animated Gradient Orb */
+    .hero-visual {
+        position: relative;
+        z-index: 2;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gradient-orb {
+        width: 400px;
+        height: 400px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.4;
+        animation: float 8s ease-in-out infinite;
+        position: absolute;
+    }
+
+    .gradient-orb-secondary {
+        width: 300px;
+        height: 300px;
+        background: var(--gradient-secondary);
+        border-radius: 50%;
+        filter: blur(50px);
+        opacity: 0.3;
+        animation: float 10s ease-in-out infinite reverse;
+        position: absolute;
+        margin-left: 100px;
+        margin-top: 100px;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px) translateX(0px);
+        }
+        50% {
+            transform: translateY(-30px) translateX(20px);
+        }
+    }
+
+    .waveform-modern {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 200px;
+    }
+
+    .wave-bar {
+        width: 10px;
+        background: linear-gradient(180deg, #000000 0%, #2d2d2d 100%);
+        border-radius: 5px;
+        animation: waveAnimation 1.5s ease-in-out infinite;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .wave-bar:nth-child(1) { height: 50px; animation-delay: 0s; }
+    .wave-bar:nth-child(2) { height: 90px; animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { height: 130px; animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { height: 110px; animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { height: 150px; animation-delay: 0.4s; }
+    .wave-bar:nth-child(6) { height: 100px; animation-delay: 0.5s; }
+    .wave-bar:nth-child(7) { height: 120px; animation-delay: 0.6s; }
+    .wave-bar:nth-child(8) { height: 70px; animation-delay: 0.7s; }
+
+    @keyframes waveAnimation {
+        0%, 100% {
+            transform: scaleY(1);
+            opacity: 0.7;
+        }
+        50% {
+            transform: scaleY(0.6);
+            opacity: 1;
+        }
+    }
+
+    /* Stats Section with Gradient */
+    .stats-modern {
+        background: linear-gradient(180deg, #f7f7f9 0%, #ffffff 100%);
+        padding: 80px 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card-modern {
+        text-align: center;
+        padding: 24px;
+    }
+
+    .stat-number {
+        font-size: 56px;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .stat-label {
+        font-size: 15px;
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    /* Features Section - Tab Style */
+    .features-modern {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .section-title {
+        font-size: 48px;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 16px;
+        background: linear-gradient(180deg, #000000 0%, #2d2d2d 50%, #1a1a1a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 60px;
+        transition: color 0.3s ease;
+    }
+
+    .feature-card-modern {
+        padding: 40px;
+        border-radius: 20px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .feature-card-modern {
+        background: var(--bg-secondary);
+        border-color: var(--border-color);
+    }
+
+    .feature-card-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card-modern:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border-color: #000000;
+    }
+
+    [data-theme="dark"] .feature-card-modern:hover {
+        box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-card-modern:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-icon-modern {
+        width: 72px;
+        height: 72px;
+        background: var(--gradient-primary);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: white;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .feature-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #111827;
+    }
+
+    .feature-description {
+        font-size: 15px;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    /* How It Works */
+    .how-it-works-modern {
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+        padding: 100px 0;
+    }
+
+    .step-card-modern {
+        text-align: center;
+        padding: 40px 24px;
+        position: relative;
+    }
+
+    .step-number-modern {
+        width: 80px;
+        height: 80px;
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0 auto 24px;
+        box-shadow: 0 8px 24px rgba(31, 78, 218, 0.3);
+    }
+
+    .step-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: #111827;
+    }
+
+    .step-description {
+        font-size: 15px;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    .step-arrow {
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 32px;
+        color: #d1d5db;
+    }
+
+    /* Demo Section */
+    .demo-modern {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .demo-voice-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .demo-voice-card:hover {
+        border-color: #000000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="dark"] .demo-voice-card:hover {
+        border-color: #ffffff;
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+    }
+
+    /* How It Works Section */
+    .how-it-works-section {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .steps-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .step-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .step-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .step-card:hover {
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .step-number {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 50px;
+        background: var(--gradient-primary);
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .step-icon {
+        font-size: 48px;
+        color: var(--primary);
+        margin: 20px 0;
+    }
+
+    .step-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 20px 0 15px;
+    }
+
+    .step-description {
+        font-size: 16px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    /* Testimonials */
+    .testimonials-modern {
+        padding: 100px 0;
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+    }
+
+    .testimonial-card-modern {
+        background: var(--bg-secondary);
+        padding: 40px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        height: 100%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .testimonial-card-modern:hover {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+    }
+
+    [data-theme="dark"] .testimonial-card-modern:hover {
+        box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+    }
+
+    .testimonial-quote {
+        font-size: 16px;
+        font-style: italic;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 24px;
+        transition: color 0.3s ease;
+    }
+
+    .author-avatar-modern {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    /* CTA Section */
+    .cta-modern {
+        background: linear-gradient(135deg, #0a0b1e 0%, #1a1b3e 100%);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(31, 78, 218, 0.2) 0%, transparent 70%);
+    }
+
+    .cta-title {
+        font-size: 52px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+    }
+
+    .cta-subtitle {
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 48px;
+    }
+
+    .cta-features {
+        display: flex;
+        gap: 32px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 48px;
+    }
+
+    .cta-feature {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+    }
+
+    .cta-feature i {
+        color: #10b981;
+        margin-right: 8px;
+    }
+
+    /* Use Cases Carousel */
+    .use-cases-carousel {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        overflow: hidden;
+        transition: background-color 0.3s ease;
+    }
+
+    .carousel-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 48px;
+        margin: 0 16px;
+        min-height: 400px;
+        transition: all 0.3s ease;
+    }
+
+    .carousel-card:hover {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        transform: translateY(-8px);
+    }
+
+    [data-theme="dark"] .carousel-card:hover {
+        box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+    }
+
+    .carousel-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--gradient-primary);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: white;
+        margin-bottom: 32px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .carousel-controls {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 48px;
+    }
+
+    .carousel-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 20px;
+        color: #374151;
+    }
+
+    .carousel-btn:hover {
+        background: var(--gradient-primary);
+        border-color: var(--blue-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .carousel-dots {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+    }
+
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #d1d5db;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+        background: var(--blue-primary);
+        width: 32px;
+        border-radius: 6px;
+    }
+
+    /* Pricing Plans Section */
+    .pricing-section-home {
+        padding: 100px 0;
+        background: var(--bg-secondary);
+        transition: background-color 0.3s ease;
+    }
+
+    .pricing-cards-home {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+    }
+
+    .pricing-card-home {
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px 30px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .pricing-card-home.featured {
+        border-color: var(--primary);
+        transform: scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .pricing-card-home.featured {
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
+    }
+
+    .pricing-card-home:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .pricing-card-home:hover {
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: -15px;
+        right: 30px;
+        background: var(--gradient-primary);
+        color: #ffffff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .plan-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+    }
+
+    .plan-price {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+        margin: 20px 0;
+    }
+
+    .plan-price .currency {
+        font-size: 24px;
+        color: var(--text-secondary);
+    }
+
+    .plan-price .amount {
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .plan-price .period {
+        font-size: 18px;
+        color: var(--text-secondary);
+    }
+
+    .plan-description {
+        font-size: 16px;
+        color: var(--text-secondary);
+        margin: 20px 0;
+        min-height: 48px;
+    }
+
+    .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 30px 0;
+    }
+
+    .plan-features li {
+        padding: 12px 0;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+    }
+
+    .plan-features li i {
+        color: var(--success);
+        font-size: 18px;
+    }
+
+    .btn-plan {
+        display: block;
+        width: 100%;
+        padding: 16px 24px;
+        background: var(--gradient-primary);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-plan:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #ffffff;
+    }
+
+    /* Video Section */
+    .video-section {
+        padding: 100px 0;
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+    }
+
+    .video-container {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        background: #000;
+        aspect-ratio: 16/9;
+    }
+
+    .video-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1f4eda 0%, #764ba2 100%);
+        position: relative;
+    }
+
+    .video-play-btn {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: var(--blue-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-play-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-placeholder::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+    }
+
+    /* Pricing Preview */
+    .pricing-preview {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .pricing-card-preview {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-align: left;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pricing-card-preview:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .pricing-card-preview.featured {
+        border-color: #000000;
+        border-width: 3px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .pricing-card-preview.featured {
+        border-color: #ffffff;
+        box-shadow: 0 20px 60px rgba(255, 255, 255, 0.15);
+    }
+
+    .pricing-card-preview.featured::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: var(--gradient-primary);
+    }
+
+    .pricing-badge {
+        position: absolute;
+    top: 1px;
+    right: -6px;
+    background: #000000;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 0 0 0px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    }
+
+    [data-theme="dark"] .pricing-badge {
+        background: #ffffff;
+        color: #000000;
+    }
+
+    .pricing-price {
+        font-size: 56px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 16px 0 4px 0;
+        line-height: 1;
+    }
+
+    .pricing-price::before {
+        content: '$';
+        font-size: 24px;
+        vertical-align: super;
+        margin-right: 4px;
+    }
+
+    .pricing-features {
+        list-style: none;
+        padding: 0;
+        margin: 24px 0;
+        flex-grow: 1;
+    }
+
+    .pricing-features li {
+        padding: 10px 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+        transition: color 0.3s ease;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .pricing-features li i {
+        margin-top: 3px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .pricing-card-preview h4 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .pricing-card-preview .small {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    /* Responsive Pricing Cards */
+    @media (max-width: 991px) {
+        .pricing-card-preview.featured {
+            transform: scale(1);
+        }
+
+        .pricing-preview .row {
+            justify-content: center;
+        }
+
+        .pricing-card-home.featured {
+            transform: scale(1);
+        }
+
+        .pricing-cards-home {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .pricing-section-home {
+            padding: 60px 0;
+        }
+
+        .pricing-cards-home {
+            grid-template-columns: 1fr !important;
+            gap: 20px;
+            padding: 0 15px;
+        }
+
+        .pricing-card-home {
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card-home.featured {
+            transform: scale(1);
+        }
+
+        .pricing-card-preview {
+            padding: 24px 20px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card-preview.featured {
+            transform: scale(1);
+        }
+
+        .pricing-price {
+            font-size: 48px;
+        }
+
+        .pricing-features li {
+            font-size: 13px;
+            padding: 8px 0;
+        }
+
+        .pricing-preview .col-lg-3 {
+            margin-bottom: 20px;
+        }
+
+        .payment-methods-card {
+            margin-top: 40px !important;
+            padding: 0 15px;
+        }
+
+        .payment-methods-card > div {
+            padding: 30px 20px !important;
+        }
+
+        .payment-methods-card h3 {
+            font-size: 22px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .payment-methods-card img {
+            height: 30px !important;
+        }
+
+        .payment-methods-card > div > div {
+            gap: 20px !important;
+        }
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        padding: 100px 0;
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+    }
+
+    .faq-item {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .faq-item:hover {
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.08);
+    }
+
+    .faq-question {
+        padding: 24px 32px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 18px;
+        color: var(--text-primary);
+        background: var(--bg-secondary);
+        border: none;
+        width: 100%;
+        text-align: left;
+        transition: color 0.3s ease;
+    }
+
+    .faq-question:hover {
+        color: #000000;
+    }
+
+    [data-theme="dark"] .faq-question:hover {
+        color: #ffffff;
+    }
+
+    .faq-icon {
+        font-size: 20px;
+        color: #000000;
+        transition: transform 0.3s ease;
+    }
+
+    [data-theme="dark"] .faq-icon {
+        color: #ffffff;
+    }
+
+    .faq-item.active .faq-icon {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0 32px;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+        padding: 0 32px 24px;
+    }
+
+    .faq-answer-content {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        padding-top: 8px;
+        transition: color 0.3s ease;
+    }
+
+    /* Trust Indicators Section */
+    .trust-section {
+        padding: 80px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .trust-badge {
+        text-align: center;
+        padding: 32px 16px;
+        background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .trust-badge:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .trust-badge i {
+        font-size: 40px;
+        color: #000000;
+        margin-bottom: 16px;
+    }
+
+    .trust-badge h5 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    .trust-badge p {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    /* Quality Comparison Section */
+    .quality-comparison {
+        padding: 100px 0;
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+    }
+
+    .comparison-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .comparison-card.featured-comparison {
+        border-color: #000000;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .comparison-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+
+    .badge-bad {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .badge-good {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .comparison-content {
+        margin-top: 24px;
+    }
+
+    .comparison-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .comparison-list li {
+        padding: 12px 0;
+        font-size: 15px;
+        color: #374151;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .comparison-list li:last-child {
+        border-bottom: none;
+    }
+
+    /* Live Statistics Section */
+    .live-stats-section {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .live-stat-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .live-stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .live-stat-card .stat-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--gradient-primary);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 28px;
+        color: white;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .live-stat-card .stat-value {
+        font-size: 42px;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+    }
+
+    .live-stat-card .stat-label {
+        font-size: 15px;
+        color: #6b7280;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+
+    .live-stat-card .stat-trend {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    /* API Section */
+    .api-section {
+        padding: 100px 0;
+        background: var(--bg-tertiary);
+        transition: background-color 0.3s ease;
+    }
+
+    .api-features {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .api-feature-item {
+        display: flex;
+        gap: 16px;
+        align-items: start;
+    }
+
+    .api-feature-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--gradient-primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-example {
+        background: #1e293b;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .code-header {
+        background: #0f172a;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #334155;
+    }
+
+    .code-title {
+        color: #e2e8f0;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .code-lang {
+        color: #94a3b8;
+        font-size: 12px;
+        text-transform: uppercase;
+        background: #334155;
+        padding: 4px 12px;
+        border-radius: 6px;
+    }
+
+    .code-block {
+        padding: 24px;
+        margin: 0;
+        overflow-x: auto;
+    }
+
+    .code-block code {
+        color: #e2e8f0;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    /* Language Section */
+    .language-section {
+        padding: 100px 0;
+        background: var(--bg-primary);
+        transition: background-color 0.3s ease;
+    }
+
+    .language-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 32px 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .language-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        border-color: #000000;
+    }
+
+    .language-flag {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .language-card h5 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 36px;
+        }
+        .hero-subtitle {
+            font-size: 16px;
+        }
+        .section-title {
+            font-size: 32px;
+        }
+        .cta-title {
+            font-size: 32px;
+        }
+        .hero-features {
+            flex-direction: column;
+        }
+        .step-arrow {
+            display: none;
+        }
+        .hero-visual {
+            height: 300px;
+        }
+        .gradient-orb {
+            width: 250px;
+            height: 250px;
+        }
+        .code-block {
+            font-size: 11px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<section class="hero-modern" {% if hero and hero.background_image %}style="background-image: url('{{ hero.background_image.url }}'); background-size: cover; background-position: center;"{% endif %}>
+    <!-- Background Video (if provided) -->
+    {% if hero and hero.background_video %}
+    <video autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+        <source src="{{ hero.background_video.url }}" type="video/mp4">
+    </video>
+    {% endif %}
+
+    <!-- Dark overlay for better text readability -->
+    {% if hero and hero.background_image or hero and hero.background_video %}
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+    {% endif %}
+
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content" {% if hero and hero.background_image or hero and hero.background_video %}style="color: white;"{% endif %}>
+                {% if hero %}
+                <div class="hero-badge" {% if hero.background_image or hero.background_video %}style="background: rgba(255, 255, 255, 0.2); color: white; backdrop-filter: blur(10px);"{% endif %}>
+                    <i class="fas fa-star"></i>
+                    <span>{{ hero.badge_text }}</span>
+                </div>
+                <h1 class="hero-title" {% if hero.background_image or hero.background_video %}style="color: white;"{% endif %}>{{ hero.title }}</h1>
+                <p class="hero-subtitle" {% if hero.background_image or hero.background_video %}style="color: rgba(255, 255, 255, 0.9);"{% endif %}>{{ hero.subtitle }}</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if hero.primary_button_text %}
+                    <a href="{{ hero.primary_button_url }}" class="btn-gradient-primary">
+                        <span>{{ hero.primary_button_text }} <i class="fas fa-arrow-right ms-2"></i></span>
+                    </a>
+                    {% endif %}
+                    {% if hero.secondary_button_text %}
+                    <a href="{{ hero.secondary_button_url }}" class="btn-outline-glass">
+                        <i class="fas fa-play me-2"></i> {{ hero.secondary_button_text }}
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="hero-features">
+                    {% for feature in hero.features.all %}
+                    <div class="hero-feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ feature.text }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    <span>{% trans "AI-Powered Voice Technology" %}</span>
+                </div>
+                <h1 class="hero-title">{% trans "Transform Text into Natural, Human-Like Speech" %}</h1>
+                <p class="hero-subtitle">
+                    {% trans "Clone any voice and generate professional-quality speech with our advanced AI technology." %}
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#" class="btn-gradient-primary">
+                        <span>{% trans "Get Started" %} <i class="fas fa-arrow-right ms-2"></i></span>
+                    </a>
+                </div>
+                <div class="hero-features">
+                    <div class="hero-feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{% trans "1,000 free credits" %}</span>
+                    </div>
+                    <div class="hero-feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{% trans "1 free voice clone" %}</span>
+                    </div>
+                    <div class="hero-feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{% trans "No credit card required" %}</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <div class="gradient-orb"></div>
+                    <div class="gradient-orb-secondary"></div>
+                    <div class="waveform-modern">
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-modern">
+    <div class="container">
+        <div class="row">
+            {% for stat in statistics %}
+            <div class="col-md-3 col-6">
+                <div class="stat-card-modern">
+                    <div class="stat-number">{{ stat.number }}</div>
+                    <div class="stat-label">{{ stat.label }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-3 col-6">
+                <div class="stat-card-modern">
+                    <div class="stat-number">10M+</div>
+                    <div class="stat-label">{% trans "Words Generated" %}</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card-modern">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">{% trans "Happy Users" %}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-modern">
+    <div class="container">
+        <h2 class="section-title">{% trans "Powerful Features" %}</h2>
+        <p class="section-subtitle">{% trans "Everything you need to create professional voice content" %}</p>
+        <div class="row g-4">
+            {% for feature in features %}
+            <div class="col-md-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-modern">
+                        <i class="fas {{ feature.icon }}"></i>
+                    </div>
+                    <h5 class="feature-title">{{ feature.title }}</h5>
+                    <p class="feature-description">{{ feature.description }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-modern">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h5 class="feature-title">{% trans "Text-to-Speech" %}</h5>
+                    <p class="feature-description">{% trans "Convert text into natural-sounding speech." %}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works-modern">
+    <div class="container">
+        <h2 class="section-title">{% trans "How It Works" %}</h2>
+        <p class="section-subtitle">{% trans "Get started in three simple steps" %}</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="step-card-modern">
+                    <div class="step-number-modern">1</div>
+                    <h5 class="step-title">{% trans "Sign Up Free" %}</h5>
+                    <p class="step-description">{% trans "Create your account and get 1,000 free credits plus 1 free voice clone to start." %}</p>
+                    <div class="step-arrow d-none d-md-block">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card-modern">
+                    <div class="step-number-modern">2</div>
+                    <h5 class="step-title">{% trans "Choose or Clone" %}</h5>
+                    <p class="step-description">{% trans "Select from our voice library or clone your own voice in seconds." %}</p>
+                    <div class="step-arrow d-none d-md-block">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card-modern">
+                    <div class="step-number-modern">3</div>
+                    <h5 class="step-title">{% trans "Generate & Download" %}</h5>
+                    <p class="step-description">{% trans "Enter your text, customize settings, and download high-quality audio instantly." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section id="demo" class="demo-modern">
+    <div class="container">
+        <h2 class="section-title">{% trans "Try Demo Voices" %}</h2>
+        <p class="section-subtitle">{% trans "Listen to sample voices from our library" %}</p>
+        <div class="row">
+            {% for voice in demo_voices %}
+            <div class="col-md-6 mb-4">
+                <div class="demo-voice-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">
+                                <i class="fas fa-microphone me-2" style="color: #000000;"></i>
+                                {{ voice.name }}
+                            </h6>
+                            <small class="text-muted">{{ voice.description }}</small>
+                        </div>
+                        {% if voice.audio_file %}
+                        <button class="btn-gradient-primary" style="padding: 10px 24px;" onclick="playDemoVoice('{{ voice.audio_file.url }}')">
+                            <span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>
+                        </button>
+                        {% else %}
+                        <button class="btn-gradient-primary" style="padding: 10px 24px;" disabled>
+                            <span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="demo-voice-card">
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">{% trans "No demo voices available at the moment" %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "How It Works" %}</h2>
+        <p class="section-subtitle">{% trans "Get started in three simple steps" %}</p>
+
+        <div class="steps-container">
+            {% for step in how_it_works %}
+            <div class="step-card">
+                <div class="step-number">{{ step.order }}</div>
+                {% if step.icon %}
+                <div class="step-icon">
+                    <i class="fas fa-{{ step.icon }}"></i>
+                </div>
+                {% endif %}
+                <h3 class="step-title">{{ step.title }}</h3>
+                <p class="step-description">{{ step.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-modern">
+    <div class="container">
+        <h2 class="section-title">{% trans "What Our Users Say" %}</h2>
+        <p class="section-subtitle">{% trans "Join thousands of satisfied customers" %}</p>
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4">
+                <div class="testimonial-card-modern">
+                    <div class="testimonial-quote">
+                        "{{ testimonial.quote }}"
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="author-avatar-modern">{{ testimonial.author_initials }}</div>
+                        <div>
+                            <div class="fw-bold">{{ testimonial.author_name }}</div>
+                            <small class="text-muted">{{ testimonial.author_title }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4">
+                <div class="testimonial-card-modern">
+                    <div class="testimonial-quote">
+                        "{% trans "This is the best Talk Studio platform I've used." %}"
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="author-avatar-modern">JD</div>
+                        <div>
+                            <div class="fw-bold">{% trans "John Doe" %}</div>
+                            <small class="text-muted">{% trans "Content Creator" %}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases Carousel -->
+<section class="use-cases-carousel">
+    <div class="container">
+        <h2 class="section-title">{% trans "Perfect For Every Use Case" %}</h2>
+        <p class="section-subtitle">{% trans "Discover how professionals use our Talk Studio technology" %}</p>
+
+        <div id="useCasesCarousel" class="position-relative">
+            <div class="carousel-track" style="display: flex; transition: transform 0.5s ease;">
+                <!-- Slide 1 -->
+                <div class="carousel-slide" style="min-width: 100%;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-podcast"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "Podcast Production" %}</h4>
+                                <p class="text-muted">{% trans "Create consistent voiceovers for your podcast episodes without recording every time. Perfect for intro/outro segments." %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "Video Content" %}</h4>
+                                <p class="text-muted">{% trans "Generate narration for YouTube videos, tutorials, and promotional content with natural-sounding voices." %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-book-reader"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "Audiobooks" %}</h4>
+                                <p class="text-muted">{% trans "Transform your written content into professional audiobooks with customizable voice characteristics." %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-slide" style="min-width: 100%;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "Advertisements" %}</h4>
+                                <p class="text-muted">{% trans "Create engaging voice ads for radio, social media, and digital marketing campaigns quickly and affordably." %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "E-Learning" %}</h4>
+                                <p class="text-muted">{% trans "Develop educational content with clear, professional narration for online courses and training materials." %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="carousel-card">
+                                <div class="carousel-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <h4 class="mb-3">{% trans "Gaming" %}</h4>
+                                <p class="text-muted">{% trans "Add character voices and narration to your games without expensive voice actor sessions." %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="prevSlide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn" id="nextSlide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="carousel-dots">
+            <div class="carousel-dot active" data-slide="0"></div>
+            <div class="carousel-dot" data-slide="1"></div>
+        </div>
+    </div>
+</section>
+
+<
+
+<!-- Video Demo Section -->
+<section class="video-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                {% if video_section %}
+                <h2 class="section-title text-start">{{ video_section.title }}</h2>
+                <p class="section-subtitle text-start">{{ video_section.subtitle }}</p>
+                <ul class="list-unstyled mt-4">
+                    {% for feature in video_section.features.all %}
+                    <li class="mb-3">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <span>{{ feature.text }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <h2 class="section-title text-start">{% trans "See It In Action" %}</h2>
+                <p class="section-subtitle text-start">{% trans "Watch how easy it is to clone a voice and generate professional audio in minutes" %}</p>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="video-container" id="videoContainer" style="cursor: pointer; position: relative;">
+                    <div class="video-placeholder">
+                        <div class="video-play-btn" id="playVideoBtn">
+                            <i class="fas fa-play" style="margin-left: 6px;"></i>
+                        </div>
+                    </div>
+                    {% if video_section and video_section.video_file %}
+                    <video id="demoVideo" style="width: 100%; height: 100%; border-radius: 12px;" muted loop playsinline>
+                        <source src="{{ video_section.video_file.url }}" type="video/mp4">
+                        {% trans "Your browser does not support the video tag." %}
+                    </video>
+                    {% else %}
+                    <video id="demoVideo" style="width: 100%; height: 100%; border-radius: 12px;" muted loop playsinline>
+                        <source src="{% static 'videos/demo.mp4' %}" type="video/mp4">
+                        {% trans "Your browser does not support the video tag." %}
+                    </video>
+                    {% endif %}
+                    <!-- Click overlay for modal -->
+                    <div id="videoClickOverlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Preview -->
+<section class="pricing-preview">
+    <div class="container">
+        <div class="row g-4 mt-4">
+            {% for plan in pricing_plans %}
+            <div class="col-lg-3 col-md-6">
+                <div class="pricing-card-preview {% if plan.plan_type == 'pro' %}featured{% endif %}">
+                    {% if plan.plan_type == 'pro' %}
+                    <div class="pricing-badge">{% trans "Most Popular" %}</div>
+                    {% endif %}
+                    <h4 class="fw-bold">{{ plan.name }}</h4>
+                    <p class="text-muted small mb-3">{{ plan.description }}</p>
+                    <div class="pricing-price" {% if plan.plan_type == 'free' %}style="font-size: 64px;"{% endif %}>{{ plan.price|floatformat:0 }}</div>
+                    <p class="text-muted mb-4">
+                        {% if plan.plan_type == 'yearly' %}
+                            {% trans "/year" %}
+                        {% elif plan.plan_type == 'free' %}
+                            {% trans "/forever" %}
+                        {% else %}
+                            {% trans "/month" %}
+                        {% endif %}
+                    </p>
+
+                    <div class="mb-4" style="background: {% if plan.plan_type == 'pro' %}#000000{% else %}var(--bg-secondary){% endif %}; padding: 12px; border-radius: 8px; text-align: center;{% if plan.plan_type == 'pro' %} color: white;{% endif %}">
+                        <strong>
+                            {% if plan.credits_per_month >= 1000000 %}
+                                {% widthratio plan.credits_per_month 1000000 1 %}M {% trans "Credits" %}
+                            {% elif plan.credits_per_month >= 1000 %}
+                                {% widthratio plan.credits_per_month 1000 1 %}K {% trans "Credits" %}
+                            {% else %}
+                                {{ plan.credits_per_month }} {% trans "Credits" %}
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <ul class="pricing-features">
+                        {% for feature in plan.features|slice:":6" %}
+                        <li>
+                            {% if 'No ' in feature or 'no ' in feature %}
+                                <i class="fas fa-times" style="color: #ef4444;"></i>
+                            {% else %}
+                                <i class="fas fa-check" style="color: #10b981;"></i>
+                            {% endif %}
+                            {{ feature }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    {% if plan.plan_type == 'free' %}
+                        <a href="{% url 'account_signup' %}" class="btn btn-outline-primary" style="width: 100%; padding: 12px; border-radius: 8px; margin-top: 20px;">
+                            {% trans "Sign Up Free" %}
+                        </a>
+                    {% elif plan.plan_type == 'pro' %}
+                        <a href="{% url 'pricing' %}" class="btn-gradient-primary" style="width: 100%; padding: 12px; border-radius: 8px; margin-top: 20px; background: #000; color: white; text-decoration: none; display: block; text-align: center;">
+                            {% trans "Get Started" %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'pricing' %}" class="btn btn-outline-primary" style="width: 100%; padding: 12px; border-radius: 8px; margin-top: 20px;">
+                            {% trans "Get Started" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Accepted Payment Methods -->
+        <div class="payment-methods-card" style="margin-top: 80px; text-align: center;">
+            <div style="background: var(--bg-secondary); border: 2px solid var(--border-color); border-radius: 16px; padding: 40px; max-width: 1000px; margin: 0 auto;">
+                <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 30px; color: var(--text-primary);">{% trans "Accepted Payment Methods" %}</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px;">
+                    <!-- PayPal -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style="height: 50px; filter: grayscale(20%);">
+
+                    <!-- Visa -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" style="height: 35px; filter: grayscale(20%);">
+
+                    <!-- Mastercard -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style="height: 45px; filter: grayscale(20%);">
+
+                    <!-- Google Pay -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay" style="height: 40px; filter: grayscale(20%);">
+
+                    <!-- JazzCash -->
+                    <img src="{% static 'logos/jazzcash.png' %}" alt="JazzCash" style="height: 50px;">
+
+                    <!-- EasyPaisa -->
+                    <img src="{% static 'logos/easypaisa.png' %}" alt="EasyPaisa" style="height: 50px;">
+
+                    <!-- UPI -->
+                    <img src="{% static 'logos/upi.png' %}" alt="UPI" style="height: 45px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Frequently Asked Questions" %}</h2>
+        <p class="section-subtitle">{% trans "Everything you need to know about Talk Studio" %}</p>
+
+        <div class="row">
+            <div class="col-lg-8 mx-auto mt-4">
+                {% for faq in faqs %}
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>{{ faq.question }}</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            {{ faq.answer }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>{% trans "What is Talk Studio?" %}</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            {% trans "Talk Studio uses AI to create a digital replica of a voice." %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Indicators Section -->
+<section class="trust-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Trusted By Professionals Worldwide" %}</h2>
+        <p class="section-subtitle">{% trans "Join thousands of content creators, developers, and businesses" %}</p>
+
+        <div class="row g-4 mt-4">
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <h5>{% trans "99.9%" %}</h5>
+                    <p>{% trans "Uptime" %}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-lock"></i>
+                    <h5>{% trans "256-bit" %}</h5>
+                    <p>{% trans "Encryption" %}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-check-circle"></i>
+                    <h5>{% trans "SOC 2" %}</h5>
+                    <p>{% trans "Compliant" %}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-certificate"></i>
+                    <h5>{% trans "GDPR" %}</h5>
+                    <p>{% trans "Ready" %}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-headset"></i>
+                    <h5>{% trans "24/7" %}</h5>
+                    <p>{% trans "Support" %}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="trust-badge">
+                    <i class="fas fa-award"></i>
+                    <h5>{% trans "ISO" %}</h5>
+                    <p>{% trans "Certified" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Voice Quality Comparison -->
+<section class="quality-comparison">
+    <div class="container">
+        <h2 class="section-title">{% trans "Unmatched Voice Quality" %}</h2>
+        <p class="section-subtitle">{% trans "Hear the difference our advanced AI makes" %}</p>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-6">
+                <div class="comparison-card">
+                    <div class="comparison-badge badge-bad">
+                        <i class="fas fa-times-circle"></i> {% trans "Traditional TTS" %}
+                    </div>
+                    <div class="comparison-content">
+                        <ul class="comparison-list">
+                            <li><i class="fas fa-times text-danger me-2"></i>{% trans "Robotic and unnatural tone" %}</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>{% trans "Monotone delivery" %}</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>{% trans "Poor pronunciation" %}</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>{% trans "Limited emotion control" %}</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>{% trans "Generic voice options" %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="comparison-card featured-comparison">
+                    <div class="comparison-badge badge-good">
+                        <i class="fas fa-check-circle"></i> {% trans "TalkStudio TTS" %}
+                    </div>
+                    <div class="comparison-content">
+                        <ul class="comparison-list">
+                            <li><i class="fas fa-check text-success me-2"></i>{% trans "Natural human-like speech" %}</li>
+                            <li><i class="fas fa-check text-success me-2"></i>{% trans "Dynamic emotion control" %}</li>
+                            <li><i class="fas fa-check text-success me-2"></i>{% trans "Perfect pronunciation" %}</li>
+                            <li><i class="fas fa-check text-success me-2"></i>{% trans "8-vector emotion system" %}</li>
+                            <li><i class="fas fa-check text-success me-2"></i>{% trans "Custom Talk Studio" %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Live Statistics Section -->
+<section class="live-stats-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Platform Statistics" %}</h2>
+        <p class="section-subtitle">{% trans "Real-time metrics from our global platform" %}</p>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="live-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" data-target="50000">0</div>
+                    <div class="stat-label">{% trans "Active Users" %}</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> <span>12% {% trans "this month" %}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="live-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <div class="stat-value" data-target="125000">0</div>
+                    <div class="stat-label">{% trans "Voices Cloned" %}</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> <span>24% {% trans "this month" %}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="live-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="stat-value" data-target="2500000">0</div>
+                    <div class="stat-label">{% trans "Audio Generated (hrs)" %}</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> <span>35% {% trans "this month" %}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="live-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-value" data-target="150">0</div>
+                    <div class="stat-label">{% trans "Countries" %}</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> <span>8% {% trans "this month" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API/Integration Section -->
+<section class="api-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-title text-start">{% trans "Powerful API for Developers" %}</h2>
+                <p class="section-subtitle text-start">{% trans "Integrate voice generation into your applications with our simple REST API" %}</p>
+
+                <div class="api-features mt-4">
+                    <div class="api-feature-item">
+                        <div class="api-feature-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">{% trans "RESTful API" %}</h6>
+                            <p class="text-muted mb-0">{% trans "Simple HTTP endpoints with JSON responses" %}</p>
+                        </div>
+                    </div>
+                    <div class="api-feature-item">
+                        <div class="api-feature-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">{% trans "Complete Documentation" %}</h6>
+                            <p class="text-muted mb-0">{% trans "Detailed guides and code examples" %}</p>
+                        </div>
+                    </div>
+                    <div class="api-feature-item">
+                        <div class="api-feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">{% trans "Fast Response Times" %}</h6>
+                            <p class="text-muted mb-0">{% trans "Average API response under 200ms" %}</p>
+                        </div>
+                    </div>
+                    <div class="api-feature-item">
+                        <div class="api-feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">{% trans "Secure Authentication" %}</h6>
+                            <p class="text-muted mb-0">{% trans "API keys with rate limiting and HTTPS" %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-title"><i class="fas fa-terminal me-2"></i>{% trans "API Example" %}</span>
+                        <span class="code-lang">Python</span>
+                    </div>
+                    <pre class="code-block"><code>import requests
+
+# Generate voice
+response = requests.post(
+    'https://api.example.com/generate',
+    headers={'Authorization': 'Bearer YOUR_API_KEY'},
+    json={
+        'text': 'Hello world!',
+        'voice_id': 'your_cloned_voice',
+        'emotion': 'happy',
+        'speed': 1.0
+    }
+)
+
+audio_url = response.json()['audio_url']
+print(f"Audio ready: {audio_url}")</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Multi-Language Support Section -->
+<section class="language-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Global Language Support" %}</h2>
+        <p class="section-subtitle">{% trans "Use our platform in your native language" %}</p>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇺🇸</div>
+                    <h5>{% trans "English" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Full platform support" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇸🇦</div>
+                    <h5>{% trans "Arabic" %}</h5>
+                    <p class="text-muted mb-0">{% trans "RTL interface support" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇵🇰</div>
+                    <h5>{% trans "Urdu" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Complete translation" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇮🇳</div>
+                    <h5>{% trans "Hindi" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Native language support" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇧🇩</div>
+                    <h5>{% trans "Bengali" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Fully localized" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇨🇳</div>
+                    <h5>{% trans "Chinese" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Simplified Chinese" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇪🇸</div>
+                    <h5>{% trans "Spanish" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Global Spanish" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🇫🇷</div>
+                    <h5>{% trans "French" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Full interface" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="language-card">
+                    <div class="language-flag">🌐</div>
+                    <h5>{% trans "More Coming" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Request your language" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-modern text-center">
+    <div class="container" style="position: relative; z-index: 2;">
+        <h2 class="cta-title">{% trans "Ready to Get Started?" %}</h2>
+        <p class="cta-subtitle">
+            {% trans "Sign up now and get 1,000 free credits plus 1 free voice clone!" %}<br>
+            {% trans "No credit card required." %}
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'account_signup' %}" class="btn-gradient-primary" style="padding: 16px 48px; font-size: 18px;">
+                <span><i class="fas fa-rocket me-2"></i>{% trans "Start Free Trial" %}</span>
+            </a>
+            <a href="{% url 'pricing' %}" class="btn-outline-glass" style="padding: 16px 48px; font-size: 18px;">
+                <i class="fas fa-tags me-2"></i>{% trans "View Pricing" %}
+            </a>
+            {% else %}
+            <a href="#" class="btn-gradient-primary" style="padding: 16px 48px; font-size: 18px;">
+                <span><i class="fas fa-magic me-2"></i>{% trans "Start Generating" %}</span>
+            </a>
+            <a href="{% url 'clone' %}" class="btn-outline-glass" style="padding: 16px 48px; font-size: 18px;">
+                <i class="fas fa-clone me-2"></i>{% trans "Clone Voice" %}
+            </a>
+            {% endif %}
+        </div>
+        <div class="cta-features">
+            <div class="cta-feature">
+                <i class="fas fa-shield-alt"></i>
+                {% trans "Secure payment processing" %}
+            </div>
+            <div class="cta-feature">
+                <i class="fas fa-lock"></i>
+                {% trans "Your data is encrypted" %}
+            </div>
+            <div class="cta-feature">
+                <i class="fas fa-headset"></i>
+                {% trans "24/7 support" %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video Modal -->
+<div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.95); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="position: relative; width: 90%; max-width: 1200px;">
+        <!-- Close button -->
+        <button id="closeVideoModal" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: white; font-size: 32px; cursor: pointer; z-index: 10000;">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Video player -->
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 12px;">
+            {% if video_section and video_section.video_file %}
+            <video id="modalVideo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" controls autoplay>
+                <source src="{{ video_section.video_file.url }}" type="video/mp4">
+                {% trans "Your browser does not support the video tag." %}
+            </video>
+            {% else %}
+            <video id="modalVideo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" controls autoplay>
+                <source src="{% static 'videos/demo.mp4' %}" type="video/mp4">
+                {% trans "Your browser does not support the video tag." %}
+            </video>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Carousel Functionality
+let currentSlide = 0;
+const totalSlides = 2;
+const carouselTrack = document.querySelector('.carousel-track');
+const dots = document.querySelectorAll('.carousel-dot');
+
+function updateCarousel() {
+    if (carouselTrack) {
+        carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+}
+
+document.getElementById('nextSlide')?.addEventListener('click', () => {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+});
+
+document.getElementById('prevSlide')?.addEventListener('click', () => {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+});
+
+dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+        currentSlide = index;
+        updateCarousel();
+    });
+});
+
+// Auto-advance carousel every 5 seconds
+setInterval(() => {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+}, 5000);
+
+// Video Player Functionality with Auto-play on Scroll & Modal
+const playVideoBtn = document.getElementById('playVideoBtn');
+const videoPlaceholder = document.querySelector('.video-placeholder');
+const demoVideo = document.getElementById('demoVideo');
+const videoContainer = document.getElementById('videoContainer');
+const videoClickOverlay = document.getElementById('videoClickOverlay');
+const videoModal = document.getElementById('videoModal');
+const modalVideo = document.getElementById('modalVideo');
+const closeVideoModal = document.getElementById('closeVideoModal');
+
+let videoPlayed = false;
+
+// Auto-play video when scrolled into view
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !videoPlayed) {
+            // Hide placeholder and play video
+            if (videoPlaceholder) {
+                videoPlaceholder.style.display = 'none';
+            }
+            if (demoVideo) {
+                demoVideo.style.display = 'block';
+                demoVideo.play().catch(err => {
+                    console.log('Auto-play prevented:', err);
+                });
+            }
+            videoPlayed = true;
+        }
+    });
+}, {
+    threshold: 0.5 // Trigger when 50% of video is visible
+});
+
+// Observe video container
+if (videoContainer) {
+    videoObserver.observe(videoContainer);
+}
+
+// Open modal when video container is clicked
+videoContainer?.addEventListener('click', () => {
+    videoModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // Pause preview video
+    if (demoVideo) {
+        demoVideo.pause();
+    }
+
+    // Play modal video
+    if (modalVideo) {
+        modalVideo.currentTime = demoVideo?.currentTime || 0;
+        modalVideo.play();
+    }
+});
+
+// Close modal
+closeVideoModal?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    videoModal.style.display = 'none';
+    document.body.style.overflow = '';
+
+    // Pause modal video
+    if (modalVideo) {
+        modalVideo.pause();
+    }
+
+    // Resume preview video
+    if (demoVideo) {
+        demoVideo.currentTime = modalVideo?.currentTime || 0;
+        demoVideo.play();
+    }
+});
+
+// Close modal when clicking outside video
+videoModal?.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        closeVideoModal.click();
+    }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal.style.display === 'flex') {
+        closeVideoModal.click();
+    }
+});
+
+// FAQ Toggle Functionality
+function toggleFAQ(button) {
+    const faqItem = button.parentElement;
+    const isActive = faqItem.classList.contains('active');
+
+    // Close all FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Open clicked item if it wasn't active
+    if (!isActive) {
+        faqItem.classList.add('active');
+    }
+}
+
+// Smooth scroll for demo link
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && href.length > 1) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    });
+});
+
+// Add animation on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Observe sections for animation
+document.querySelectorAll('.feature-card-modern, .carousel-card, .testimonial-card-modern, .pricing-card-preview, .faq-item, .trust-badge, .comparison-card, .live-stat-card, .language-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+
+// Animated counter for statistics
+function animateCounter(element) {
+    const target = parseInt(element.getAttribute('data-target'));
+    const duration = 2000; // 2 seconds
+    const increment = target / (duration / 16); // 60fps
+    let current = 0;
+
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target.toLocaleString();
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current).toLocaleString();
+        }
+    }, 16);
+}
+
+// Observe stat values and animate when visible
+const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.textContent === '0') {
+            animateCounter(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-value').forEach(el => {
+    statObserver.observe(el);
+});
+
+// Play demo voice audio with play/stop toggle
+let currentAudio = null;
+let currentButton = null;
+
+function playDemoVoice(audioUrl, buttonElement) {
+    // Get button element (if called from onclick, need to get it)
+    const button = buttonElement || event.currentTarget;
+
+    // If same audio is playing, stop it
+    if (currentAudio && currentButton === button) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+        currentButton = null;
+
+        // Reset button to Play state
+        button.innerHTML = '<span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>';
+        return;
+    }
+
+    // If different audio is playing, stop it first
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+
+        // Reset previous button to Play state
+        if (currentButton) {
+            currentButton.innerHTML = '<span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>';
+        }
+    }
+
+    // Create new audio instance
+    currentAudio = new Audio(audioUrl);
+    currentButton = button;
+
+    // Change button to Stop state
+    button.innerHTML = '<span><i class="fas fa-stop me-2"></i>{% trans "Stop" %}</span>';
+
+    // Play audio
+    currentAudio.play().catch(error => {
+        console.error('Error playing audio:', error);
+        alert('Unable to play audio. Please try again.');
+
+        // Reset on error
+        currentAudio = null;
+        currentButton = null;
+        button.innerHTML = '<span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>';
+    });
+
+    // Reset when finished
+    currentAudio.addEventListener('ended', () => {
+        currentAudio = null;
+        currentButton = null;
+        button.innerHTML = '<span><i class="fas fa-play me-2"></i>{% trans "Play" %}</span>';
+    });
+}
+</script>
+{% endblock %}

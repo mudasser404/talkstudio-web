@@ -1,0 +1,150 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% load socialaccount %}
+
+{% block title %}{% trans "Connected Accounts" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header mb-4">
+                <h2><i class="fas fa-link me-2"></i>{% trans "Connected Accounts" %}</h2>
+                <p class="text-muted">{% trans "Manage your social login connections" %}</p>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>{% trans "Your Connected Accounts" %}</h5>
+                </div>
+                <div class="card-body">
+                    {% if form.accounts %}
+                    <p class="text-muted mb-4">
+                        {% trans "You can sign in to your account using any of the following third party accounts:" %}
+                    </p>
+
+                    <form method="post" action="{% url 'socialaccount_connections' %}">
+                        {% csrf_token %}
+
+                        {% for account in form.accounts %}
+                        <div class="social-account-item mb-3 p-3" style="background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if account.get_provider.id == 'google' %}
+                                    <div style="width: 48px; height: 48px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+                                            <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+                                            <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+                                            <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+                                        </svg>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-1" style="font-weight: 600; color: #1f2937;">
+                                            {{ account.get_provider.name }}
+                                        </h6>
+                                        <p class="mb-0 text-muted" style="font-size: 14px;">
+                                            {{ account }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="radio" name="account" value="{{ account.id }}" id="account_{{ account.id }}"
+                                           {% if form.accounts|length == 1 %}disabled{% endif %}>
+                                    <label for="account_{{ account.id }}" class="visually-hidden">{% trans "Remove" %}</label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% if form.accounts|length > 1 %}
+                        <button type="submit" class="btn btn-danger mt-3" name="action_remove">
+                            <i class="fas fa-unlink me-2"></i>{% trans "Remove Selected Account" %}
+                        </button>
+                        {% else %}
+                        <div class="alert alert-warning mt-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {% trans "You cannot remove your only login method. Please add another login method first." %}
+                        </div>
+                        {% endif %}
+                    </form>
+
+                    {% else %}
+                    <p class="text-muted">
+                        {% trans "You currently have no social network accounts connected to this account." %}
+                    </p>
+                    {% endif %}
+
+                    <hr class="my-4">
+
+                    <h6 class="mb-3"><i class="fas fa-plus-circle me-2"></i>{% trans "Add a New Connection" %}</h6>
+
+                    {% if google_oauth_enabled %}
+                    <div class="available-providers">
+                        <a href="{% provider_login_url 'google' process='connect' %}" class="btn btn-outline-primary">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                <path d="M19.8055 10.2253C19.8055 9.48164 19.7453 8.73551 19.6175 8.00684H10.2002V12.172H15.5948C15.3575 13.4411 14.608 14.5521 13.5196 15.2658V17.7466H16.7869C18.7537 15.9417 19.8055 13.313 19.8055 10.2253Z" fill="#4285F4"/>
+                                <path d="M10.2002 20.1673C12.9539 20.1673 15.259 19.2569 16.7906 17.7466L13.5233 15.2658C12.603 15.889 11.4531 16.2442 10.2039 16.2442C7.53994 16.2442 5.29085 14.422 4.48014 11.9966H1.10815V14.5516C2.67964 17.657 6.2774 19.9988 10.2002 19.9988V20.1673Z" fill="#34A853"/>
+                                <path d="M4.47646 12.0002C4.02436 10.7311 4.02436 9.33669 4.47646 8.06755V5.51257H1.10447C-0.368156 8.43498 -0.368156 11.9995 1.10447 14.9219L4.47646 12.3669V12.0002Z" fill="#FBBC04"/>
+                                <path d="M10.2002 3.92319C11.5242 3.90315 12.8044 4.43039 13.7546 5.36304L16.645 2.5082C15.1806 1.14636 13.2291 0.400156 10.2002 0.400156C6.2774 0.400156 2.67964 2.74199 1.10815 5.84727L4.48014 8.4023C5.28717 5.97692 7.53625 4.15471 10.2002 4.15471V3.92319Z" fill="#EA4335"/>
+                            </svg>
+                            {% trans "Connect Google Account" %}
+                        </a>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% trans "Google Sign-In is not currently configured by the administrator." %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>{% trans "Back to Dashboard" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .social-account-item {
+        transition: all 0.2s;
+    }
+
+    .social-account-item:hover {
+        background: #f3f4f6 !important;
+        border-color: #d1d5db !important;
+    }
+
+    .btn-outline-primary {
+        border-color: #3b82f6;
+        color: #3b82f6;
+    }
+
+    .btn-outline-primary:hover {
+        background: #3b82f6;
+        color: white;
+    }
+</style>
+{% endblock %}

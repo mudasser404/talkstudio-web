@@ -1,0 +1,112 @@
+{% extends 'landing_page_crud.html' %}
+{% load i18n %}
+
+{% block table_row %}
+<td>{{ item.name|truncatechars:40 }}</td>
+<td>{{ item.description|truncatechars:60 }}</td>
+<td>
+    {% if item.audio_file %}
+        <audio controls style="height: 32px;">
+            <source src="{{ item.audio_file.url }}" type="audio/mpeg">
+            <source src="{{ item.audio_file.url }}" type="audio/wav">
+        </audio>
+    {% else %}
+        <span class="text-muted">No audio</span>
+    {% endif %}
+</td>
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <label class="form-label">{% trans "Name" %} <span class="text-danger">*</span></label>
+    <input type="text" class="form-control" name="name" id="name" required>
+    <div class="form-help">{% trans "Voice name (e.g., Sarah - Female (American))" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Description" %} <span class="text-danger">*</span></label>
+    <textarea class="form-control" name="description" id="description" required></textarea>
+    <div class="form-help">{% trans "Voice description (e.g., Professional and friendly voice)" %}</div>
+</div>
+
+<div class="form-group">
+    <label class="form-label">{% trans "Audio File" %}</label>
+    <input type="file" class="form-control" name="audio_file" id="audio_file" accept="audio/*">
+    <div class="form-help">{% trans "Upload MP3, WAV, or other audio file (max 10MB)" %}</div>
+    <div id="current_audio_player" style="margin-top: 10px; display: none;">
+        <label class="form-label">{% trans "Current Audio:" %}</label>
+        <audio controls style="width: 100%; max-width: 400px;">
+            <source id="current_audio_source" src="" type="audio/mpeg">
+        </audio>
+    </div>
+</div>
+{% endblock %}
+
+{% block populate_form_js %}
+document.getElementById('name').value = data.name || '';
+document.getElementById('description').value = data.description || '';
+document.getElementById('order').value = data.order || 0;
+document.getElementById('is_active').checked = data.is_active;
+
+// Show current audio if exists
+if (data.audio_file) {
+    const audioPlayer = document.getElementById('current_audio_player');
+    const audioSource = document.getElementById('current_audio_source');
+    audioSource.src = data.audio_file;
+    audioPlayer.style.display = 'block';
+
+    // Reset file input
+    document.getElementById('audio_file').value = '';
+} else {
+    document.getElementById('current_audio_player').style.display = 'none';
+}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+// Override default save function to handle file uploads
+function saveItem() {
+    const form = document.getElementById('itemForm');
+    const formData = new FormData(form);
+
+    // Add item_id if editing
+    const itemId = document.getElementById('item_id').value;
+    if (itemId) {
+        formData.append('item_id', itemId);
+    }
+
+    fetch('{{ save_url }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess(data.message || '{% trans "Item saved successfully" %}');
+            closeModal();
+            setTimeout(() => location.reload(), 500);
+        } else {
+            showError(data.error || '{% trans "Failed to save item" %}');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('{% trans "An error occurred while saving" %}');
+    });
+}
+
+// Helper functions for notifications
+function showSuccess(message) {
+    // Simple alert for now (can be replaced with better notification system)
+    alert(message);
+}
+
+function showError(message) {
+    alert('Error: ' + message);
+}
+</script>
+{% endblock %}

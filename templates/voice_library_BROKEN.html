@@ -1,0 +1,661 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Voice Library" %}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">{% trans "Voice Library" %}</h2>
+
+        <!-- Tab Pills Navigation -->
+        <ul class="nav nav-pills mb-4" id="voiceLibraryTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="my-voices-tab" data-bs-toggle="pill" data-bs-target="#my-voices" type="button" role="tab">
+                    <i class="fas fa-microphone me-2"></i>{% trans "My Cloned Voices" %}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="default-voices-tab" data-bs-toggle="pill" data-bs-target="#default-voices" type="button" role="tab">
+                    <i class="fas fa-music me-2"></i>{% trans "Default Voices" %}
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="voiceLibraryTabContent">
+
+            <!-- My Cloned Voices Tab -->
+            <div class="tab-pane fade show active" id="my-voices" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>{% trans "Your Cloned Voices" %}</h4>
+                    <button class="btn btn-primary" onclick="openAddVoiceModal()">
+                        <i class="fas fa-plus"></i> {% trans "Clone New Voice" %}
+                    </button>
+                </div>
+
+                <div id="cloned-voices-list">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{% trans "Loading..." %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default Voices Tab -->
+            <div class="tab-pane fade" id="default-voices" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>{% trans "Default Voice Library" %}</h4>
+                    {% if user.is_staff or user.is_superuser %}
+                    <button class="btn btn-success" onclick="openAddDefaultVoiceModal()">
+                        <i class="fas fa-plus"></i> {% trans "Add Default Voice" %}
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Gender Filter -->
+                <div class="mb-4">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary active" onclick="filterDefaultVoices('all')">All</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="filterDefaultVoices('male')">Male</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="filterDefaultVoices('female')">Female</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="filterDefaultVoices('neutral')">Neutral</button>
+                    </div>
+                </div>
+
+                <div id="default-voices-list">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{% trans "Loading..." %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Add/Edit Cloned Voice Modal (existing) -->
+<div class="modal fade" id="voiceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="voiceModalLabel">
+                    <i class="fas fa-microphone"></i> {% trans "Clone New Voice" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="voiceForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="voiceName" class="form-label">
+                            {% trans "Voice Name" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="voiceName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="voiceAudio" class="form-label">
+                            {% trans "Audio File" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" class="form-control" id="voiceAudio" name="audio_file" accept="audio/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="voiceImage" class="form-label">
+                            {% trans "Voice Avatar (Optional)" %}
+                        </label>
+                        <input type="file" class="form-control" id="voiceImage" name="image" accept="image/*">
+                        <div id="imagePreview" class="mt-2" style="display: none;">
+                            <img id="previewImg" src="" style="max-width: 200px; border-radius: 8px;">
+                        </div>
+                    </div>
+                    <div id="audioPreview" class="mt-3" style="display: none;"></div>
+                    <input type="hidden" id="voiceId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" onclick="saveVoice()">
+                    <span id="saveButtonText">{% trans "Save Voice" %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Default Voice Modal (admin only) -->
+<div class="modal fade" id="defaultVoiceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="defaultVoiceModalLabel">
+                    <i class="fas fa-music"></i> {% trans "Add Default Voice" %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="defaultVoiceForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="defaultVoiceName" class="form-label">
+                                {% trans "Voice Name" %} <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="defaultVoiceName" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="defaultVoiceGender" class="form-label">
+                                {% trans "Gender" %} <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="defaultVoiceGender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="neutral">Neutral</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="defaultVoiceAccent" class="form-label">{% trans "Accent" %}</label>
+                            <input type="text" class="form-control" id="defaultVoiceAccent" name="accent" placeholder="e.g., American, British">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="defaultVoiceLanguage" class="form-label">{% trans "Language" %}</label>
+                            <input type="text" class="form-control" id="defaultVoiceLanguage" name="language" value="English">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="defaultVoiceDescription" class="form-label">{% trans "Description" %}</label>
+                        <textarea class="form-control" id="defaultVoiceDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="defaultVoiceFile" class="form-label">
+                            {% trans "Voice File" %} <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" class="form-control" id="defaultVoiceFile" name="voice_file" accept="audio/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="defaultVoicePreview" class="form-label">{% trans "Preview Audio (Optional)" %}</label>
+                        <input type="file" class="form-control" id="defaultVoicePreview" name="preview_audio" accept="audio/*">
+                    </div>
+                    <input type="hidden" id="defaultVoiceId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-success" onclick="saveDefaultVoice()">
+                    <span id="saveDefaultButtonText">{% trans "Save Voice" %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Tab Pills Styling */
+.nav-pills .nav-link {
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    margin-right: 10px;
+}
+
+.nav-pills .nav-link:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary);
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* Voice Cards Styling */
+.voice-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.voice-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.voice-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    margin: 0 auto 24px auto;
+    display: block;
+}
+
+.custom-audio-player {
+    position: relative;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+.custom-audio-player::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.92) 0%, rgba(42, 82, 152, 0.92) 100%);
+    z-index: 0;
+}
+
+.custom-audio-player > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Gender Badge */
+.gender-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+.gender-badge.male {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.gender-badge.female {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.gender-badge.neutral {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    border-radius: 24px;
+}
+
+.empty-state i {
+    font-size: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 24px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/table_utils.js' %}?v=2.0"></script>
+<script>
+let voiceModal, defaultVoiceModal;
+let currentAudioFile = null;
+let currentGenderFilter = 'all';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modals
+    voiceModal = new bootstrap.Modal(document.getElementById('voiceModal'));
+    defaultVoiceModal = new bootstrap.Modal(document.getElementById('defaultVoiceModal'));
+
+    // Load both tabs data
+    loadClonedVoices();
+    loadDefaultVoices();
+
+    // Image preview for cloned voices
+    document.getElementById('voiceImage')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Tab change handler
+    document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function(e) {
+            if (e.target.id === 'default-voices-tab') {
+                loadDefaultVoices();
+            } else {
+                loadClonedVoices();
+            }
+        });
+    });
+});
+
+// ==================== CLONED VOICES FUNCTIONS ====================
+
+function openAddVoiceModal() {
+    document.getElementById('voiceModalLabel').innerHTML = '<i class="fas fa-microphone"></i> Clone New Voice';
+    document.getElementById('voiceForm').reset();
+    document.getElementById('voiceId').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('audioPreview').style.display = 'none';
+    voiceModal.show();
+}
+
+async function saveVoice() {
+    const form = document.getElementById('voiceForm');
+    const formData = new FormData(form);
+    const voiceId = document.getElementById('voiceId').value;
+
+    const name = document.getElementById('voiceName').value.trim();
+    const audioFile = document.getElementById('voiceAudio').files[0];
+
+    if (!name || (!voiceId && !audioFile)) {
+        alert('Please fill required fields');
+        return;
+    }
+
+    const saveButton = document.querySelector('#voiceModal .btn-primary');
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+
+    try {
+        const url = voiceId ? `/api/voices/cloned/${voiceId}/` : '/api/voices/cloned/';
+        const method = voiceId ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            voiceModal.hide();
+            loadClonedVoices();
+            showAlert('Voice saved successfully!', 'success');
+        } else {
+            showAlert(data.error || 'Failed to save voice', 'error');
+        }
+    } catch (error) {
+        showAlert('An error occurred', 'error');
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML = 'Save Voice';
+    }
+}
+
+async function loadClonedVoices() {
+    const container = document.getElementById('cloned-voices-list');
+
+    try {
+        const response = await fetch('/api/voices/cloned/', {credentials: 'include'});
+        const responseData = await response.json();
+        const data = responseData.results || responseData;
+
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-microphone-slash"></i>
+                    <h4>No Voices Yet</h4>
+                    <p>Start by cloning your first voice</p>
+                    <button class="btn btn-primary" onclick="openAddVoiceModal()">
+                        <i class="fas fa-plus"></i> Clone Your First Voice
+                    </button>
+                </div>`;
+            return;
+        }
+
+        let html = '<div class="row">';
+        data.forEach(voice => {
+            const imageUrl = voice.image || '{% static "voice/defualt.png" %}';
+            const audioUrl = voice.audio_file.startsWith('/') || voice.audio_file.startsWith('http')
+                ? voice.audio_file : '/media/' + voice.audio_file;
+
+            html += `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="voice-card">
+                        <div class="p-4">
+                            <img src="${imageUrl}" alt="${escapeHtml(voice.name)}" class="voice-avatar">
+                            <h5 class="text-center mb-3">${escapeHtml(voice.name)}</h5>
+                            <audio controls style="width: 100%;" src="${audioUrl}"></audio>
+                            <div class="mt-3 d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-danger flex-fill" onclick="deleteVoice('${voice.id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (error) {
+        container.innerHTML = `<div class="text-center py-5"><p class="text-danger">Failed to load voices</p></div>`;
+    }
+}
+
+async function deleteVoice(voiceId) {
+    if (!confirm('Are you sure?')) return;
+
+    try {
+        const response = await fetch(`/api/voices/cloned/${voiceId}/`, {
+            method: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')}
+        });
+
+        if (response.ok) {
+            loadClonedVoices();
+            showAlert('Voice deleted successfully', 'success');
+        }
+    } catch (error) {
+        showAlert('An error occurred', 'error');
+    }
+}
+
+// ==================== DEFAULT VOICES FUNCTIONS ====================
+
+function openAddDefaultVoiceModal() {
+    document.getElementById('defaultVoiceModalLabel').innerHTML = '<i class="fas fa-music"></i> Add Default Voice';
+    document.getElementById('defaultVoiceForm').reset();
+    document.getElementById('defaultVoiceId').value = '';
+    defaultVoiceModal.show();
+}
+
+async function saveDefaultVoice() {
+    const form = document.getElementById('defaultVoiceForm');
+    const formData = new FormData(form);
+    const voiceId = document.getElementById('defaultVoiceId').value;
+
+    const name = formData.get('name');
+    const gender = formData.get('gender');
+    const voiceFile = document.getElementById('defaultVoiceFile').files[0];
+
+    if (!name || !gender || (!voiceId && !voiceFile)) {
+        alert('Please fill required fields');
+        return;
+    }
+
+    const saveButton = document.querySelector('#defaultVoiceModal .btn-success');
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+
+    try {
+        const url = voiceId ? `/api/voices/default-voices/${voiceId}/` : '/api/voices/default-voices/';
+        const method = voiceId ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {'X-CSRFToken': formData.get('csrfmiddlewaretoken')},
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            defaultVoiceModal.hide();
+            loadDefaultVoices();
+            showAlert('Default voice saved successfully!', 'success');
+        } else {
+            showAlert(data.error || 'Failed to save voice', 'error');
+        }
+    } catch (error) {
+        showAlert('An error occurred', 'error');
+    } finally {
+        saveButton.disabled = false;
+        saveButton.innerHTML = 'Save Voice';
+    }
+}
+
+async function loadDefaultVoices(gender = currentGenderFilter) {
+    currentGenderFilter = gender;
+    const container = document.getElementById('default-voices-list');
+
+    try {
+        let url = '/api/voices/library/';
+        if (gender && gender !== 'all') {
+            url += `?gender=${gender}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-music"></i>
+                    <h4>No Default Voices</h4>
+                    <p>No default voices available yet</p>
+                </div>`;
+            return;
+        }
+
+        let html = '<div class="row">';
+        data.forEach(voice => {
+            const voiceUrl = voice.voice_file.startsWith('/') ? voice.voice_file : '/media/' + voice.voice_file;
+
+            html += `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="voice-card">
+                        <span class="gender-badge ${voice.gender}">${voice.gender}</span>
+                        <div class="p-4">
+                            <h5 class="mb-2">${escapeHtml(voice.name)}</h5>
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-language"></i> ${voice.language || 'English'}
+                                ${voice.accent ? '• ' + voice.accent : ''}
+                            </p>
+                            ${voice.description ? `<p class="small mb-3">${escapeHtml(voice.description)}</p>` : ''}
+                            <audio controls style="width: 100%;" src="${voiceUrl}"></audio>
+                            {% if user.is_staff or user.is_superuser %}
+                            <div class="mt-3">
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteDefaultVoice(${voice.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (error) {
+        container.innerHTML = `<div class="text-center py-5"><p class="text-danger">Failed to load voices</p></div>`;
+    }
+}
+
+function filterDefaultVoices(gender) {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    loadDefaultVoices(gender);
+}
+
+async function deleteDefaultVoice(voiceId) {
+    if (!confirm('Are you sure?')) return;
+
+    try {
+        const response = await fetch(`/api/voices/default-voices/${voiceId}/`, {
+            method: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')}
+        });
+
+        if (response.ok) {
+            loadDefaultVoices();
+            showAlert('Voice deleted successfully', 'success');
+        }
+    } catch (error) {
+        showAlert('An error occurred', 'error');
+    }
+}
+
+// ==================== UTILITY FUNCTIONS ====================
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => alertDiv.remove(), 5000);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function escapeHtml(text) {
+    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+</script>
+{% endblock %}

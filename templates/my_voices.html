@@ -1,0 +1,264 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "My Voices" %}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">{% trans "My Voices" %}</h2>
+
+        <!-- Only Generated Audio (No tabs) -->
+        <div class="row mb-3">
+            <div class="col">
+                <a href="{% url 'clone' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> {% trans "Generate Audio" %}
+                </a>
+            </div>
+        </div>
+
+        <div id="generated-audio-list">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{% trans "Loading..." %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Voice Cards Styling */
+.voice-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+.voice-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+/* Custom Audio Player - Same as Voice Library */
+.custom-audio-player {
+    position: relative;
+    border-radius: 25px;
+    padding: 24px 20px 20px;
+    margin-bottom: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.custom-audio-player::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(43, 76, 126, 0.95) 0%, rgba(30, 58, 95, 0.95) 100%);
+    z-index: 0;
+}
+
+.custom-audio-player > * {
+    position: relative;
+    z-index: 1;
+}
+
+.custom-audio-player .audio-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.4);
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.custom-audio-player .audio-icon i {
+    font-size: 48px;
+    color: white;
+}
+
+.custom-audio-player .player-info {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.custom-audio-player .status-text {
+    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.custom-audio-player .voice-name {
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    padding: 0 10px;
+}
+
+.custom-audio-player .voice-name:hover::after {
+    content: attr(data-full-name);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    background: rgba(0,0,0,0.95);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    white-space: normal;
+    z-index: 1000;
+    max-width: 280px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.custom-audio-player .waveform {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.custom-audio-player .waveform .bar {
+    width: 4px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 3px;
+    animation: wave 1s ease-in-out infinite;
+}
+
+.custom-audio-player .waveform .bar:nth-child(1) { height: 15px; }
+.custom-audio-player .waveform .bar:nth-child(2) { height: 25px; animation-delay: 0.1s; }
+.custom-audio-player .waveform .bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+.custom-audio-player .waveform .bar:nth-child(4) { height: 30px; animation-delay: 0.3s; }
+.custom-audio-player .waveform .bar:nth-child(5) { height: 22px; animation-delay: 0.4s; }
+.custom-audio-player .waveform .bar:nth-child(6) { height: 28px; animation-delay: 0.5s; }
+.custom-audio-player .waveform .bar:nth-child(7) { height: 18px; animation-delay: 0.4s; }
+.custom-audio-player .waveform .bar:nth-child(8) { height: 24px; animation-delay: 0.3s; }
+.custom-audio-player .waveform .bar:nth-child(9) { height: 20px; animation-delay: 0.2s; }
+.custom-audio-player .waveform .bar:nth-child(10) { height: 16px; animation-delay: 0.1s; }
+
+@keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.5); }
+}
+
+.custom-audio-player .time-info {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+}
+
+.custom-audio-player .player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.custom-audio-player .player-controls button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.custom-audio-player .player-controls button:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.12);
+}
+
+.custom-audio-player .player-controls .play-btn {
+    width: 60px;
+    height: 60px;
+    background: white;
+    color: #1e3c72;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    font-size: 20px;
+}
+
+.custom-audio-player .player-controls .play-btn:hover {
+    background: rgba(255,255,255,0.98);
+    transform: scale(1.15);
+}
+
+.custom-audio-player .delete-section {
+    width: 100%;
+    text-align: center;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.custom-audio-player .delete-section button {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    padding: 10px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.custom-audio-player .delete-section button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/table_utils.js' %}?v=2.0"></script>
+<script src="{% static 'js/my_voices.js' %}"></script>
+<script>
+// Load only generated audio
+document.addEventListener('DOMContentLoaded', function() {
+    loadGeneratedAudio();
+});
+</script>
+{% endblock %}

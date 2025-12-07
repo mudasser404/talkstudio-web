@@ -1,0 +1,449 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Activity Logs - Admin" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .logs-header {
+        background: linear-gradient(135deg, #000000 0%, #1A1A1A 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 32px;
+    }
+
+    .logs-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .log-item {
+        padding: 16px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        margin-bottom: 12px;
+        background: var(--bg-primary);
+        transition: all 0.2s ease;
+    }
+
+    .log-item:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary);
+    }
+
+    .log-action {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 15px;
+    }
+
+    .log-description {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin: 8px 0;
+    }
+
+    .log-meta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--text-tertiary);
+    }
+
+    .log-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .severity-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .severity-low {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .severity-medium {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .severity-high {
+        background: #FED7AA;
+        color: #9A3412;
+    }
+
+    .severity-critical {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .filter-bar {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: var(--radius-lg);
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+    }
+
+    .filter-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: end;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Logs Header -->
+<section class="logs-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-2">
+                    <i class="fas fa-history me-2"></i>{% trans "Activity Logs" %}
+                </h1>
+                <p class="mb-0 opacity-75">{% trans "Complete audit trail of all admin and user activities" %}</p>
+            </div>
+            <div>
+                <a href="/admin-dashboard/" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left me-2"></i>{% trans "Back to Dashboard" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <!-- Activity Logs List -->
+    <div class="logs-card">
+        <h5 class="mb-4">
+            <i class="fas fa-list me-2"></i>{% trans "Activity Logs" %}
+        </h5>
+
+        <!-- Filters and Search -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="logs-search" placeholder="{% trans 'Search logs...' %}" onkeyup="filterLogs()">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="logs-action-filter" onchange="filterLogs()">
+                    <option value="">{% trans "All Actions" %}</option>
+                    <option value="user_created">{% trans "User Created" %}</option>
+                    <option value="user_updated">{% trans "User Updated" %}</option>
+                    <option value="user_deleted">{% trans "User Deleted" %}</option>
+                    <option value="user_activated">{% trans "User Activated" %}</option>
+                    <option value="user_deactivated">{% trans "User Deactivated" %}</option>
+                    <option value="credits_added">{% trans "Credits Added" %}</option>
+                    <option value="subscription_changed">{% trans "Subscription Changed" %}</option>
+                    <option value="voice_cloned">{% trans "Voice Cloned" %}</option>
+                    <option value="audio_generated">{% trans "Audio Generated" %}</option>
+                    <option value="payment_completed">{% trans "Payment Completed" %}</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="logs-severity-filter" onchange="filterLogs()">
+                    <option value="">{% trans "All Severities" %}</option>
+                    <option value="low">{% trans "Low" %}</option>
+                    <option value="medium">{% trans "Medium" %}</option>
+                    <option value="high">{% trans "High" %}</option>
+                    <option value="critical">{% trans "Critical" %}</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" id="logs-page-size" onchange="changeLogsPageSize()">
+                    <option value="10">{% trans "10 per page" %}</option>
+                    <option value="20" selected>{% trans "20 per page" %}</option>
+                    <option value="50">{% trans "50 per page" %}</option>
+                    <option value="100">{% trans "100 per page" %}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="cursor: pointer;" onclick="sortLogs('created_at')">{% trans "Time" %} <i class="fas fa-sort" id="sort-created_at"></i></th>
+                        <th style="cursor: pointer;" onclick="sortLogs('action')">{% trans "Action" %} <i class="fas fa-sort" id="sort-action"></i></th>
+                        <th>{% trans "Description" %}</th>
+                        <th style="cursor: pointer;" onclick="sortLogs('severity')">{% trans "Severity" %} <i class="fas fa-sort" id="sort-severity"></i></th>
+                        <th>{% trans "Admin" %}</th>
+                        <th>{% trans "Target" %}</th>
+                        <th>{% trans "IP Address" %}</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-table-body">
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">{% trans "Loading..." %}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div id="logs-showing-text">{% trans "Showing 0 of 0" %}</div>
+            <nav>
+                <ul class="pagination mb-0" id="logs-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// CSRF token is already defined in dashboard_base.html
+
+// Activity logs state
+let allLogsData = [];
+let filteredLogsData = [];
+let logsCurrentPage = 1;
+let logsPageSize = 20;
+let logsSortColumn = 'created_at';
+let logsSortOrder = 'desc';
+
+// Get icon for action
+function getActionIcon(action) {
+    const icons = {
+        'user_created': 'user-plus',
+        'user_updated': 'user-edit',
+        'user_deleted': 'user-times',
+        'user_activated': 'user-check',
+        'user_deactivated': 'user-slash',
+        'credits_added': 'coins',
+        'credits_deducted': 'minus-circle',
+        'subscription_changed': 'exchange-alt',
+        'voice_cloned': 'microphone',
+        'audio_generated': 'magic',
+        'payment_completed': 'dollar-sign',
+        'admin_login': 'sign-in-alt',
+        'settings_updated': 'cog'
+    };
+    return icons[action] || 'info-circle';
+}
+
+// Load activity logs
+async function loadActivityLogs() {
+    try {
+        const response = await fetch('/api/accounts/admin/activity-logs/?limit=500', {
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('[LOGS] API Response:', data);
+            allLogsData = data.logs || [];
+            filteredLogsData = [...allLogsData];
+            renderLogsTable();
+        }
+    } catch (error) {
+        console.error('Error loading logs:', error);
+        document.getElementById('logs-table-body').innerHTML =
+            '<tr><td colspan="7" class="text-center py-4"><div class="alert alert-danger">{% trans "Failed to load activity logs" %}</div></td></tr>';
+    }
+}
+
+function filterLogs() {
+    const searchQuery = document.getElementById('logs-search').value.toLowerCase();
+    const actionFilter = document.getElementById('logs-action-filter').value;
+    const severityFilter = document.getElementById('logs-severity-filter').value;
+
+    filteredLogsData = allLogsData.filter(log => {
+        const matchesSearch = !searchQuery ||
+            log.description.toLowerCase().includes(searchQuery) ||
+            (log.admin_email && log.admin_email.toLowerCase().includes(searchQuery)) ||
+            (log.target_email && log.target_email.toLowerCase().includes(searchQuery));
+
+        const matchesAction = !actionFilter || log.action === actionFilter;
+        const matchesSeverity = !severityFilter || log.severity === severityFilter;
+
+        return matchesSearch && matchesAction && matchesSeverity;
+    });
+
+    logsCurrentPage = 1;
+    renderLogsTable();
+}
+
+function sortLogs(column) {
+    if (logsSortColumn === column) {
+        logsSortOrder = logsSortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+        logsSortColumn = column;
+        logsSortOrder = 'asc';
+    }
+
+    // Update sort icons
+    document.querySelectorAll('[id^="sort-"]').forEach(icon => {
+        icon.className = 'fas fa-sort text-muted';
+    });
+    const icon = document.getElementById(`sort-${column}`);
+    if (icon) {
+        icon.className = logsSortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+    }
+
+    filteredLogsData.sort((a, b) => {
+        let valA = a[column];
+        let valB = b[column];
+
+        if (column === 'created_at') {
+            valA = new Date(valA).getTime();
+            valB = new Date(valB).getTime();
+        }
+
+        if (valA < valB) return logsSortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return logsSortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    renderLogsTable();
+}
+
+function changeLogsPageSize() {
+    logsPageSize = parseInt(document.getElementById('logs-page-size').value);
+    logsCurrentPage = 1;
+    renderLogsTable();
+}
+
+function goToLogsPage(page) {
+    const totalPages = Math.ceil(filteredLogsData.length / logsPageSize);
+    if (page < 1 || page > totalPages) return;
+    logsCurrentPage = page;
+    renderLogsTable();
+}
+
+function renderLogsTable() {
+    const tbody = document.getElementById('logs-table-body');
+    tbody.innerHTML = '';
+
+    if (filteredLogsData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4">{% trans "No activity logs found" %}</td></tr>';
+        document.getElementById('logs-showing-text').textContent = '{% trans "Showing 0 of 0" %}';
+        document.getElementById('logs-pagination').innerHTML = '';
+        return;
+    }
+
+    // Pagination
+    const totalPages = Math.ceil(filteredLogsData.length / logsPageSize);
+    const startIdx = (logsCurrentPage - 1) * logsPageSize;
+    const endIdx = Math.min(startIdx + logsPageSize, filteredLogsData.length);
+    const pageLogs = filteredLogsData.slice(startIdx, endIdx);
+
+    // Render rows
+    pageLogs.forEach(log => {
+        const row = document.createElement('tr');
+        row.style.color = '#10b981'; // Green text for all log entries
+        row.innerHTML = `
+            <td style="white-space: nowrap;">${new Date(log.created_at).toLocaleString()}</td>
+            <td>
+                <i class="fas fa-${getActionIcon(log.action)} me-2"></i>
+                ${log.action_display || log.action}
+            </td>
+            <td>${log.description}</td>
+            <td>
+                <span class="severity-badge severity-${log.severity}">${log.severity_display || log.severity}</span>
+            </td>
+            <td>${log.admin_email || '-'}</td>
+            <td>${log.target_email || '-'}</td>
+            <td>${log.ip_address || '-'}</td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Update showing text
+    document.getElementById('logs-showing-text').textContent =
+        `{% trans "Showing" %} ${startIdx + 1} {% trans "to" %} ${endIdx} {% trans "of" %} ${filteredLogsData.length}`;
+
+    // Render pagination
+    renderLogsPagination(totalPages);
+}
+
+function renderLogsPagination(totalPages) {
+    const pagination = document.getElementById('logs-pagination');
+    pagination.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    // Previous button
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${logsCurrentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="event.preventDefault(); goToLogsPage(${logsCurrentPage - 1})">{% trans "Previous" %}</a>`;
+    pagination.appendChild(prevLi);
+
+    // Page numbers
+    const maxPages = 5;
+    let startPage = Math.max(1, logsCurrentPage - Math.floor(maxPages / 2));
+    let endPage = Math.min(totalPages, startPage + maxPages - 1);
+
+    if (endPage - startPage < maxPages - 1) {
+        startPage = Math.max(1, endPage - maxPages + 1);
+    }
+
+    if (startPage > 1) {
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        li.innerHTML = `<a class="page-link" href="#" onclick="event.preventDefault(); goToLogsPage(1)">1</a>`;
+        pagination.appendChild(li);
+
+        if (startPage > 2) {
+            const dots = document.createElement('li');
+            dots.className = 'page-item disabled';
+            dots.innerHTML = '<span class="page-link">...</span>';
+            pagination.appendChild(dots);
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${i === logsCurrentPage ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="event.preventDefault(); goToLogsPage(${i})">${i}</a>`;
+        pagination.appendChild(li);
+    }
+
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const dots = document.createElement('li');
+            dots.className = 'page-item disabled';
+            dots.innerHTML = '<span class="page-link">...</span>';
+            pagination.appendChild(dots);
+        }
+
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        li.innerHTML = `<a class="page-link" href="#" onclick="event.preventDefault(); goToLogsPage(${totalPages})">${totalPages}</a>`;
+        pagination.appendChild(li);
+    }
+
+    // Next button
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${logsCurrentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="event.preventDefault(); goToLogsPage(${logsCurrentPage + 1})">{% trans "Next" %}</a>`;
+    pagination.appendChild(nextLi);
+}
+
+// Load logs on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadActivityLogs();
+});
+</script>
+{% endblock %}

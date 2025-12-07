@@ -1,0 +1,640 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Language Management - TalkStudio{% endblock %}
+
+{% block extra_css %}
+<style>
+    .language-header {
+        background: linear-gradient(135deg, #000000 0%, #1A1A1A 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+    }
+
+    .language-card {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .language-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .language-flag {
+        font-size: 32px;
+        margin-right: 16px;
+    }
+
+    .language-info {
+        flex: 1;
+    }
+
+    .language-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 4px;
+    }
+
+    .language-native {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .language-code {
+        display: inline-block;
+        background: #f5f5f5;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-family: monospace;
+        color: #666;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-enabled {
+        background: #4caf50;
+        color: white;
+    }
+
+    .status-disabled {
+        background: #9e9e9e;
+        color: white;
+    }
+
+    .training-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+
+    .training-completed {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .training-not-started {
+        background: #f5f5f5;
+        color: #757575;
+    }
+
+    .training-training {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .training-failed {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .quality-score {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .quality-stars {
+        color: #ffc107;
+        font-size: 16px;
+    }
+
+    .quality-text {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+        background-color: #4caf50;
+    }
+
+    input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .filter-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border: 1px solid #e5e5e5;
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        border: 2px solid #e5e5e5;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .filter-btn.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .bulk-actions {
+        background: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        border: 1px solid #e5e5e5;
+        display: none;
+    }
+
+    .bulk-actions.show {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .language-card {
+            flex-direction: column;
+        }
+
+        .action-buttons {
+            margin-top: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="language-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-2"><i class="fas fa-language me-2"></i>Language Management</h2>
+                <p class="mb-0" style="opacity: 0.9;">Control which languages are available for voice cloning</p>
+            </div>
+            <button class="btn btn-light" onclick="refreshLanguages()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="total-count">0</div>
+            <div class="stat-label">Total Languages</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value text-success" id="enabled-count">0</div>
+            <div class="stat-label">Enabled</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value text-primary" id="trained-count">0</div>
+            <div class="stat-label">Trained</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value text-warning" id="pending-count">0</div>
+            <div class="stat-label">Pending Training</div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-section">
+        <h6 class="mb-3"><i class="fas fa-filter me-2"></i>Filter Languages</h6>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterLanguages('all')">
+                <i class="fas fa-globe me-2"></i>All Languages
+            </button>
+            <button class="filter-btn" onclick="filterLanguages('enabled')">
+                <i class="fas fa-check-circle me-2"></i>Enabled Only
+            </button>
+            <button class="filter-btn" onclick="filterLanguages('disabled')">
+                <i class="fas fa-times-circle me-2"></i>Disabled Only
+            </button>
+            <button class="filter-btn" onclick="filterLanguages('trained')">
+                <i class="fas fa-graduation-cap me-2"></i>Trained Only
+            </button>
+            <button class="filter-btn" onclick="filterLanguages('not-trained')">
+                <i class="fas fa-clock me-2"></i>Not Trained
+            </button>
+        </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions" id="bulk-actions">
+        <div>
+            <span id="selected-count">0</span> languages selected
+        </div>
+        <div>
+            <button class="btn btn-success btn-sm me-2" onclick="bulkEnable()">
+                <i class="fas fa-check me-2"></i>Enable Selected
+            </button>
+            <button class="btn btn-secondary btn-sm me-2" onclick="bulkDisable()">
+                <i class="fas fa-ban me-2"></i>Disable Selected
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">
+                <i class="fas fa-times me-2"></i>Clear Selection
+            </button>
+        </div>
+    </div>
+
+    <!-- Languages List -->
+    <div id="languages-container">
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading languages...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let allLanguages = [];
+let selectedLanguages = new Set();
+let currentFilter = 'all';
+
+// Load languages on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadLanguages();
+});
+
+function loadLanguages() {
+    fetch('/api/accounts/admin/languages/', {
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            allLanguages = data.languages;
+            updateStatistics();
+            renderLanguages(allLanguages);
+        } else {
+            showError('Failed to load languages');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('Failed to load languages');
+    });
+}
+
+function updateStatistics() {
+    const total = allLanguages.length;
+    const enabled = allLanguages.filter(l => l.is_enabled).length;
+    const trained = allLanguages.filter(l => l.is_trained).length;
+    const pending = total - trained;
+
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('enabled-count').textContent = enabled;
+    document.getElementById('trained-count').textContent = trained;
+    document.getElementById('pending-count').textContent = pending;
+}
+
+function renderLanguages(languages) {
+    const container = document.getElementById('languages-container');
+
+    if (languages.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No languages found</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = languages.map(lang => `
+        <div class="language-card" data-language-id="${lang.id}" data-filter-enabled="${lang.is_enabled}" data-filter-trained="${lang.is_trained}">
+            <div class="d-flex align-items-start">
+                <div class="language-flag">${lang.flag}</div>
+                <div class="language-info">
+                    <div class="d-flex align-items-center mb-2">
+                        <input type="checkbox" class="language-checkbox me-3" data-language-id="${lang.id}" onchange="updateSelection()">
+                        <div>
+                            <div class="language-name">${lang.name}</div>
+                            <div class="language-native">${lang.native_name}</div>
+                            <span class="language-code">${lang.code}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <span class="status-badge ${lang.is_enabled ? 'status-enabled' : 'status-disabled'}">
+                            ${lang.is_enabled ? '✓ Enabled' : '✗ Disabled'}
+                        </span>
+                        <span class="training-badge training-${lang.training_status}">
+                            ${getTrainingIcon(lang.training_status)} ${getTrainingText(lang.training_status)}
+                        </span>
+                    </div>
+
+                    ${lang.quality_score > 0 ? `
+                        <div class="quality-score">
+                            <span class="quality-stars">${getQualityStars(lang.quality_score)}</span>
+                            <span class="quality-text">${lang.quality_score.toFixed(1)}% Quality</span>
+                        </div>
+                    ` : ''}
+
+                    ${lang.description ? `
+                        <p class="text-muted small mt-2 mb-0">${lang.description}</p>
+                    ` : ''}
+                </div>
+                <div class="action-buttons ms-auto">
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${lang.is_enabled ? 'checked' : ''} onchange="toggleLanguage(${lang.id}, this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getTrainingIcon(status) {
+    const icons = {
+        'completed': '✓',
+        'training': '⏳',
+        'failed': '✗',
+        'not_started': '○'
+    };
+    return icons[status] || '•';
+}
+
+function getTrainingText(status) {
+    const texts = {
+        'completed': 'Completed',
+        'training': 'Training',
+        'failed': 'Failed',
+        'not_started': 'Not Started'
+    };
+    return texts[status] || status;
+}
+
+function getQualityStars(score) {
+    if (score >= 90) return '⭐⭐⭐⭐⭐';
+    if (score >= 75) return '⭐⭐⭐⭐';
+    if (score >= 50) return '⭐⭐⭐';
+    if (score >= 25) return '⭐⭐';
+    return '⭐';
+}
+
+function toggleLanguage(languageId, enabled) {
+    const action = enabled ? 'enable' : 'disable';
+
+    fetch(`/api/accounts/admin/languages/${languageId}/toggle/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ action: action })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess(`Language ${enabled ? 'enabled' : 'disabled'} successfully`);
+            loadLanguages();
+        } else {
+            showError(data.error || 'Failed to update language');
+            loadLanguages(); // Reload to revert UI
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('Failed to update language');
+        loadLanguages();
+    });
+}
+
+function filterLanguages(filter) {
+    currentFilter = filter;
+
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    let filtered = allLanguages;
+
+    switch(filter) {
+        case 'enabled':
+            filtered = allLanguages.filter(l => l.is_enabled);
+            break;
+        case 'disabled':
+            filtered = allLanguages.filter(l => !l.is_enabled);
+            break;
+        case 'trained':
+            filtered = allLanguages.filter(l => l.is_trained);
+            break;
+        case 'not-trained':
+            filtered = allLanguages.filter(l => !l.is_trained);
+            break;
+    }
+
+    renderLanguages(filtered);
+}
+
+function updateSelection() {
+    selectedLanguages.clear();
+    document.querySelectorAll('.language-checkbox:checked').forEach(cb => {
+        selectedLanguages.add(parseInt(cb.dataset.languageId));
+    });
+
+    const count = selectedLanguages.size;
+    document.getElementById('selected-count').textContent = count;
+
+    if (count > 0) {
+        document.getElementById('bulk-actions').classList.add('show');
+    } else {
+        document.getElementById('bulk-actions').classList.remove('show');
+    }
+}
+
+function clearSelection() {
+    document.querySelectorAll('.language-checkbox').forEach(cb => {
+        cb.checked = false;
+    });
+    updateSelection();
+}
+
+function bulkEnable() {
+    bulkAction('enable');
+}
+
+function bulkDisable() {
+    bulkAction('disable');
+}
+
+function bulkAction(action) {
+    if (selectedLanguages.size === 0) return;
+
+    const promises = Array.from(selectedLanguages).map(id => {
+        return fetch(`/api/accounts/admin/languages/${id}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ action: action })
+        });
+    });
+
+    Promise.all(promises)
+        .then(() => {
+            showSuccess(`${selectedLanguages.size} languages ${action}d successfully`);
+            clearSelection();
+            loadLanguages();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showError('Failed to update languages');
+            loadLanguages();
+        });
+}
+
+function refreshLanguages() {
+    loadLanguages();
+    showSuccess('Languages refreshed');
+}
+
+function showSuccess(message) {
+    // Simple alert for now - you can replace with a toast notification
+    const toast = document.createElement('div');
+    toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function showError(message) {
+    const toast = document.createElement('div');
+    toast.className = 'alert alert-danger position-fixed top-0 end-0 m-3';
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,510 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{% trans "Dashboard" %}</h1>
+    <p class="page-subtitle">{% blocktrans with username=user.username %}Welcome back, {{ username }}! Here's your account overview.{% endblocktrans %}</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                </div>
+                <h3 class="stat-value mb-1" id="dashboard-credits">{{ user.credits|default:"0" }}</h3>
+                <div class="stat-label">{% trans "Available Credits" %}</div>
+                <small class="text-muted" id="credit-calculation-info">{% trans "Loading..." %}</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon" style="background: var(--success-light); color: var(--success);">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <h3 class="stat-value mb-1" id="dashboard-voices">0</h3>
+                <div class="stat-label">{% trans "Cloned Voices" %}</div>
+                <small class="text-muted">{% trans "Total voice models" %}</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon" style="background: var(--info-light); color: var(--info);">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                </div>
+                <h3 class="stat-value mb-1" id="dashboard-generations">0</h3>
+                <div class="stat-label">{% trans "Generations" %}</div>
+                <small class="text-muted">{% trans "Total audio generated" %}</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon" style="background: var(--warning-light); color: #996A00;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <h3 class="stat-value mb-1" id="dashboard-plan">{{ user.subscription_type|title }}</h3>
+                <div class="stat-label">{% trans "Current Plan" %}</div>
+                <small class="text-muted">
+                    {% if user.subscription_type == 'free' %}
+                        <a href="{% url 'pricing' %}">{% trans "Upgrade now" %}</a>
+                    {% else %}
+                        {% trans "Active subscription" %}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Quick Actions -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-bolt me-2"></i>{% trans "Quick Actions" %}</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'clone' %}" class="btn btn-primary">
+                        <i class="fas fa-microphone-alt me-2"></i>{% trans "Clone New Voice" %}
+                    </a>
+                    <a href="{% url 'my-voices' %}" class="btn btn-secondary">
+                        <i class="fas fa-folder me-2"></i>{% trans "My Voice Library" %}
+                    </a>
+                    <a href="{% url 'pricing' %}" class="btn btn-action">
+                        <i class="fas fa-shopping-cart me-2"></i>{% trans "Buy More Credits" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Info Card -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user me-2"></i>{% trans "Account Info" %}</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="text-muted" style="font-size: 12px;">{% trans "EMAIL" %}</div>
+                    <div style="font-weight: 500;">{{ user.email }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="text-muted" style="font-size: 12px;">{% trans "USERNAME" %}</div>
+                    <div style="font-weight: 500;">{{ user.username }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="text-muted" style="font-size: 12px;">{% trans "PLAN TYPE" %}</div>
+                    <div>
+                        <span class="badge badge-primary">{{ user.subscription_type|title }}</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="text-muted" style="font-size: 12px;">{% trans "MEMBER SINCE" %}</div>
+                    <div style="font-weight: 500;">{{ user.created_at|date:"M d, Y" }}</div>
+                </div>
+                <hr>
+                <a href="{% url 'profile' %}" class="btn btn-secondary w-100">
+                    <i class="fas fa-user-cog me-2"></i>{% trans "Profile Settings" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Section -->
+    <div class="col-md-8">
+        <!-- Recent Transactions -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-history me-2"></i>{% trans "Recent Activity" %}</h5>
+            </div>
+            <div class="card-body">
+                <div id="recent-transactions">
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% trans "No recent transactions. Start by cloning your first voice or generating audio!" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Chart -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-line me-2"></i>{% trans "Credits Usage (Last 7 Days)" %}</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="usage-chart" height="80"></canvas>
+            </div>
+        </div>
+
+        <!-- Getting Started Guide -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-book me-2"></i>{% trans "Getting Started" %}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div class="stat-icon" style="background: var(--success-light); color: var(--success); width: 40px; height: 40px;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{% trans "1. Clone a Voice" %}</h6>
+                                <small class="text-muted">{% trans "Upload a 5-15 second audio sample of any voice you want to clone." %}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div class="stat-icon" style="background: var(--info-light); color: var(--info); width: 40px; height: 40px;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{% trans "2. Generate Audio" %}</h6>
+                                <small class="text-muted">{% trans "Enter up to 50,000 characters of text to convert into speech." %}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div class="stat-icon" style="background: var(--warning-light); color: #996A00; width: 40px; height: 40px;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{% trans "3. Download & Use" %}</h6>
+                                <small class="text-muted">{% trans "Download your generated audio in high quality WAV format." %}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div class="stat-icon" style="background: var(--danger-light); color: var(--danger); width: 40px; height: 40px;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{% trans "4. Manage Credits" %}</h6>
+                                <small class="text-muted">{% trans "Purchase more credits anytime from the pricing page." %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Initialize chart variable
+let usageChart = null;
+
+// Get CSRF token from common.js
+const getCSRFToken = () => {
+    if (typeof csrftoken !== 'undefined') {
+        return csrftoken;
+    }
+    if (typeof getCookie === 'function') {
+        return getCookie('csrftoken');
+    }
+    return '';
+};
+
+// Load platform settings for credit calculation info
+async function loadCreditCalculationInfo() {
+    try {
+        const response = await fetch('/api/accounts/platform-settings/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch platform settings');
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.settings) {
+            const calcType = data.settings.credit_calculation_type || 'per_character';
+            const creditsPerUnit = data.settings.credits_per_unit || 1;
+
+            // Map calculation type to readable text
+            const typeMap = {
+                'per_character': 'character',
+                'per_word': 'word',
+                'per_letter': 'letter'
+            };
+
+            const unitText = typeMap[calcType] || 'character';
+            const infoElement = document.getElementById('credit-calculation-info');
+
+            if (infoElement) {
+                infoElement.textContent = `${creditsPerUnit} credit${creditsPerUnit !== 1 ? 's' : ''} = 1 ${unitText}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading credit calculation info:', error);
+        const infoElement = document.getElementById('credit-calculation-info');
+        if (infoElement) {
+            infoElement.textContent = '1 credit = 1 character'; // Fallback
+        }
+    }
+}
+
+// Load dashboard statistics
+async function loadDashboardStats() {
+    try {
+        const response = await fetch('/api/accounts/dashboard/stats/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch dashboard stats');
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Update stats cards
+            document.getElementById('dashboard-credits').textContent = data.stats.credits || 0;
+            document.getElementById('dashboard-voices').textContent = data.stats.voices || 0;
+            document.getElementById('dashboard-generations').textContent = data.stats.generations || 0;
+            document.getElementById('dashboard-plan').textContent = (data.stats.plan || 'free').charAt(0).toUpperCase() + (data.stats.plan || 'free').slice(1);
+        }
+    } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+    }
+}
+
+// Load usage chart data
+async function loadUsageChart() {
+    try {
+        const response = await fetch('/api/accounts/dashboard/usage/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch usage data');
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.usage) {
+            const ctx = document.getElementById('usage-chart').getContext('2d');
+
+            // Destroy existing chart if it exists
+            if (usageChart) {
+                usageChart.destroy();
+            }
+
+            usageChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.usage.labels || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: '{% trans "Credits Used" %}',
+                        data: data.usage.data || [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgb(0, 0, 0)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error loading usage chart:', error);
+        // Initialize empty chart on error
+        const ctx = document.getElementById('usage-chart').getContext('2d');
+        usageChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: '{% trans "Credits Used" %}',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    borderColor: 'rgb(0, 0, 0)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Load recent transactions
+async function loadRecentTransactions() {
+    try {
+        const response = await fetch('/api/accounts/transactions/recent/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            credentials: 'same-origin'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch transactions');
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.transactions && data.transactions.length > 0) {
+            const container = document.getElementById('recent-transactions');
+            container.innerHTML = '';
+
+            // Create transaction list
+            const listGroup = document.createElement('div');
+            listGroup.className = 'list-group';
+
+            data.transactions.forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                // Format date
+                const date = new Date(transaction.date);
+                const dateStr = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                // Determine color based on transaction type
+                let amountClass = 'text-success';
+                let amountPrefix = '+';
+                if (transaction.amount < 0) {
+                    amountClass = 'text-danger';
+                    amountPrefix = '';
+                }
+
+                item.innerHTML = `
+                    <div>
+                        <div class="fw-bold">${transaction.description || transaction.type}</div>
+                        <small class="text-muted">${dateStr}</small>
+                    </div>
+                    <div>
+                        <span class="badge ${amountClass}" style="font-size: 14px;">
+                            ${amountPrefix}${transaction.amount} credits
+                        </span>
+                    </div>
+                `;
+
+                listGroup.appendChild(item);
+            });
+
+            container.appendChild(listGroup);
+        } else {
+            // Show empty state
+            const container = document.getElementById('recent-transactions');
+            container.innerHTML = `
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    {% trans "No recent transactions. Start by cloning your first voice or generating audio!" %}
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error loading transactions:', error);
+    }
+}
+
+// Load all dashboard data
+async function loadDashboardData() {
+    await Promise.all([
+        loadCreditCalculationInfo(),
+        loadDashboardStats(),
+        loadUsageChart(),
+        loadRecentTransactions()
+    ]);
+}
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', loadDashboardData);
+
+// Refresh data every 30 seconds
+setInterval(loadDashboardData, 30000);
+</script>
+{% endblock %}

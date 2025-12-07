@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Payment Successful - TalkStudio{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 80px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--success-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        animation: scaleIn 0.5s ease;
+    }
+
+    .success-icon i {
+        font-size: 50px;
+        color: var(--success);
+    }
+
+    .success-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-xl);
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease;
+    }
+
+    .payment-details {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--space-lg);
+        margin: var(--space-lg) 0;
+        text-align: left;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--space-sm) 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-icon">
+        <i class="fas fa-check"></i>
+    </div>
+
+    <div class="success-card">
+        <h1 class="mb-3" style="color: var(--text-primary);">Payment Successful!</h1>
+        <p class="text-muted mb-4">Your payment has been processed successfully</p>
+
+        <div class="payment-details">
+            <div class="detail-row">
+                <span style="color: var(--text-secondary);">Transaction ID</span>
+                <strong style="color: var(--text-primary);">{{ payment.transaction_id|slice:":20" }}...</strong>
+            </div>
+            <div class="detail-row">
+                <span style="color: var(--text-secondary);">Amount Paid</span>
+                <strong style="color: var(--text-primary);">${{ payment.amount }}</strong>
+            </div>
+            <div class="detail-row">
+                <span style="color: var(--text-secondary);">Credits Added</span>
+                <strong style="color: var(--success);">+{{ payment.credits_awarded }} credits</strong>
+            </div>
+            <div class="detail-row">
+                <span style="color: var(--text-secondary);">Current Balance</span>
+                <strong style="color: var(--primary);">{{ user.credits }} credits</strong>
+            </div>
+        </div>
+
+        <div class="alert alert-success" role="alert" style="background: var(--success-light); border: 1px solid var(--success); color: var(--success);">
+            <i class="fas fa-info-circle me-2"></i>
+            Your credits have been added to your account and are ready to use!
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="{% url 'clone' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-microphone-alt me-2"></i>Start Cloning
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-chart-line me-2"></i>Go to Dashboard
+            </a>
+        </div>
+
+        <div class="mt-4">
+            <p style="color: var(--text-secondary); font-size: 13px;">
+                A receipt has been sent to {{ user.email }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

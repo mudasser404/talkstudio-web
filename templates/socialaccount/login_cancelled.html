@@ -1,0 +1,65 @@
+{% extends 'account/auth_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Login Cancelled" %}{% endblock %}
+
+{% block header_title %}{% trans "Login Cancelled" %}{% endblock %}
+{% block header_subtitle %}{% trans "You cancelled the Google sign-in process" %}{% endblock %}
+
+{% block content %}
+<div class="cancelled-container" style="text-align: center; padding: 40px 20px;">
+    <div style="width: 100px; height: 100px; margin: 0 auto 24px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-times-circle" style="font-size: 48px; color: #d97706;"></i>
+    </div>
+
+    <h3 style="color: #1f2937; margin-bottom: 12px;">{% trans "Authentication Cancelled" %}</h3>
+
+    <p style="color: #6b7280; font-size: 16px; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto;">
+        {% trans "It looks like you cancelled the Google sign-in process. No worries, you can try again or use a different method to sign in." %}
+    </p>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
+        <a href="{% url 'account_login' %}" class="btn btn-primary">
+            <i class="fab fa-google me-2"></i>{% trans "Try Google Sign-In Again" %}
+        </a>
+        <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-envelope me-2"></i>{% trans "Sign In with Email" %}
+        </a>
+    </div>
+
+    <div style="padding: 20px; background: #f0f9ff; border-radius: 12px; max-width: 520px; margin: 0 auto;">
+        <p style="margin: 0; color: #1e40af; font-size: 14px;">
+            <i class="fas fa-info-circle me-2"></i>
+            {% trans "Google Sign-In is fast, secure, and you don't need to remember another password!" %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% trans "Don't have an account?" %} <a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-outline-secondary {
+        background: white;
+        border: 1px solid #e5e7eb;
+        color: #374151;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}

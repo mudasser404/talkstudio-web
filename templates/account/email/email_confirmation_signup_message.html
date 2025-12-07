@@ -1,0 +1,67 @@
+{% extends "account/email/base.html" %}
+{% load i18n %}
+
+{% block subject %}{% trans "Welcome to Talk Studio Platform!" %}{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    🎉 {% trans "Welcome to Talk Studio Platform!" %}
+</div>
+
+<div class="message">
+    <p>{% trans "Thank you for joining us! We're excited to have you on board." %}</p>
+
+    <p>{% trans "To get started, please confirm your email address by clicking the button below:" %}</p>
+</div>
+
+<center>
+    <a href="{{ activate_url }}" class="button">
+        ✅ {% trans "Activate My Account" %}
+    </a>
+</center>
+
+<div class="info-box">
+    <p style="margin: 0; color: #1e40af; font-size: 14px;">
+        <strong>🎁 {% trans "Your Welcome Bonus:" %}</strong>
+    </p>
+    <ul style="margin: 10px 0 0 20px; color: #1e40af; font-size: 14px;">
+        <li><strong>{{ free_credits|default:"1,000" }} free credits</strong> {% trans "to start creating" %}</li>
+        <li><strong>{{ free_voice_clones|default:"1" }} free voice clone{{ free_voice_clones|default:1|pluralize }}</strong> {% trans "to test the platform" %}</li>
+        <li>{% trans "Full access to all features" %}</li>
+        <li>{% trans "Priority email support" %}</li>
+    </ul>
+</div>
+
+<div class="message">
+    <p style="font-size: 14px;">{% trans "If the button doesn't work, copy and paste this link into your browser:" %}</p>
+    <p><a href="{{ activate_url }}" class="link-text">{{ activate_url }}</a></p>
+</div>
+
+<div class="message" style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <p style="margin: 0 0 10px 0; font-weight: 600; color: #1f2937;">
+        🚀 {% trans "Quick Start Guide:" %}
+    </p>
+    <ol style="margin: 0; padding-left: 20px; color: #4b5563; font-size: 14px; line-height: 1.8;">
+        <li>{% trans "Confirm your email (click button above)" %}</li>
+        <li>{% trans "Complete your profile" %}</li>
+        <li>{% trans "Create your first voice clone" %}</li>
+        <li>{% trans "Start generating amazing audio!" %}</li>
+    </ol>
+</div>
+
+<div class="warning-box">
+    <p style="margin: 0; color: #92400e; font-size: 14px;">
+        ⏰ <strong>{% trans "Important:" %}</strong><br>
+        {% trans "This verification link expires in 24 hours. Make sure to activate your account soon!" %}
+    </p>
+</div>
+
+<div class="message">
+    <p>{% trans "If you have any questions, our support team is ready to help you!" %}</p>
+</div>
+
+<div class="message">
+    <p>{% trans "Best regards," %}<br>
+    <strong>{% trans "The Talk Studio Platform Team" %}</strong></p>
+</div>
+{% endblock %}

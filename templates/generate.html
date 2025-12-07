@@ -1,0 +1,345 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Generate Voice - Index-TTS2" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .emotion-control-section {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        margin-bottom: var(--space-md);
+    }
+
+    .emotion-vector-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+
+    .slider-container {
+        margin-bottom: var(--space-sm);
+    }
+
+    .slider-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--space-xs);
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .advanced-params {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+    }
+
+    .segment-preview {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--space-sm);
+    }
+
+    .segment-item {
+        padding: var(--space-xs);
+        margin-bottom: var(--space-xs);
+        background: var(--bg-tertiary);
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2><i class="fas fa-magic"></i> Generate Voice with Index-TTS2</h2>
+                        <p class="text-muted">{% trans "Advanced emotion-controlled text-to-speech synthesis" %}</p>
+                    </div>
+                    <div class="badge badge-info" style="font-size: 14px; padding: 10px 16px;">
+                        <i class="fas fa-coins"></i> {{ user.credits|default:0 }} Credits
+                    </div>
+                </div>
+
+                <form id="generate-form">
+                    <!-- Speaker Audio Prompt -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-microphone"></i> Speaker Voice Prompt
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans "Upload Voice Sample (3-10 seconds)" %}</label>
+                                    <input type="file" class="form-control" id="prompt-audio" accept="audio/*" required>
+                                    <small class="text-muted">{% trans "Upload a clean audio sample of the target voice" %}</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans "Or Select from Library/My Voices" %}</label>
+                                    <select class="form-select" id="voice-library-select">
+                                        <option value="">{% trans "Select a voice..." %}</option>
+                                        <optgroup label="Voice Library">
+                                            <!-- Populated via JS -->
+                                        </optgroup>
+                                        <optgroup label="My Cloned Voices">
+                                            <!-- Populated via JS -->
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-3" id="prompt-audio-player" style="display: none;">
+                                <audio controls class="w-100" id="prompt-audio-preview"></audio>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text Input -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-keyboard"></i> Target Text
+                        </div>
+                        <div class="card-body">
+                            <textarea class="form-control" id="input-text" rows="6" maxlength="50000"
+                                placeholder="{% trans \'Enter the text you want to synthesize...\' %}" required></textarea>
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-muted">
+                                    <span id="char-count">0</span> / {% trans "50,000 characters" %}
+                                </small>
+                                <small class="text-muted">
+                                    Credits needed: <strong id="credits-needed">0</strong>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emotion Control -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-heart"></i> Emotion Control
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">{% trans "Emotion Control Method" %}</label>
+                                <div class="btn-group w-100" role="group" id="emo-control-method">
+                                    <input type="radio" class="btn-check" name="emoMethod" id="emo-method-0" value="0" checked>
+                                    <label class="btn btn-outline-primary" for="emo-method-0">
+                                        <i class="fas fa-user"></i> Same as Speaker
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="emoMethod" id="emo-method-1" value="1">
+                                    <label class="btn btn-outline-primary" for="emo-method-1">
+                                        <i class="fas fa-music"></i> Reference Audio
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="emoMethod" id="emo-method-2" value="2">
+                                    <label class="btn btn-outline-primary" for="emo-method-2">
+                                        <i class="fas fa-sliders-h"></i> Vector Control
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="emoMethod" id="emo-method-3" value="3">
+                                    <label class="btn btn-outline-primary" for="emo-method-3">
+                                        <i class="fas fa-comment-alt"></i> Text Description
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Emotion Reference Audio -->
+                            <div id="emo-ref-section" style="display: none;">
+                                <label class="form-label">{% trans "Emotion Reference Audio" %}</label>
+                                <input type="file" class="form-control mb-2" id="emo-ref-audio" accept="audio/*">
+                                <audio controls class="w-100" id="emo-ref-preview" style="display: none;"></audio>
+                            </div>
+
+                            <!-- Emotion Vector Control -->
+                            <div id="emo-vector-section" style="display: none;" class="emotion-vector-grid">
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-smile"></i> Joy</span>
+                                        <span id="vec1-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec1" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-angry"></i> Anger</span>
+                                        <span id="vec2-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec2" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-sad-tear"></i> Sadness</span>
+                                        <span id="vec3-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec3" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-grimace"></i> Fear</span>
+                                        <span id="vec4-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec4" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-frown"></i> Disgust</span>
+                                        <span id="vec5-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec5" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-tired"></i> Dejection</span>
+                                        <span id="vec6-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec6" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-surprise"></i> Surprise</span>
+                                        <span id="vec7-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec7" min="0" max="1" step="0.05" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span><i class="fas fa-meh"></i> Calm</span>
+                                        <span id="vec8-value">0.0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="vec8" min="0" max="1" step="0.05" value="0">
+                                </div>
+                            </div>
+
+                            <!-- Emotion Text Description -->
+                            <div id="emo-text-section" style="display: none;">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-flask"></i> Experimental feature - Results may vary
+                                </div>
+                                <label class="form-label">{% trans "Emotion Description" %}</label>
+                                <input type="text" class="form-control" id="emo-text"
+                                    placeholder="e.g., 'excited and happy', 'calm and soothing', 'dramatic and intense'">
+                                <small class="text-muted">{% trans "Leave empty to use target text as emotion description" %}</small>
+                            </div>
+
+                            <!-- Emotion Weight -->
+                            <div id="emo-weight-section" style="display: none;" class="mt-3">
+                                <label class="form-label">{% trans "Emotion Weight:" %} <span id="emo-weight-value">0.65</span></label>
+                                <input type="range" class="form-range" id="emo-weight" min="0" max="1" step="0.01" value="0.65">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Parameters -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <a class="text-decoration-none d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#advanced-params">
+                                <span><i class="fas fa-cog"></i> Advanced Parameters</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </a>
+                        </div>
+                        <div class="collapse" id="advanced-params">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>{% trans "GPT2 Sampling Parameters" %}</h6>
+                                        <div class="advanced-params">
+                                            <div>
+                                                <label class="form-label">{% trans "Temperature:" %} <span id="temperature-value">0.8</span></label>
+                                                <input type="range" class="form-range" id="temperature" min="0.1" max="2.0" step="0.1" value="0.8">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">{% trans "Top P:" %} <span id="top-p-value">0.8</span></label>
+                                                <input type="range" class="form-range" id="top-p" min="0" max="1" step="0.01" value="0.8">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">{% trans "Top K:" %} <span id="top-k-value">30</span></label>
+                                                <input type="range" class="form-range" id="top-k" min="0" max="100" step="1" value="30">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">{% trans "Num Beams:" %} <span id="num-beams-value">3</span></label>
+                                                <input type="range" class="form-range" id="num-beams" min="1" max="10" step="1" value="3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>{% trans "Text Segmentation" %}</h6>
+                                        <div>
+                                            <label class="form-label">{% trans "Max Tokens Per Segment:" %} <span id="max-tokens-value">120</span></label>
+                                            <input type="range" class="form-range" id="max-tokens-segment" min="20" max="200" step="2" value="120">
+                                            <small class="text-muted">{% trans "Recommended: 80-200. Affects audio quality and generation speed." %}</small>
+                                        </div>
+                                        <div class="mt-3">
+                                            <h6>{% trans "Segment Preview" %}</h6>
+                                            <div class="segment-preview" id="segment-preview">
+                                                <div class="text-muted text-center">{% trans "Enter text to see segments" %}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+                            <i class="fas fa-magic"></i> Generate Voice with Index-TTS2
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Generation Result -->
+                <div id="generation-result" class="card shadow-sm mt-4" style="display: none;">
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <h5><i class="fas fa-check-circle"></i> Voice Generated Successfully!</h5>
+                        </div>
+                        <audio id="result-audio" controls class="w-100 mb-3"></audio>
+                        <div class="d-flex gap-2">
+                            <a href="#" id="download-btn" class="btn btn-primary" download>
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                            <button class="btn btn-secondary" id="generate-another">
+                                <i class="fas fa-redo"></i> Generate Another
+                            </button>
+                        </div>
+                        <div class="mt-3">
+                            <p class="mb-1"><strong>{% trans "Credits Used:" %}</strong> <span id="credits-used-display">0</span></p>
+                            <p class="mb-0"><strong>{% trans "Remaining Credits:" %}</strong> <span id="remaining-credits-display">{{ user.credits|default:0 }}</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="generation-loading" class="text-center mt-4" style="display: none;">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">{% trans "Loading..." %}</span>
+                    </div>
+                    <p class="mt-3"><strong>{% trans "Generating voice..." %}</strong></p>
+                    <p class="text-muted">{% trans "This may take a minute depending on text length" %}</p>
+                </div>
+
+                <!-- Credit Info -->
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle"></i> {% trans "You have" %} <strong>{{ user.credits|default:0 }}</strong> {% trans "credits remaining." %}
+                    <a href="{% url 'pricing' %}" class="alert-link">{% trans "Buy more credits" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/generate.js' %}"></script>
+{% endblock %}

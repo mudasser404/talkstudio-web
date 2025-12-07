@@ -1,0 +1,1137 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% if user.is_staff %}
+        {% trans "Support Administration" %}
+    {% else %}
+        {% trans "Customer Support" %}
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Common Styles */
+    :root {
+        --primary-green: #16A34A;
+        --primary-green-dark: #15803D;
+        --bg-light: #F9FAFB;
+    }
+
+    /* Check if user is staff for different layouts */
+    {% if user.is_staff %}
+    /* ============================================ */
+    /* ADMIN VIEW STYLES */
+    /* ============================================ */
+    .support-admin-container {
+        padding: 24px;
+        background: var(--bg-light);
+        min-height: 100vh;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #1F2937;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 16px;
+        transition: all 0.2s;
+    }
+
+    .back-button:hover {
+        background: #374151;
+        color: white;
+    }
+
+    .page-title-custom {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 24px;
+    }
+
+    .support-main-content {
+        display: grid;
+        grid-template-columns: 1fr 450px;
+        gap: 24px;
+    }
+
+    .tickets-list-section, .ticket-detail-panel {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .tickets-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #E5E7EB;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .tickets-header h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .filter-tabs-custom {
+        display: flex;
+        gap: 8px;
+        padding: 16px 24px;
+        border-bottom: 1px solid #E5E7EB;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn-custom {
+        padding: 6px 16px;
+        background: #F3F4F6;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        color: #6B7280;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .filter-btn-custom:hover {
+        background: #E5E7EB;
+    }
+
+    .filter-btn-custom.active {
+        background: var(--primary-green);
+        color: white;
+    }
+
+    .ticket-item {
+        padding: 16px 24px;
+        border-bottom: 1px solid #E5E7EB;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .ticket-item:hover {
+        background: var(--bg-light);
+    }
+
+    .ticket-subject {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .ticket-id-small {
+        font-size: 12px;
+        color: #6B7280;
+    }
+
+    .ticket-badges {
+        display: flex;
+        gap: 8px;
+    }
+
+    .badge-status {
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .badge-pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .badge-open {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .message-bubble {
+        background: white;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .message-bubble.customer {
+        background: #EDE9FE;
+        border-left: 3px solid #7C3AED;
+    }
+
+    .message-bubble.staff {
+        background: #DBEAFE;
+        border-left: 3px solid #3B82F6;
+    }
+
+    .live-support-widget {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: white;
+        border-radius: 8px;
+        padding: 12px 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1000;
+    }
+
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary-green);
+        animation: pulse 2s infinite;
+    }
+
+    .status-indicator.offline {
+        background: #9CA3AF;
+        animation: none;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .ticket-detail-panel {
+        max-height: calc(100vh - 150px);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .conversation-section {
+        padding: 20px 24px;
+        background: var(--bg-light);
+    }
+
+    .reply-textarea, .status-dropdown {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #E5E7EB;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .send-reply-btn, .status-update-btn {
+        width: 100%;
+        padding: 12px;
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .send-reply-btn:hover, .status-update-btn:hover {
+        background: var(--primary-green-dark);
+    }
+
+    .status-update-btn {
+        background: #6366F1;
+    }
+
+    .status-update-btn:hover {
+        background: #4F46E5;
+    }
+
+    @media (max-width: 1200px) {
+        .support-main-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    {% else %}
+    /* ============================================ */
+    /* CUSTOMER VIEW STYLES */
+    /* ============================================ */
+    .support-tabs {
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 24px;
+    }
+
+    .support-tab {
+        display: inline-block;
+        padding: 12px 24px;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .support-tab.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .ticket-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .ticket-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-open {
+        background: var(--info-light);
+        color: var(--info);
+    }
+
+    .live-support-badge {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .live-support-badge.online {
+        background: var(--success-light);
+        border-color: var(--success);
+        color: var(--success);
+    }
+
+    .live-support-badge.offline {
+        background: var(--bg-tertiary);
+        border-color: var(--border-color);
+        color: var(--text-tertiary);
+    }
+
+    .live-support-badge i {
+        animation: pulse 2s infinite;
+        margin-right: 12px;
+    }
+
+    .live-support-badge.offline i {
+        animation: none;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    {% endif %}
+
+    /* Common styles */
+    .empty-state {
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--text-secondary);
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.3;
+    }
+
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .message-author {
+        font-weight: 600;
+    }
+
+    .message-time {
+        color: #6B7280;
+        font-size: 12px;
+    }
+
+    .message-text {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .info-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 13px;
+    }
+
+    .ticket-meta-info {
+        display: flex;
+        gap: 16px;
+        font-size: 13px;
+        color: #6B7280;
+        margin-top: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+{% if user.is_staff %}
+<!-- ============================================ -->
+<!-- ADMIN VIEW -->
+<!-- ============================================ -->
+<div class="support-admin-container">
+    <!-- Live Support Widget -->
+    <div class="live-support-widget">
+        <div class="status-indicator" id="status-indicator"></div>
+        <div class="status-text" id="status-text" style="font-weight: 600; font-size: 14px;">{% trans "Support is Live" %}</div>
+        <button class="status-toggle-btn" onclick="toggleSupportStatus()" style="padding: 6px 12px; background: #1F2937; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">
+            <span id="toggle-text">{% trans "Go Offline" %}</span>
+        </button>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header-custom">
+        <a href="{% url 'admin-dashboard' %}" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            {% trans "Back to Dashboard" %}
+        </a>
+        <h1 class="page-title-custom">{% trans "Customer Support Administration" %}</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="support-main-content">
+        <!-- Tickets List -->
+        <div class="tickets-list-section">
+            <div class="tickets-header">
+                <h2>{% trans "All Tickets" %}</h2>
+            </div>
+
+            <div class="filter-tabs-custom">
+                <button class="filter-btn-custom active" data-filter="all" onclick="filterTickets('all')">{% trans "All" %}</button>
+                <button class="filter-btn-custom" data-filter="open" onclick="filterTickets('open')">{% trans "Open" %}</button>
+                <button class="filter-btn-custom" data-filter="in_progress" onclick="filterTickets('in_progress')">{% trans "In Progress" %}</button>
+                <button class="filter-btn-custom" data-filter="waiting_customer" onclick="filterTickets('waiting_customer')">{% trans "Waiting" %}</button>
+                <button class="filter-btn-custom" data-filter="resolved" onclick="filterTickets('resolved')">{% trans "Resolved" %}</button>
+                <button class="filter-btn-custom" data-filter="urgent" onclick="filterTickets('urgent')">
+                    <i class="fas fa-exclamation-circle"></i> {% trans "Urgent" %}
+                </button>
+            </div>
+
+            <div id="tickets-container">
+                <div class="empty-state">
+                    <i class="fas fa-ticket-alt"></i>
+                    <p>{% trans "Loading tickets..." %}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Detail Panel -->
+        <div class="ticket-detail-panel" id="ticket-detail-panel">
+            <div class="empty-state" style="padding: 120px 24px;">
+                <i class="fas fa-mouse-pointer"></i>
+                <p>{% trans "Select a ticket to view details" %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- ============================================ -->
+<!-- CUSTOMER VIEW -->
+<!-- ============================================ -->
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">{% trans "Customer Support" %}</h1>
+            <p class="page-subtitle">{% trans "Get help with your account, ask questions, or report issues." %}</p>
+        </div>
+        <div class="live-support-badge" id="live-support-badge">
+            <i class="fas fa-circle" id="support-status-dot"></i>
+            <span id="support-status-text">{% trans "Checking..." %}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Support Tabs -->
+<div class="support-tabs">
+    <button class="support-tab active" data-tab="tickets">{% trans "My Tickets" %}</button>
+    <button class="support-tab" data-tab="new-ticket">{% trans "New Ticket" %}</button>
+    <button class="support-tab" data-tab="faq">{% trans "FAQ" %}</button>
+</div>
+
+<!-- My Tickets Tab -->
+<div class="tab-content active" id="tickets-tab">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0"><i class="fas fa-ticket-alt me-2"></i>{% trans "Your Support Tickets" %}</h5>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-outline-secondary active" data-filter="all">{% trans "All" %}</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-filter="open">{% trans "Open" %}</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-filter="resolved">{% trans "Resolved" %}</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="customer-tickets-list">
+                <div class="empty-state">
+                    <i class="fas fa-ticket-alt"></i>
+                    <p>{% trans "Loading tickets..." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Ticket Tab -->
+<div class="tab-content" id="new-ticket-tab">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-plus-circle me-2"></i>{% trans "Create New Support Ticket" %}</h5>
+        </div>
+        <div class="card-body">
+            <form id="new-ticket-form">
+                <div class="mb-3">
+                    <label for="ticket-subject" class="form-label">{% trans "Subject" %} <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="ticket-subject" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="ticket-category" class="form-label">{% trans "Category" %}</label>
+                        <select class="form-select" id="ticket-category">
+                            <option value="general">{% trans "General Inquiry" %}</option>
+                            <option value="technical">{% trans "Technical Issue" %}</option>
+                            <option value="billing">{% trans "Billing & Payments" %}</option>
+                            <option value="account">{% trans "Account Management" %}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="ticket-priority" class="form-label">{% trans "Priority" %}</label>
+                        <select class="form-select" id="ticket-priority">
+                            <option value="low">{% trans "Low" %}</option>
+                            <option value="medium" selected>{% trans "Medium" %}</option>
+                            <option value="high">{% trans "High" %}</option>
+                            <option value="urgent">{% trans "Urgent" %}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="ticket-description" class="form-label">{% trans "Description" %}</label>
+                    <textarea class="form-control" id="ticket-description" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i>{% trans "Submit Ticket" %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Tab -->
+<div class="tab-content" id="faq-tab">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-question-circle me-2"></i>{% trans "Frequently Asked Questions" %}</h5>
+        </div>
+        <div class="card-body" id="faq-list">
+            <div class="empty-state">
+                <i class="fas fa-question-circle"></i>
+                <p>{% trans "Loading FAQs..." %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ticket Detail Modal -->
+<div class="modal fade" id="ticketDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{% trans "Ticket Details" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="ticket-detail-content">
+                <div class="text-center p-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// csrftoken already defined in dashboard_base.html
+const isStaff = {{ user.is_staff|yesno:"true,false" }};
+
+// Support status
+let isSupportLive = false;
+
+async function loadSupportStatus() {
+    try {
+        const response = await fetch('/api/support/status/', {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+        const data = await response.json();
+        isSupportLive = data.is_online;
+        updateStatusUI();
+    } catch (error) {
+        console.error('Error loading support status:', error);
+    }
+}
+
+function updateStatusUI() {
+    const indicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    const toggleText = document.getElementById('toggle-text');
+
+    if (isSupportLive) {
+        if (indicator) indicator.classList.remove('offline');
+        if (statusText) statusText.textContent = '{% trans "Support is Live" %}';
+        if (toggleText) toggleText.textContent = '{% trans "Go Offline" %}';
+    } else {
+        if (indicator) indicator.classList.add('offline');
+        if (statusText) statusText.textContent = '{% trans "Support is Offline" %}';
+        if (toggleText) toggleText.textContent = '{% trans "Go Online" %}';
+    }
+}
+
+async function toggleSupportStatus() {
+    isSupportLive = !isSupportLive;
+
+    try {
+        const response = await fetch('/api/support/status/set/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ is_online: isSupportLive })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            updateStatusUI();
+        } else {
+            // Revert on error
+            isSupportLive = !isSupportLive;
+            alert('{% trans "Error updating support status" %}');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        isSupportLive = !isSupportLive;
+        alert('{% trans "Error updating support status" %}');
+    }
+}
+
+let currentFilter = 'all';
+let allTickets = [];
+
+// Load tickets
+async function loadTickets() {
+    try {
+        const response = await fetch('/api/support/tickets/', {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+
+        const data = await response.json();
+        allTickets = data.results || data;
+
+        if (isStaff) {
+            displayAdminTickets();
+        } else {
+            displayCustomerTickets();
+        }
+    } catch (error) {
+        console.error('Error loading tickets:', error);
+    }
+}
+
+function displayAdminTickets() {
+    let tickets = allTickets;
+
+    if (currentFilter === 'urgent') {
+        tickets = allTickets.filter(t => t.priority === 'urgent');
+    } else if (currentFilter !== 'all') {
+        tickets = allTickets.filter(t => t.status === currentFilter);
+    }
+
+    const container = document.getElementById('tickets-container');
+    if (!container) return;
+
+    if (tickets.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>{% trans "No tickets found." %}</p></div>';
+        return;
+    }
+
+    container.innerHTML = tickets.map(ticket => `
+        <div class="ticket-item" onclick="viewTicket(${ticket.id})">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <div>
+                    <div class="ticket-subject">${ticket.subject}</div>
+                    <div class="ticket-id-small">${ticket.ticket_id}</div>
+                </div>
+                <div class="ticket-badges">
+                    <span class="badge-status badge-${ticket.status === 'open' ? 'pending' : 'open'}">${ticket.status_display || ticket.status}</span>
+                    <span class="badge-status badge-${ticket.priority === 'urgent' ? 'pending' : 'open'}">${ticket.priority_display || ticket.priority}</span>
+                </div>
+            </div>
+            <div class="ticket-meta-info">
+                <span><i class="fas fa-user"></i> ${ticket.user_email || ticket.user_name || 'N/A'}</span>
+                <span><i class="fas fa-folder"></i> ${ticket.category_display || ticket.category}</span>
+                <span><i class="fas fa-clock"></i> ${new Date(ticket.created_at).toLocaleDateString()}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function displayCustomerTickets() {
+    const container = document.getElementById('customer-tickets-list');
+    if (!container) return;
+
+    if (allTickets.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-ticket-alt"></i><p>{% trans "No tickets yet." %}</p></div>';
+        return;
+    }
+
+    container.innerHTML = allTickets.map(ticket => `
+        <div class="ticket-card" onclick="viewCustomerTicket(${ticket.id})">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <strong>${ticket.subject}</strong>
+                    <div style="font-size: 12px; color: #6B7280;">${ticket.ticket_id}</div>
+                </div>
+                <span class="status-badge status-${ticket.status}">${ticket.status_display || ticket.status}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterTickets(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn-custom').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+    displayAdminTickets();
+}
+
+async function viewTicket(ticketId) {
+    const panel = document.getElementById('ticket-detail-panel');
+    if (!panel) return;
+
+    panel.innerHTML = '<div class="empty-state"><div class="spinner-border text-primary"></div></div>';
+
+    try {
+        const response = await fetch(`/api/support/tickets/${ticketId}/`, {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+
+        const ticket = await response.json();
+
+        panel.innerHTML = `
+            <div style="padding: 20px 24px; border-bottom: 1px solid #E5E7EB;">
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${ticket.subject}</div>
+                <div style="font-size: 13px; color: #6B7280;">
+                    <strong>${ticket.ticket_id}</strong> • ${ticket.category_display || ticket.category}
+                </div>
+            </div>
+
+            <div style="padding: 20px 24px; border-bottom: 1px solid #E5E7EB;">
+                <div class="info-section-title">{% trans "Ticket Information" %}</div>
+                <div class="info-row"><span>{% trans "Customer" %}</span><span>${ticket.user_email || ticket.user_name || 'N/A'}</span></div>
+                <div class="info-row"><span>{% trans "Status" %}</span><span>${ticket.status_display || ticket.status}</span></div>
+                <div class="info-row"><span>{% trans "Priority" %}</span><span>${ticket.priority_display || ticket.priority}</span></div>
+                <div class="info-row"><span>{% trans "Created" %}</span><span>${new Date(ticket.created_at).toLocaleString()}</span></div>
+            </div>
+
+            <div class="conversation-section">
+                <div style="font-weight: 600; margin-bottom: 16px;">{% trans "Conversation" %}</div>
+                <div class="message-bubble customer">
+                    <div class="message-header">
+                        <span class="message-author"><i class="fas fa-user"></i> ${ticket.user_email || 'Customer'}</span>
+                        <span class="message-time">${new Date(ticket.created_at).toLocaleString()}</span>
+                    </div>
+                    <div class="message-text">${ticket.description}</div>
+                </div>
+                ${ticket.messages && ticket.messages.length > 0 ? ticket.messages.map(msg => `
+                    <div class="message-bubble ${msg.is_staff_reply ? 'staff' : 'customer'}">
+                        <div class="message-header">
+                            <span class="message-author">
+                                <i class="fas fa-${msg.is_staff_reply ? 'user-shield' : 'user'}"></i>
+                                ${msg.user_name || (msg.is_staff_reply ? 'Support' : 'Customer')}
+                            </span>
+                            <span class="message-time">${new Date(msg.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="message-text">${msg.message}</div>
+                    </div>
+                `).join('') : ''}
+            </div>
+
+            <div style="padding: 20px 24px; border-top: 1px solid #E5E7EB;">
+                <div style="font-weight: 600; margin-bottom: 12px;">{% trans "Update Status" %}</div>
+                <select class="status-dropdown" id="status-select-${ticket.id}">
+                    <option value="open" ${ticket.status === 'open' ? 'selected' : ''}>{% trans "Open" %}</option>
+                    <option value="in_progress" ${ticket.status === 'in_progress' ? 'selected' : ''}>{% trans "In Progress" %}</option>
+                    <option value="waiting_customer" ${ticket.status === 'waiting_customer' ? 'selected' : ''}>{% trans "Waiting for Customer" %}</option>
+                    <option value="resolved" ${ticket.status === 'resolved' ? 'selected' : ''}>{% trans "Resolved" %}</option>
+                    <option value="closed" ${ticket.status === 'closed' ? 'selected' : ''}>{% trans "Closed" %}</option>
+                </select>
+                <button class="status-update-btn" onclick="updateStatus(${ticket.id})" style="margin-top: 12px;">
+                    <i class="fas fa-save"></i> {% trans "Update Status" %}
+                </button>
+            </div>
+
+            ${ticket.status !== 'closed' ? `
+                <div style="padding: 20px 24px; border-top: 1px solid #E5E7EB;">
+                    <div style="font-weight: 600; margin-bottom: 12px;">{% trans "Send Reply" %}</div>
+                    <textarea class="reply-textarea" id="reply-text-${ticket.id}" placeholder="{% trans 'Type your response...' %}"></textarea>
+                    <button class="send-reply-btn" onclick="sendReply(${ticket.id})" style="margin-top: 12px;">
+                        <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
+                    </button>
+                </div>
+            ` : ''}
+        `;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function updateStatus(ticketId) {
+    const select = document.getElementById(`status-select-${ticketId}`);
+    try {
+        const response = await fetch(`/api/support/tickets/${ticketId}/update_status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ status: select.value })
+        });
+
+        if (response.ok) {
+            alert('{% trans "Status updated!" %}');
+            loadTickets();
+            viewTicket(ticketId);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function sendReply(ticketId) {
+    const textarea = document.getElementById(`reply-text-${ticketId}`);
+    const message = textarea.value.trim();
+
+    if (!message) return;
+
+    try {
+        const response = await fetch(`/api/support/tickets/${ticketId}/add_message/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ message })
+        });
+
+        if (response.ok) {
+            textarea.value = '';
+            viewTicket(ticketId);
+            alert('{% trans "Reply sent!" %}');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Customer view functions
+async function viewCustomerTicket(ticketId) {
+    const modal = new bootstrap.Modal(document.getElementById('ticketDetailModal'));
+    const modalBody = document.getElementById('ticket-detail-content');
+
+    modalBody.innerHTML = '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>';
+    modal.show();
+
+    try {
+        const response = await fetch(`/api/support/tickets/${ticketId}/`, {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+
+        const ticket = await response.json();
+
+        modalBody.innerHTML = `
+            <div class="mb-3">
+                <h6><strong>${ticket.subject}</strong></h6>
+                <p class="text-muted small">${ticket.ticket_id} • ${ticket.category_display || ticket.category}</p>
+                <span class="status-badge status-${ticket.status}">${ticket.status_display || ticket.status}</span>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <strong>{% trans "Description:" %}</strong>
+                <p>${ticket.description}</p>
+            </div>
+            ${ticket.messages && ticket.messages.length > 0 ? `
+                <hr>
+                <strong>{% trans "Messages:" %}</strong>
+                <div class="mt-3">
+                    ${ticket.messages.map(msg => `
+                        <div class="mb-3 p-3" style="background: ${msg.is_staff_reply ? '#DBEAFE' : '#F3F4F6'}; border-radius: 8px;">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>${msg.is_staff_reply ? '{% trans "Support Team" %}' : '{% trans "You" %}'}</strong>
+                                <small class="text-muted">${new Date(msg.created_at).toLocaleString()}</small>
+                            </div>
+                            <p class="mb-0">${msg.message}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+            ${ticket.status !== 'closed' ? `
+                <hr>
+                <div class="mt-3">
+                    <label class="form-label"><strong>{% trans "Add a reply:" %}</strong></label>
+                    <textarea class="form-control mb-2" id="customer-reply-${ticket.id}" rows="3"></textarea>
+                    <button class="btn btn-primary btn-sm" onclick="sendCustomerReply(${ticket.id})">
+                        <i class="fas fa-paper-plane me-1"></i>{% trans "Send Reply" %}
+                    </button>
+                </div>
+            ` : ''}
+        `;
+    } catch (error) {
+        console.error('Error:', error);
+        modalBody.innerHTML = '<div class="alert alert-danger">{% trans "Error loading ticket details" %}</div>';
+    }
+}
+
+async function sendCustomerReply(ticketId) {
+    const textarea = document.getElementById(`customer-reply-${ticketId}`);
+    const message = textarea.value.trim();
+
+    if (!message) {
+        alert('{% trans "Please enter a message" %}');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/support/tickets/${ticketId}/add_message/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ message })
+        });
+
+        if (response.ok) {
+            alert('{% trans "Reply sent successfully!" %}');
+            textarea.value = '';
+            viewCustomerTicket(ticketId);
+            loadTickets();
+        } else {
+            alert('{% trans "Error sending reply" %}');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('{% trans "Error sending reply" %}');
+    }
+}
+
+// New ticket form submission
+async function submitNewTicket(event) {
+    event.preventDefault();
+
+    const subject = document.getElementById('ticket-subject').value.trim();
+    const category = document.getElementById('ticket-category').value;
+    const priority = document.getElementById('ticket-priority').value;
+    const description = document.getElementById('ticket-description').value.trim();
+
+    if (!subject || !description) {
+        alert('{% trans "Please fill in all required fields" %}');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/support/tickets/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                subject,
+                category,
+                priority,
+                description
+            })
+        });
+
+        if (response.ok) {
+            alert('{% trans "Ticket created successfully!" %}');
+            document.getElementById('new-ticket-form').reset();
+
+            // Switch to My Tickets tab
+            document.querySelectorAll('.support-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="tickets"]').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tickets-tab').classList.add('active');
+
+            loadTickets();
+        } else {
+            const errorData = await response.json();
+            alert('{% trans "Error creating ticket: " %}' + (errorData.detail || '{% trans "Unknown error" %}'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('{% trans "Error creating ticket" %}');
+    }
+}
+
+// Load FAQs
+async function loadFAQs() {
+    try {
+        const response = await fetch('/api/support/faqs/', {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+
+        const data = await response.json();
+        const faqs = data.results || data;
+        const faqList = document.getElementById('faq-list');
+
+        if (!faqList) return;
+
+        if (faqs.length === 0) {
+            faqList.innerHTML = '<div class="empty-state"><i class="fas fa-question-circle"></i><p>{% trans "No FAQs available yet." %}</p></div>';
+            return;
+        }
+
+        faqList.innerHTML = '<div class="accordion" id="faqAccordion">' + faqs.map((faq, index) => `
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading${index}">
+                    <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
+                        ${faq.question}
+                    </button>
+                </h2>
+                <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">${faq.answer}</div>
+                </div>
+            </div>
+        `).join('') + '</div>';
+    } catch (error) {
+        console.error('Error loading FAQs:', error);
+    }
+}
+
+// Check support online status for customer
+async function checkSupportStatus() {
+    try {
+        const response = await fetch('/api/support/status/', {
+            headers: {'X-CSRFToken': csrftoken},
+            credentials: 'same-origin'
+        });
+        const data = await response.json();
+        const isOnline = data.is_online;
+
+        const badge = document.getElementById('live-support-badge');
+        const dot = document.getElementById('support-status-dot');
+        const text = document.getElementById('support-status-text');
+
+        if (!badge) return;
+
+        if (isOnline) {
+            badge.classList.remove('offline');
+            badge.classList.add('online');
+            if (text) text.textContent = '{% trans "Support is Online" %}';
+        } else {
+            badge.classList.remove('online');
+            badge.classList.add('offline');
+            if (text) text.textContent = '{% trans "Support is Offline" %}';
+        }
+    } catch (error) {
+        console.error('Error checking support status:', error);
+    }
+}
+
+// Tab switching for customer view
+document.querySelectorAll('.support-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        const tabName = this.getAttribute('data-tab');
+        document.querySelectorAll('.support-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+    });
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    if (isStaff) {
+        loadSupportStatus();
+        // Refresh support status every 3 seconds for admin
+        setInterval(loadSupportStatus, 3000);
+    } else {
+        checkSupportStatus();
+        loadFAQs();
+        // Refresh support status every 5 seconds for customers
+        setInterval(checkSupportStatus, 5000);
+    }
+
+    loadTickets();
+    setInterval(loadTickets, 30000);
+
+    // Attach form submission handler
+    const newTicketForm = document.getElementById('new-ticket-form');
+    if (newTicketForm) {
+        newTicketForm.addEventListener('submit', submitNewTicket);
+    }
+});
+</script>
+{% endblock %}
